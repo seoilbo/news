@@ -60,7 +60,7 @@ if (fs.existsSync(path.join(__dirname, '202605.html'))) {
     fs.copyFileSync(path.join(__dirname, '202605.html'), path.join(distDir, '202605.html'));
 }
 if (fs.existsSync(path.join(__dirname, 'reporter'))) {
-    fs.copyFileSync(path.join(__dirname, 'reporter'), path.join(distDir, 'reporter'));
+    copyRecursiveSync(path.join(__dirname, 'reporter'), path.join(distDir, 'reporter'));
 }
 
 // 3. 각 기사별 전용 HTML(OG 태그 포함) 생성
