@@ -212,7 +212,7 @@
             transform: translateY(-50%);
             z-index: 900;
             height: fit-content;
-            width: 62px;
+            width: 76px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -223,12 +223,12 @@
             background-color: #ffffff;
             border: 1px solid #d1d8dd;
             display: grid;
-            grid-template-columns: 46px;
+            grid-template-columns: 56px;
             justify-content: center;
             justify-items: center;
             align-items: center;
-            padding: 8px 6px;
-            gap: 4px;
+            padding: 10px 8px;
+            gap: 6px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
@@ -249,13 +249,13 @@
 
         /* PC 유틸리티 바 전용 확대 */
         .utility-container .util-btn {
-            width: 46px;
-            height: 46px;
-            font-size: 16px;
+            width: 56px;
+            height: 56px;
+            font-size: 20px;
         }
         .utility-container .util-icon {
-            width: 24px;
-            height: 24px;
+            width: 30px;
+            height: 30px;
         }
 
         .util-btn:hover {
@@ -546,7 +546,7 @@
 
         /* 제목(카테고리+제목): 기사 본문 칸 + 오른쪽 주요 기사 칸 위에 표시 (왼쪽 유틸리티 바는 제외) */
         .article-layout .article-header {
-            grid-column: 1 / -1;
+            grid-column: 1;
             grid-row: 1;
             min-width: 0;
         }
@@ -837,7 +837,7 @@
 
         /* 화면 왼쪽 고정 유틸리티와 본문이 겹치지 않도록 여백 확보 */
         @media (min-width: 769px) and (max-width: 1479px) {
-            .page-wrapper { padding-left: 88px; }
+            .page-wrapper { padding-left: 104px; }
         }
 
         /* 넓은 화면: 기사 본문이 사이트 정중앙, 주요 기사는 본문 오른쪽에 붙음 */
