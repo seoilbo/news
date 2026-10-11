@@ -205,33 +205,6 @@
             position: relative;
         }
 
-        .utility-sidebar {
-            position: fixed;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 900;
-            height: fit-content;
-            width: 76px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            flex-shrink: 0;
-        }
-
-        .utility-container {
-            background-color: #ffffff;
-            border: 1px solid #d1d8dd;
-            display: grid;
-            grid-template-columns: 56px;
-            justify-content: center;
-            justify-items: center;
-            align-items: center;
-            padding: 10px 8px;
-            gap: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-
         .util-btn {
             width: 36px;
             height: 36px;
@@ -247,28 +220,75 @@
             text-decoration: none;
         }
 
-        /* PC 유틸리티 바 전용 확대 */
-        .utility-container .util-btn {
-            width: 56px;
-            height: 56px;
-            font-size: 20px;
-        }
-        .utility-container .util-icon {
-            width: 30px;
-            height: 30px;
-        }
-
         .util-btn:hover {
             background-color: #f1f3f5;
             color: #111111;
         }
 
-        .util-divider {
-            grid-column: 1 / -1;
-            width: 100%;
-            height: 1px;
-            background-color: #e1e4e8;
-            margin: 2px 0;
+        /* 기사 본문 상단 가로 유틸리티 바 (글자 크기 / 인쇄 · 공유) */
+        .article-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e1e4e8;
+        }
+
+        .toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toolbar-btn {
+            height: 36px;
+            padding: 0 14px;
+            background: #ffffff;
+            border: 1px solid #d1d8dd;
+            color: #333333;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .toolbar-btn:hover {
+            background-color: #f1f3f5;
+            color: #111111;
+        }
+
+        .toolbar-btn img {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* 글자 크기: A- / A+ 를 붙여서 한 덩어리로 */
+        .toolbar-size {
+            display: inline-flex;
+            align-items: center;
+        }
+        .toolbar-size .toolbar-btn {
+            width: 44px;
+            padding: 0;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .toolbar-size .toolbar-btn + .toolbar-btn {
+            margin-left: -1px;
+        }
+
+        .toolbar-label {
+            font-size: 13px;
+            color: #777777;
+            margin-right: 10px;
         }
 
         main {
@@ -536,7 +556,7 @@
             line-height: 1.5;
         }
 
-        /* 제목 구분선 아래: 유틸리티 바(왼쪽) + 기사 본문(가운데) + 전체 주요 기사(오른쪽) */
+        /* 제목 구분선 아래: 기사 본문(가운데, 상단에 가로 유틸리티 바) + 전체 주요 기사(오른쪽) */
         .article-layout {
             display: grid;
             grid-template-columns: minmax(0, 1fr) 300px;
@@ -544,7 +564,7 @@
             align-items: start;
         }
 
-        /* 제목(카테고리+제목): 기사 본문 칸 + 오른쪽 주요 기사 칸 위에 표시 (왼쪽 유틸리티 바는 제외) */
+        /* 제목(카테고리+제목): 기사 본문 칸 위에 표시 */
         .article-layout .article-header {
             grid-column: 1;
             grid-row: 1;
@@ -562,7 +582,7 @@
             grid-column: 1;
             grid-row: 3;
             min-width: 0;
-            padding-top: 30px;
+            padding-top: 0;
         }
 
         .popular-aside {
@@ -574,7 +594,7 @@
 
         .popular-head {
             padding: 12px 0;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 800;
             color: #111111;
             border-bottom: 2px solid #a61c1c;
@@ -599,8 +619,8 @@
 
         .popular-rank {
             flex-shrink: 0;
-            width: 18px;
-            font-size: 16px;
+            width: 22px;
+            font-size: 18px;
             font-weight: 800;
             color: #adb5bd;
             line-height: 1.4;
@@ -611,7 +631,7 @@
         }
 
         .popular-title {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 600;
             line-height: 1.45;
             color: #111111;
@@ -627,7 +647,7 @@
 
         .popular-empty {
             padding: 24px 0;
-            font-size: 13px;
+            font-size: 14px;
             color: #868e96;
             text-align: center;
         }
@@ -835,11 +855,6 @@
             }
         }
 
-        /* 화면 왼쪽 고정 유틸리티와 본문이 겹치지 않도록 여백 확보 */
-        @media (min-width: 769px) and (max-width: 1479px) {
-            .page-wrapper { padding-left: 104px; }
-        }
-
         /* 넓은 화면: 기사 본문이 사이트 정중앙, 주요 기사는 본문 오른쪽에 붙음 */
         @media (min-width: 1480px) {
             .page-wrapper { max-width: none; padding: 0; }
@@ -854,7 +869,8 @@
             .sub-info-bar { display: none; }
             .header-main-bar { height: 70px; }
             .logo-img-large { height: 40px; }
-            .utility-sidebar { display: none !important; }
+            .article-toolbar { display: none !important; }
+            .article-col { padding-top: 30px; }
             .article-layout { grid-template-columns: minmax(0, 1fr); }
             .article-layout .article-header, .article-layout .article-info, .article-col, .popular-aside { grid-column: 1; }
             .cat-news-thumb { width: 110px; height: 76px; }
@@ -931,18 +947,22 @@
                         <span id="articleDate"></span>
                     </div>
 
-                    <!-- PC용 유틸리티 사이드바 -->
-                    <aside class="utility-sidebar" id="utilitySidebar">
-                        <div class="utility-container">
-                            <button class="util-btn" title="글자 키우기" onclick="changeFontSize(1)">A+</button>
-                            <button class="util-btn" title="글자 줄이기" onclick="changeFontSize(-1)">A-</button>
-                            <div class="util-divider"></div>
-                            <button class="util-btn" title="인쇄하기" onclick="openPrintWindow()"><img src="assets/print.png" alt="인쇄" class="util-icon"></button>
-                            <button class="util-btn" title="공유하기" onclick="toggleSharePopup(this, event)"><img src="assets/share.png" alt="공유" class="util-icon"></button>
-                        </div>
-                    </aside>
-
                     <div class="article-col">
+                        <!-- PC용 가로 유틸리티 바 -->
+                        <div class="article-toolbar" id="articleToolbar">
+                            <div class="toolbar-group">
+                                <span class="toolbar-label">글자 크기</span>
+                                <div class="toolbar-size">
+                                    <button type="button" class="toolbar-btn" title="글자 줄이기" aria-label="글자 줄이기" onclick="changeFontSize(-1)">A-</button>
+                                    <button type="button" class="toolbar-btn" title="글자 키우기" aria-label="글자 키우기" onclick="changeFontSize(1)">A+</button>
+                                </div>
+                            </div>
+                            <div class="toolbar-group">
+                                <button type="button" class="toolbar-btn" title="인쇄하기" onclick="openPrintWindow()"><img src="assets/print.png" alt="">인쇄</button>
+                                <button type="button" class="toolbar-btn" title="공유하기" onclick="toggleSharePopup(this, event)"><img src="assets/share.png" alt="">공유</button>
+                            </div>
+                        </div>
+
                         <div id="articleImageArea"></div>
 
                         <div class="article-content" id="articleBody"></div>
@@ -1195,10 +1215,6 @@
                     document.getElementById('articleContainer').style.display = 'block';
                     document.getElementById('errorContainer').style.display = 'none';
                     loadPopularArticles(articleId, data.category);
-                    
-                    if (window.innerWidth > 768) {
-                        document.getElementById('utilitySidebar').style.display = 'flex';
-                    }
                 })
                 .catch(error => {
                     console.error(error);
@@ -1211,7 +1227,6 @@
         function showErrorState() {
             document.getElementById('pageTitle').innerText = "페이지를 찾을 수 없습니다 | 서오일보";
             document.getElementById('articleContainer').style.display = 'none';
-            document.getElementById('utilitySidebar').style.display = 'none';
             document.getElementById('errorContainer').style.display = 'block';
         }
 
@@ -1565,7 +1580,7 @@
                         .article-image-container img, .article-image-wrap img { width: 100%; height: auto; max-height: 500px; object-fit: cover; }
                         .article-img-caption { font-size: 10pt; color: #666; margin-top: 6px; text-align: center; }
 
-                        .ad-box, .reporter-section, .popular-aside, .utility-sidebar, .category-news, .date-arrow {
+                        .ad-box, .reporter-section, .popular-aside, .article-toolbar, .category-news, .date-arrow {
                             display: none !important;
                         }
 
@@ -1667,8 +1682,8 @@
             const ph = popup.offsetHeight;
             let left, top;
 
-            if (shareAnchor.closest('.mobile-utility-bar')) {
-                // 모바일: 버튼 아래, 오른쪽 끝 맞춤
+            if (shareAnchor.closest('.mobile-utility-bar') || shareAnchor.closest('.article-toolbar')) {
+                // 모바일·가로 유틸리티 바: 버튼 아래, 오른쪽 끝 맞춤
                 left = r.right - pw;
                 top = r.bottom + 6;
             } else {
