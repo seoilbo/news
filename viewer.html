@@ -7,6 +7,9 @@
     <!-- 브라우저 탭 아이콘 (파비콘) 설정 -->
     <link rel="icon" href="assets/favi.png" type="image/png">
 
+    <!-- 카카오톡 공유용 SDK -->
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js" crossorigin="anonymous"></script>
+
     <!-- Open Graph 태그 (카톡 등 공유 미리보기용) -->
     <meta property="og:title" content="서오일보" id="ogTitle">
     <meta property="og:description" content="여기를 눌러 링크를 확인하세요" id="ogDesc">
@@ -203,10 +206,13 @@
         }
 
         .utility-sidebar {
-            position: sticky;
-            top: 90px;
+            position: fixed;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 900;
             height: fit-content;
-            width: 86px;
+            width: 48px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -217,12 +223,12 @@
             background-color: #ffffff;
             border: 1px solid #d1d8dd;
             display: grid;
-            grid-template-columns: repeat(2, 36px);
+            grid-template-columns: 36px;
             justify-content: center;
             justify-items: center;
             align-items: center;
-            padding: 8px 4px;
-            gap: 4px;
+            padding: 6px 4px;
+            gap: 2px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
@@ -258,6 +264,86 @@
             flex: 1;
             min-width: 0;
         }
+
+        /* 공유 팝업 (공유 버튼 옆, 애니메이션 없음) */
+        .share-popup {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            width: 168px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8dd;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            padding: 10px 12px 14px 12px;
+        }
+        .share-popup.open { display: block; }
+
+        .share-popup-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #e1e4e8;
+            font-size: 14px;
+            font-weight: 800;
+            color: #111111;
+            line-height: 1.2;
+        }
+
+        .share-popup-close {
+            background: none;
+            border: none;
+            padding: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .share-popup-close img {
+            width: 14px;
+            height: 14px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .share-popup-icons {
+            display: flex;
+            gap: 14px;
+        }
+
+        .share-icon-btn {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border: none;
+            border-radius: 50%;
+            overflow: hidden;
+            background: none;
+            cursor: pointer;
+            display: block;
+        }
+        .share-icon-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .share-toast {
+            display: none;
+            position: fixed;
+            left: 50%;
+            bottom: 48px;
+            transform: translateX(-50%);
+            z-index: 3000;
+            background-color: rgba(17, 17, 17, 0.92);
+            color: #ffffff;
+            font-size: 14px;
+            padding: 10px 18px;
+            white-space: nowrap;
+        }
+        .share-toast.show { display: block; }
 
         .article-header {
             margin-bottom: 0;
@@ -442,39 +528,34 @@
         /* 제목 구분선 아래: 유틸리티 바(왼쪽) + 기사 본문(가운데) + 전체 주요 기사(오른쪽) */
         .article-layout {
             display: grid;
-            grid-template-columns: 86px minmax(0, 1fr) 300px;
+            grid-template-columns: minmax(0, 1fr) 300px;
             column-gap: 40px;
             align-items: start;
         }
 
         /* 제목(카테고리+제목): 기사 본문 칸 + 오른쪽 주요 기사 칸 위에 표시 (왼쪽 유틸리티 바는 제외) */
         .article-layout .article-header {
-            grid-column: 2 / -1;
+            grid-column: 1 / -1;
             grid-row: 1;
             min-width: 0;
         }
 
         /* 기자·날짜 + 구분선: 기사 본문 칸 너비만 */
         .article-layout .article-info {
-            grid-column: 2;
+            grid-column: 1;
             grid-row: 2;
             min-width: 0;
         }
 
-        .article-layout .utility-sidebar {
-            grid-column: 1;
-            grid-row: 3;
-        }
-
         .article-col {
-            grid-column: 2;
+            grid-column: 1;
             grid-row: 3;
             min-width: 0;
             padding-top: 30px;
         }
 
         .popular-aside {
-            grid-column: 3;
+            grid-column: 2;
             grid-row: 3;
             position: sticky;
             top: 90px;
@@ -733,14 +814,19 @@
         }
 
         @media (max-width: 1100px) {
-            .article-layout { grid-template-columns: 86px minmax(0, 1fr); }
+            .article-layout { grid-template-columns: minmax(0, 1fr); }
             .popular-aside {
-                grid-column: 2;
+                grid-column: 1;
                 grid-row: 4;
                 position: static;
                 margin-top: 50px;
                 border-top: 2px solid #111111;
             }
+        }
+
+        /* 화면 왼쪽 고정 유틸리티와 본문이 겹치지 않도록 여백 확보 */
+        @media (min-width: 769px) and (max-width: 1280px) {
+            .page-wrapper { padding-left: 72px; }
         }
 
         @media (max-width: 768px) {
@@ -803,7 +889,7 @@
             <button class="util-btn" onclick="changeFontSize(1)">A+</button>
             <button class="util-btn" onclick="changeFontSize(-1)">A-</button>
             <button class="util-btn" onclick="openPrintWindow()"><img src="assets/print.png" alt="인쇄" class="util-icon"></button>
-            <button class="util-btn" onclick="copyShareUrl()"><img src="assets/share.png" alt="공유" class="util-icon"></button>
+            <button class="util-btn" onclick="toggleSharePopup(this, event)"><img src="assets/share.png" alt="공유" class="util-icon"></button>
         </div>
         <div class="scroll-progress-bar" id="scrollProgressBar"></div>
     </header>
@@ -831,7 +917,7 @@
                             <button class="util-btn" title="글자 줄이기" onclick="changeFontSize(-1)">A-</button>
                             <div class="util-divider"></div>
                             <button class="util-btn" title="인쇄하기" onclick="openPrintWindow()"><img src="assets/print.png" alt="인쇄" class="util-icon"></button>
-                            <button class="util-btn" title="공유하기" onclick="copyShareUrl()"><img src="assets/share.png" alt="공유" class="util-icon"></button>
+                            <button class="util-btn" title="공유하기" onclick="toggleSharePopup(this, event)"><img src="assets/share.png" alt="공유" class="util-icon"></button>
                         </div>
                     </aside>
 
@@ -929,6 +1015,19 @@
     </footer>
 
     <!-- 스크립트 영역 -->
+    <!-- 공유 팝업 -->
+    <div class="share-popup" id="sharePopup" role="dialog" aria-label="공유">
+        <div class="share-popup-head">
+            <span>공유</span>
+            <button type="button" class="share-popup-close" onclick="closeSharePopup()" aria-label="닫기"><img src="assets/close.png" alt="닫기"></button>
+        </div>
+        <div class="share-popup-icons">
+            <button type="button" class="share-icon-btn" onclick="shareKakao()" title="카카오톡 공유" aria-label="카카오톡 공유"><img src="assets/kakaoshare.png" alt="카카오톡"></button>
+            <button type="button" class="share-icon-btn" onclick="copyShareUrl()" title="URL 복사" aria-label="URL 복사"><img src="assets/urlshare.png" alt="URL"></button>
+        </div>
+    </div>
+    <div class="share-toast" id="shareToast"></div>
+
     <script>
         window.addEventListener('DOMContentLoaded', function() {
             const dateEl = document.getElementById('headerDate');
@@ -1507,24 +1606,150 @@
             return randomIndex;
         }
 
-        // 공유 버튼 클릭 시 안내 문구 변경 및 지정된 링크 형식으로 복사
+        // ===== 공유 =====
+        // 카카오 개발자 콘솔에서 발급한 JavaScript 키를 넣으세요. (플랫폼 > Web에 사이트 도메인 등록 필요)
+        const KAKAO_JS_KEY = 'YOUR_KAKAO_JAVASCRIPT_KEY';
+
+        let shareAnchor = null;
+
+        function getShareUrl() {
+            const articleId = new URLSearchParams(window.location.search).get('id');
+            if (!articleId) return null;
+            return `${window.location.origin}/seo-weekly-test/post/${articleId}`;
+        }
+
+        function toggleSharePopup(btn, e) {
+            if (e) e.stopPropagation();
+            const popup = document.getElementById('sharePopup');
+            if (popup.classList.contains('open') && shareAnchor === btn) {
+                closeSharePopup();
+                return;
+            }
+            shareAnchor = btn;
+            popup.classList.add('open');
+            positionSharePopup();
+        }
+
+        function closeSharePopup() {
+            document.getElementById('sharePopup').classList.remove('open');
+            shareAnchor = null;
+        }
+
+        function positionSharePopup() {
+            const popup = document.getElementById('sharePopup');
+            if (!shareAnchor || !popup.classList.contains('open')) return;
+
+            const r = shareAnchor.getBoundingClientRect();
+            if (r.width === 0 && r.height === 0) { closeSharePopup(); return; } // 버튼이 숨겨진 경우
+
+            const pw = popup.offsetWidth;
+            const ph = popup.offsetHeight;
+            let left, top;
+
+            if (shareAnchor.closest('.mobile-utility-bar')) {
+                // 모바일: 버튼 아래, 오른쪽 끝 맞춤
+                left = r.right - pw;
+                top = r.bottom + 6;
+            } else {
+                // PC: 공유 버튼 오른쪽 옆
+                left = r.right + 8;
+                top = r.top;
+            }
+            left = Math.max(8, Math.min(left, window.innerWidth - pw - 8));
+            top = Math.max(8, Math.min(top, window.innerHeight - ph - 8));
+            popup.style.left = left + 'px';
+            popup.style.top = top + 'px';
+        }
+
+        window.addEventListener('scroll', positionSharePopup, { passive: true });
+        window.addEventListener('resize', positionSharePopup);
+        document.addEventListener('click', function(e) {
+            const popup = document.getElementById('sharePopup');
+            if (popup.classList.contains('open') && !popup.contains(e.target)) closeSharePopup();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeSharePopup();
+        });
+
+        let shareToastTimer = null;
+        function showShareToast(message) {
+            const toast = document.getElementById('shareToast');
+            toast.innerText = message;
+            toast.classList.add('show');
+            clearTimeout(shareToastTimer);
+            shareToastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            let ok = false;
+            try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+            document.body.removeChild(ta);
+            return ok;
+        }
+
+        // URL 공유: 링크 복사 후 안내 문구
         function copyShareUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const articleId = urlParams.get('id');
-            
-            if (!articleId) {
-                alert('기사 주소를 찾을 수 없습니다.');
+            const shareUrl = getShareUrl();
+            if (!shareUrl) {
+                showShareToast('기사 주소를 찾을 수 없습니다.');
+                return;
+            }
+            closeSharePopup();
+
+            const done = () => showShareToast('링크가 복사되었습니다.');
+            const fail = () => showShareToast('링크 복사에 실패했습니다.');
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(shareUrl).then(done).catch(() => {
+                    fallbackCopy(shareUrl) ? done() : fail();
+                });
+            } else {
+                fallbackCopy(shareUrl) ? done() : fail();
+            }
+        }
+
+        // 카카오톡 공유
+        function shareKakao() {
+            const shareUrl = getShareUrl();
+            if (!shareUrl) {
+                showShareToast('기사 주소를 찾을 수 없습니다.');
+                return;
+            }
+            closeSharePopup();
+
+            const title = (document.getElementById('articleTitle').innerText || '서오일보').trim();
+            const desc = document.getElementById('ogDesc').getAttribute('content') || '';
+            const imageUrl = new URL(document.getElementById('ogImage').getAttribute('content') || 'assets/seologo.png', window.location.href).href;
+
+            if (window.Kakao && KAKAO_JS_KEY && KAKAO_JS_KEY !== 'YOUR_KAKAO_JAVASCRIPT_KEY') {
+                if (!Kakao.isInitialized()) Kakao.init(KAKAO_JS_KEY);
+                Kakao.Share.sendDefault({
+                    objectType: 'feed',
+                    content: {
+                        title: title,
+                        description: desc,
+                        imageUrl: imageUrl,
+                        link: { mobileWebUrl: shareUrl, webUrl: shareUrl }
+                    },
+                    buttons: [
+                        { title: '기사 보기', link: { mobileWebUrl: shareUrl, webUrl: shareUrl } }
+                    ]
+                });
                 return;
             }
 
-            const shareUrl = `${window.location.origin}/seo-weekly-test/post/${articleId}`;
-
-            navigator.clipboard.writeText(shareUrl).then(() => {
-                alert('링크가 클립보드에 복사되었습니다.');
-            }).catch(err => {
-                console.error('링크 복사 실패:', err);
-                alert('링크 복사에 실패했습니다.');
-            });
+            // 카카오 키가 없을 때: 기기 공유 창이 있으면 사용
+            if (navigator.share) {
+                navigator.share({ title: title, text: desc, url: shareUrl }).catch(() => {});
+            } else {
+                showShareToast('카카오톡 공유를 사용할 수 없습니다.');
+            }
         }
     </script>
 
