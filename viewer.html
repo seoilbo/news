@@ -225,37 +225,27 @@
             color: #111111;
         }
 
-        /* 기사 본문 상단 가로 유틸리티 바 (글자 크기 / 인쇄 · 공유) */
+        /* 기사 본문 상단 가로 유틸리티 바 (오른쪽 아이콘 모음) */
         .article-toolbar {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
-            padding: 12px 0;
-            margin-bottom: 24px;
-            border-bottom: 1px solid #e1e4e8;
-        }
-
-        .toolbar-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            gap: 2px;
+            padding: 10px 0;
+            margin-bottom: 14px;
         }
 
         .toolbar-btn {
-            height: 36px;
-            padding: 0 14px;
-            background: #ffffff;
-            border: 1px solid #d1d8dd;
-            color: #333333;
-            font-family: inherit;
-            font-size: 13px;
-            font-weight: 600;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            background: none;
+            border: none;
+            color: #444444;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
             cursor: pointer;
-            line-height: 1;
         }
 
         .toolbar-btn:hover {
@@ -263,32 +253,19 @@
             color: #111111;
         }
 
-        .toolbar-btn img {
-            width: 18px;
-            height: 18px;
+        .toolbar-btn img,
+        .toolbar-btn svg {
+            width: 24px;
+            height: 24px;
             object-fit: contain;
             display: block;
         }
 
-        /* 글자 크기: A- / A+ 를 붙여서 한 덩어리로 */
-        .toolbar-size {
-            display: inline-flex;
-            align-items: center;
-        }
-        .toolbar-size .toolbar-btn {
-            width: 44px;
-            padding: 0;
-            font-size: 14px;
-            font-weight: 700;
-        }
-        .toolbar-size .toolbar-btn + .toolbar-btn {
-            margin-left: -1px;
-        }
-
-        .toolbar-label {
-            font-size: 13px;
-            color: #777777;
-            margin-right: 10px;
+        .toolbar-divider {
+            width: 1px;
+            height: 18px;
+            background-color: #d1d8dd;
+            margin: 0 6px;
         }
 
         main {
@@ -524,6 +501,7 @@
             display: block;
         }
 
+        /* 기자 카드: 좁은 화면에서는 본문 아래 가로형, 넓은 화면(1280px~)에서는 본문 왼쪽 카드형 */
         .reporter-section {
             border-top: 1px solid #d1d8dd;
             border-bottom: 1px solid #d1d8dd;
@@ -543,11 +521,26 @@
             border: 1px solid #cbd5e1;
         }
 
+        .reporter-avatar[hidden] {
+            display: none;
+        }
+
         .reporter-info h3 {
             font-size: 16px;
             font-weight: 700;
             color: #111111;
             margin-bottom: 6px;
+        }
+
+        .reporter-dept {
+            font-size: 13px;
+            color: #888888;
+            line-height: 1.4;
+            margin-bottom: 6px;
+        }
+
+        .reporter-dept:empty {
+            display: none;
         }
 
         .reporter-info p {
@@ -855,6 +848,59 @@
             }
         }
 
+        /* 넓은 화면: 기자 카드를 본문 왼쪽에 배치 */
+        @media (min-width: 1280px) {
+            .article-col { position: relative; }
+
+            .reporter-section {
+                position: absolute;
+                top: 0;
+                right: 100%;
+                width: 240px;
+                margin: 0 40px 0 0;
+                padding: 20px;
+                border: 1px solid #d1d8dd;
+                display: grid;
+                grid-template-columns: 56px minmax(0, 1fr);
+                column-gap: 12px;
+                row-gap: 14px;
+                align-items: center;
+            }
+
+            .reporter-avatar {
+                width: 56px;
+                height: 56px;
+                margin-right: 0;
+            }
+
+            .reporter-info { display: contents; }
+
+            .reporter-head {
+                grid-column: 2;
+                grid-row: 1;
+                min-width: 0;
+            }
+
+            .reporter-avatar[hidden] + .reporter-info .reporter-head { grid-column: 1 / -1; }
+
+            .reporter-info h3 { font-size: 15px; margin-bottom: 2px; }
+            .reporter-dept { margin-bottom: 0; }
+
+            .reporter-info p {
+                grid-column: 1 / -1;
+                grid-row: 2;
+                padding-top: 14px;
+                border-top: 1px solid #e1e4e8;
+                font-size: 13px;
+                color: #666666;
+            }
+        }
+
+        /* 1280~1479px: 왼쪽 기자 카드 자리를 확보 */
+        @media (min-width: 1280px) and (max-width: 1479px) {
+            .page-wrapper { max-width: none; padding: 0 20px 0 300px; }
+        }
+
         /* 넓은 화면: 기사 본문이 사이트 정중앙, 주요 기사는 본문 오른쪽에 붙음 */
         @media (min-width: 1480px) {
             .page-wrapper { max-width: none; padding: 0; }
@@ -948,29 +994,30 @@
                     </div>
 
                     <div class="article-col">
-                        <!-- PC용 가로 유틸리티 바 -->
+                        <!-- PC용 가로 유틸리티 바 (오른쪽 아이콘) -->
                         <div class="article-toolbar" id="articleToolbar">
-                            <div class="toolbar-group">
-                                <span class="toolbar-label">글자 크기</span>
-                                <div class="toolbar-size">
-                                    <button type="button" class="toolbar-btn" title="글자 줄이기" aria-label="글자 줄이기" onclick="changeFontSize(-1)">A-</button>
-                                    <button type="button" class="toolbar-btn" title="글자 키우기" aria-label="글자 키우기" onclick="changeFontSize(1)">A+</button>
-                                </div>
-                            </div>
-                            <div class="toolbar-group">
-                                <button type="button" class="toolbar-btn" title="인쇄하기" onclick="openPrintWindow()"><img src="assets/print.png" alt="">인쇄</button>
-                                <button type="button" class="toolbar-btn" title="공유하기" onclick="toggleSharePopup(this, event)"><img src="assets/share.png" alt="">공유</button>
-                            </div>
+                            <button type="button" class="toolbar-btn" title="글자 줄이기" aria-label="글자 줄이기" onclick="changeFontSize(-1)">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 19L8.5 5l6 14M4.8 14h7.4"/><path d="M17 7h5"/></svg>
+                            </button>
+                            <button type="button" class="toolbar-btn" title="글자 키우기" aria-label="글자 키우기" onclick="changeFontSize(1)">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 19L8.5 5l6 14M4.8 14h7.4"/><path d="M17 7h5M19.5 4.5v5"/></svg>
+                            </button>
+                            <span class="toolbar-divider"></span>
+                            <button type="button" class="toolbar-btn" title="공유하기" aria-label="공유하기" onclick="toggleSharePopup(this, event)"><img src="assets/share.png" alt="공유"></button>
+                            <button type="button" class="toolbar-btn" title="인쇄하기" aria-label="인쇄하기" onclick="openPrintWindow()"><img src="assets/print.png" alt="인쇄"></button>
                         </div>
 
                         <div id="articleImageArea"></div>
 
                         <div class="article-content" id="articleBody"></div>
 
-                        <div class="reporter-section">
+                        <div class="reporter-section" id="reporterSection">
                             <img id="reporterAvatar" src="" alt="기자 프로필 이미지" class="reporter-avatar">
                             <div class="reporter-info">
-                                <h3 id="reporterName"></h3>
+                                <div class="reporter-head">
+                                    <h3 id="reporterName"></h3>
+                                    <div class="reporter-dept" id="reporterDept"></div>
+                                </div>
                                 <p id="reporterBio"></p>
                             </div>
                         </div>
@@ -1117,7 +1164,6 @@
                     categoryEl.href = `category.html?type=${categoryType}`;
 
                     document.getElementById('articleTitle').innerText = data.title;
-                    document.getElementById('articleReporter').innerText = data.reporter; 
                     renderArticleDate(data);
                     
                     const imageArea = document.getElementById('articleImageArea');
@@ -1142,9 +1188,7 @@
                         imageArea.innerHTML = '';
                     }
 
-                    document.getElementById('reporterAvatar').src = data.reporterAvatar;
-                    document.getElementById('reporterName').innerText = data.reporter;
-                    document.getElementById('reporterBio').innerText = data.reporterBio;
+                    loadReporter(data);
 
                     const contentContainer = document.getElementById('articleBody');
                     contentContainer.innerHTML = '';
@@ -1223,6 +1267,64 @@
 
             loadRandomAd();
         });
+
+        // ===== 기자 정보 =====
+        // 기사 JSON의 reporter 칸에 기자 id만 적으면 reporter/<id>.json 에서 정보를 불러옵니다.
+        // reporter/<id>.json 예: { "name": "김서오 기자", "photo": "reporter/kimseo.png", "department": "사회부", "description": "소개 문구" }
+        // reporter/<id>.json 이 없으면 예전 방식(기사 JSON의 reporter, reporterAvatar, reporterBio)으로 표시합니다.
+        function pickField(obj, keys) {
+            if (!obj) return '';
+            for (const k of keys) {
+                if (typeof obj[k] === 'string' && obj[k].trim() !== '') return obj[k].trim();
+            }
+            return '';
+        }
+
+        function applyReporter(info) {
+            document.getElementById('articleReporter').innerText = info.name;
+            document.getElementById('reporterName').innerText = info.name;
+            document.getElementById('reporterDept').innerText = info.department;
+            document.getElementById('reporterBio').innerText = info.description;
+
+            const avatar = document.getElementById('reporterAvatar');
+            if (info.photo) {
+                avatar.onerror = function() { avatar.hidden = true; };
+                avatar.hidden = false;
+                avatar.src = info.photo;
+            } else {
+                avatar.hidden = true;
+            }
+
+            const section = document.getElementById('reporterSection');
+            if (section) section.style.display = (info.name || info.description) ? '' : 'none';
+        }
+
+        async function loadReporter(data) {
+            const id = pickField(data, ['reporterId', 'reporter']);
+            const legacy = {
+                name: pickField(data, ['reporter']),
+                photo: pickField(data, ['reporterAvatar']),
+                department: pickField(data, ['reporterDepartment', 'reporterDept']),
+                description: pickField(data, ['reporterBio'])
+            };
+
+            if (id && /^[A-Za-z0-9_\-가-힣]+$/.test(id)) {
+                try {
+                    const res = await fetch('reporter/' + encodeURIComponent(id) + '.json');
+                    if (res.ok) {
+                        const r = await res.json();
+                        applyReporter({
+                            name: pickField(r, ['name', 'reporterName']),
+                            photo: pickField(r, ['photo', 'avatar', 'image']),
+                            department: pickField(r, ['department', 'dept']),
+                            description: pickField(r, ['description', 'bio'])
+                        });
+                        return;
+                    }
+                } catch (e) { /* 아래 예전 방식으로 표시 */ }
+            }
+            applyReporter(legacy);
+        }
 
         function showErrorState() {
             document.getElementById('pageTitle').innerText = "페이지를 찾을 수 없습니다 | 서오일보";
