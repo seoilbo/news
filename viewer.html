@@ -329,14 +329,18 @@
             overflow: hidden;
             background: none;
             cursor: pointer;
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .share-icon-btn img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width: 60%;
+            height: 60%;
+            object-fit: contain;
             display: block;
         }
+        .share-icon-btn.share-kakao { background-color: #fbe300; }
+        .share-icon-btn.share-url { background-color: #a61c1c; }
 
         .share-toast {
             display: none;
@@ -461,6 +465,14 @@
             font-size: 18px;
             color: #000000;
             line-height: 1.85;
+            margin-bottom: 16px;
+        }
+
+        /* 기사 본문 끝 저작권 캡션 */
+        .article-copyright {
+            font-size: 13px;
+            color: #868e96;
+            line-height: 1.5;
             margin-bottom: 40px;
         }
 
@@ -1010,6 +1022,7 @@
                         <div id="articleImageArea"></div>
 
                         <div class="article-content" id="articleBody"></div>
+                        <div class="article-copyright">© seoilbo.com All rights reserved. 무단 전재, 재배포 및 AI학습 이용 금지</div>
 
                         <div class="reporter-section" id="reporterSection">
                             <img id="reporterAvatar" src="" alt="기자 프로필 이미지" class="reporter-avatar">
@@ -1110,8 +1123,8 @@
             <button type="button" class="share-popup-close" onclick="closeSharePopup()" aria-label="닫기"><img src="assets/close.png" alt="닫기"></button>
         </div>
         <div class="share-popup-icons">
-            <button type="button" class="share-icon-btn" onclick="shareKakao()" title="카카오톡 공유" aria-label="카카오톡 공유"><img src="assets/kakaoshare.png" alt="카카오톡"></button>
-            <button type="button" class="share-icon-btn" onclick="copyShareUrl()" title="URL 복사" aria-label="URL 복사"><img src="assets/urlshare.png" alt="URL"></button>
+            <button type="button" class="share-icon-btn share-kakao" onclick="shareKakao()" title="카카오톡 공유" aria-label="카카오톡 공유"><img src="assets/kakaoshare.png" alt="카카오톡"></button>
+            <button type="button" class="share-icon-btn share-url" onclick="copyShareUrl()" title="URL 복사" aria-label="URL 복사"><img src="assets/urlshare.png" alt="URL"></button>
         </div>
     </div>
     <div class="share-toast" id="shareToast"></div>
@@ -1687,6 +1700,7 @@
                         p { font-size: 12pt; margin-bottom: 15px; }
                         .article-image-container img, .article-image-wrap img { width: 100%; height: auto; max-height: 500px; object-fit: cover; }
                         .article-img-caption { font-size: 10pt; color: #666; margin-top: 6px; text-align: center; }
+                        .article-copyright { font-size: 10pt; color: #666; margin-top: 10px; }
 
                         .ad-box, .reporter-section, .popular-aside, .article-toolbar, .category-news, .date-arrow {
                             display: none !important;
