@@ -1300,7 +1300,10 @@
         }
 
         async function loadReporter(data) {
-            const id = pickField(data, ['reporterId', 'reporter']);
+            // id 정리: 앞뒤 공백, 'reporter/' 접두어, '.json' 확장자를 적어도 인식
+            let id = pickField(data, ['reporterId', 'reporter']);
+            id = id.replace(/^\/?reporter\//i, '').replace(/\.json$/i, '').trim();
+
             const legacy = {
                 name: pickField(data, ['reporter']),
                 photo: pickField(data, ['reporterAvatar']),
@@ -1308,20 +1311,23 @@
                 description: pickField(data, ['reporterBio'])
             };
 
-            if (id && /^[A-Za-z0-9_\-가-힣]+$/.test(id)) {
+            if (id) {
+                const url = 'reporter/' + encodeURIComponent(id) + '.json';
                 try {
-                    const res = await fetch('reporter/' + encodeURIComponent(id) + '.json');
-                    if (res.ok) {
-                        const r = await res.json();
-                        applyReporter({
-                            name: pickField(r, ['name', 'reporterName']),
-                            photo: pickField(r, ['photo', 'avatar', 'image']),
-                            department: pickField(r, ['department', 'dept']),
-                            description: pickField(r, ['description', 'bio'])
-                        });
-                        return;
-                    }
-                } catch (e) { /* 아래 예전 방식으로 표시 */ }
+                    const res = await fetch(url, { cache: 'no-cache' });
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    const r = await res.json();
+                    applyReporter({
+                        name: pickField(r, ['name', 'reporterName', '기자명']),
+                        photo: pickField(r, ['photo', 'avatar', 'image', 'profile', '프사', '기자프사']),
+                        department: pickField(r, ['department', 'dept', 'team', '소속', '부서', '소속부서']),
+                        description: pickField(r, ['description', 'bio', 'desc', '설명'])
+                    });
+                    return;
+                } catch (e) {
+                    console.warn('[기자 정보] 불러오기 실패 → 기사 JSON 값으로 대체합니다. 시도한 주소:',
+                        new URL(url, location.href).href, '/ 원인:', e.message);
+                }
             }
             applyReporter(legacy);
         }
