@@ -197,7 +197,7 @@
         }
 
         .page-wrapper {
-            max-width: 1160px;
+            max-width: 1060px;
             width: 100%;
             margin: 40px auto 80px auto;
             padding: 0 10px;
@@ -212,7 +212,7 @@
             transform: translateY(-50%);
             z-index: 900;
             height: fit-content;
-            width: 48px;
+            width: 62px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -223,12 +223,12 @@
             background-color: #ffffff;
             border: 1px solid #d1d8dd;
             display: grid;
-            grid-template-columns: 36px;
+            grid-template-columns: 46px;
             justify-content: center;
             justify-items: center;
             align-items: center;
-            padding: 6px 4px;
-            gap: 2px;
+            padding: 8px 6px;
+            gap: 4px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
@@ -245,6 +245,17 @@
             font-size: 13px;
             font-weight: 700;
             text-decoration: none;
+        }
+
+        /* PC 유틸리티 바 전용 확대 */
+        .utility-container .util-btn {
+            width: 46px;
+            height: 46px;
+            font-size: 16px;
+        }
+        .utility-container .util-icon {
+            width: 24px;
+            height: 24px;
         }
 
         .util-btn:hover {
@@ -825,8 +836,12 @@
         }
 
         /* 화면 왼쪽 고정 유틸리티와 본문이 겹치지 않도록 여백 확보 */
+        /* 넓은 화면: 중앙에서 약간 왼쪽에 위치 */
+        @media (min-width: 1281px) {
+            .page-wrapper { margin-right: calc((100% - 1060px) / 2 + 32px); margin-left: calc((100% - 1060px) / 2 - 32px); }
+        }
         @media (min-width: 769px) and (max-width: 1280px) {
-            .page-wrapper { padding-left: 72px; }
+            .page-wrapper { padding-left: 88px; }
         }
 
         @media (max-width: 768px) {
@@ -1265,8 +1280,8 @@
         async function loadPopularArticles(currentId, categoryName) {
             const list = (await fetchArticleList()).filter(a => a.id !== currentId);
 
-            // 전체 주요 기사: 조회수(views) 값이 있으면 조회수순, 없으면 최신순
-            const popular = list.slice()
+            // 전체 주요 기사: 오피니언 제외, 조회수(views) 값이 있으면 조회수순, 없으면 최신순
+            const popular = list.filter(a => a.category !== '오피니언')
                 .sort((a, b) => (b.views - a.views) || b.id.localeCompare(a.id))
                 .slice(0, POPULAR_COUNT);
             renderPopular(popular);
