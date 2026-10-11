@@ -197,7 +197,7 @@
         }
 
         .page-wrapper {
-            max-width: 1060px;
+            max-width: 1160px;
             width: 100%;
             margin: 40px auto 80px auto;
             padding: 0 10px;
@@ -836,12 +836,18 @@
         }
 
         /* 화면 왼쪽 고정 유틸리티와 본문이 겹치지 않도록 여백 확보 */
-        /* 넓은 화면: 중앙에서 약간 왼쪽에 위치 */
-        @media (min-width: 1281px) {
-            .page-wrapper { margin-right: calc((100% - 1060px) / 2 + 32px); margin-left: calc((100% - 1060px) / 2 - 32px); }
-        }
-        @media (min-width: 769px) and (max-width: 1280px) {
+        @media (min-width: 769px) and (max-width: 1479px) {
             .page-wrapper { padding-left: 88px; }
+        }
+
+        /* 넓은 화면: 기사 본문이 사이트 정중앙, 주요 기사는 본문 오른쪽에 붙음 */
+        @media (min-width: 1480px) {
+            .page-wrapper { max-width: none; padding: 0; }
+            .article-layout {
+                width: 1060px;
+                grid-template-columns: 720px 300px;
+                margin-left: calc(50% - 360px);
+            }
         }
 
         @media (max-width: 768px) {
