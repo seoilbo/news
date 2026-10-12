@@ -889,42 +889,56 @@
             }
         }
 
-        /* 넓은 화면: 유틸리티 바를 본문 왼쪽에 세로로 배치 (스크롤을 따라다님) */
+        /* 넓은 화면: 유틸리티 바를 화면 왼쪽에 고정 (알약 모양, 세로 중앙) */
         @media (min-width: 1280px) {
-            .article-col { position: relative; }
+            .article-col { position: relative; padding-top: 28px; }
 
             .article-toolbar {
-                position: absolute;
-                top: 0;
-                right: 100%;
-                height: 100%;
-                margin: 0 24px 0 0;
+                position: fixed;
+                top: 50%;
+                left: 24px;
+                transform: translateY(-50%);
+                margin: 0;
                 padding: 0;
                 display: block;
+                z-index: 50;
+                max-height: calc(100vh - 130px);
             }
 
             .toolbar-inner {
-                position: sticky;
-                top: 80px;
                 flex-direction: column;
                 align-items: center;
-                width: 54px;
-                padding: 6px;
-                gap: 2px;
+                width: 68px;
+                padding: 12px 10px;
+                gap: 8px;
                 background-color: #ffffff;
                 border: 1px solid #d1d8dd;
+                border-radius: 34px;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            }
+
+            .toolbar-btn {
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+            }
+
+            .toolbar-btn img,
+            .toolbar-btn svg {
+                width: 28px;
+                height: 28px;
             }
 
             .toolbar-divider {
-                width: 24px;
+                width: 28px;
                 height: 1px;
-                margin: 4px 0;
+                margin: 2px 0;
             }
         }
 
         /* 1280~1479px: 왼쪽 유틸리티 바 자리를 확보 */
         @media (min-width: 1280px) and (max-width: 1479px) {
-            .page-wrapper { max-width: none; padding: 0 20px 0 170px; }
+            .page-wrapper { max-width: none; padding: 0 20px 0 120px; }
         }
 
         /* 넓은 화면: 기사 본문이 사이트 정중앙, 주요 기사는 본문 오른쪽에 붙음 */
@@ -1027,6 +1041,23 @@
         }
 
         /* ===== 다크 모드 ===== */
+        @media (max-width: 768px) {
+            .mobile-utility-bar {
+                justify-content: flex-start;
+                overflow-x: auto;
+                overflow-y: hidden;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .mobile-utility-bar::-webkit-scrollbar { display: none; }
+            .mobile-utility-bar .util-btn {
+                flex: 0 0 25%;
+                width: 25%;
+                scroll-snap-align: start;
+            }
+        }
+
         html[data-theme="dark"] { color-scheme: dark; }
         html[data-theme="dark"] body { color: #e4e4e4; background-color: #121212; }
         html[data-theme="dark"] .large-header,
