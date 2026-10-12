@@ -527,18 +527,17 @@
 
         /* 기자 카드: 좁은 화면에서는 본문 아래 가로형, 넓은 화면(1280px~)에서는 본문 왼쪽 카드형 */
         .reporter-section {
-            background-color: #f8f9fa;
-            border: 1px solid #e1e4e8;
-            border-top: 2px solid #111111;
-            padding: 24px;
+            border-top: 1px solid #d1d8dd;
+            border-bottom: 1px solid #d1d8dd;
+            padding: 24px 0;
             margin: 40px 0 50px 0;
             display: flex;
             align-items: center;
         }
 
         .reporter-avatar {
-            width: 80px;
-            height: 80px;
+            width: 65px;
+            height: 65px;
             border-radius: 50%;
             object-fit: cover;
             margin-right: 20px;
@@ -914,7 +913,6 @@
                 background-color: #ffffff;
                 border: 1px solid #d1d8dd;
                 border-radius: 34px;
-                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
             }
 
             .toolbar-btn {
@@ -1058,6 +1056,33 @@
             }
         }
 
+        /* 모바일 유틸 바 '옆으로 넘기기' 화살표 (한 번 만지면 사라짐) */
+        .util-scroll-hint { display: none; }
+
+        @media (max-width: 768px) {
+            .fixed-small-header.mobile-scrolled-down .util-scroll-hint {
+                display: flex;
+                position: absolute;
+                right: 5px;
+                top: 9px;
+                width: 18px;
+                height: 18px;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                background-color: rgba(255, 255, 255, 0.9);
+                border: 1px solid #d1d8dd;
+                color: #666666;
+                font-size: 14px;
+                line-height: 1;
+                pointer-events: none;
+                z-index: 5;
+            }
+        }
+
+        html.util-hint-done .util-scroll-hint { display: none !important; }
+        html[data-theme="dark"] .util-scroll-hint { background-color: rgba(18, 18, 18, 0.9); border-color: #444444; color: #cccccc; }
+
         html[data-theme="dark"] { color-scheme: dark; }
         html[data-theme="dark"] body { color: #e4e4e4; background-color: #121212; }
         html[data-theme="dark"] .large-header,
@@ -1097,7 +1122,7 @@
         html[data-theme="dark"] .article-copyright { color: #8a9097; }
         html[data-theme="dark"] .ad-box,
         html[data-theme="dark"] .ad-label { color: #999999; }
-        html[data-theme="dark"] .reporter-section { background-color: #1a1a1a; border-color: #333333; border-top-color: #bbbbbb; }
+        html[data-theme="dark"] .reporter-section { border-color: #333333; }
         html[data-theme="dark"] .reporter-avatar { border-color: #444444; }
         html[data-theme="dark"] .reporter-info h3 { color: #f5f5f5; }
         html[data-theme="dark"] .reporter-dept { color: #9aa0a6; }
@@ -1175,9 +1200,9 @@
             <button class="util-btn" onclick="changeFontSize(-1)">A-</button>
             <button class="util-btn tts-btn" onclick="startTTS()" aria-label="기사 듣기"><img src="assets/speak.png" alt="기사 듣기" class="util-icon"></button>
             <button class="util-btn theme-btn" onclick="toggleTheme()" aria-label="다크 모드"><img src="assets/dark.png" alt="다크 모드" class="util-icon"></button>
-            <button class="util-btn" onclick="openPrintWindow()"><img src="assets/print.png" alt="인쇄" class="util-icon"></button>
             <button class="util-btn" onclick="toggleSharePopup(this, event)"><img src="assets/share.png" alt="공유" class="util-icon"></button>
         </div>
+        <span class="util-scroll-hint" id="utilScrollHint" aria-hidden="true">&#8250;</span>
         <div class="scroll-progress-bar" id="scrollProgressBar"></div>
     </header>
 
@@ -1933,6 +1958,23 @@
         }
 
         applyThemeButtons();
+
+        // 모바일 유틸 바 화살표: 한 번 만지거나 옆으로 넘기면 사라지고, 이후에는 다시 나타나지 않음
+        (function() {
+            const root = document.documentElement;
+            try {
+                if (localStorage.getItem('seoUtilHintDone') === '1') { root.classList.add('util-hint-done'); return; }
+            } catch (e) {}
+            const bar = document.querySelector('.mobile-utility-bar');
+            if (!bar) return;
+            const hide = function() {
+                root.classList.add('util-hint-done');
+                try { localStorage.setItem('seoUtilHintDone', '1'); } catch (e) {}
+            };
+            bar.addEventListener('touchstart', hide, { once: true, passive: true });
+            bar.addEventListener('pointerdown', hide, { once: true, passive: true });
+            bar.addEventListener('scroll', hide, { once: true, passive: true });
+        })();
 
         let currentFontSize = 18;
         function changeFontSize(step) {
