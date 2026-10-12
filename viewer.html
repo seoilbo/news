@@ -7,6 +7,18 @@
     <!-- 브라우저 탭 아이콘 (파비콘) 설정 -->
     <link rel="icon" href="assets/favi.png" type="image/png">
 
+    <!-- 다크/라이트 모드: 저장된 선택이 있으면 먼저 적용 (없으면 라이트) -->
+    <script>
+        (function() {
+            try {
+                var saved = localStorage.getItem('seoTheme');
+                document.documentElement.setAttribute('data-theme', saved === 'dark' ? 'dark' : 'light');
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+
     <!-- 카카오톡 공유용 SDK -->
     <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js" crossorigin="anonymous"></script>
 
@@ -515,17 +527,18 @@
 
         /* 기자 카드: 좁은 화면에서는 본문 아래 가로형, 넓은 화면(1280px~)에서는 본문 왼쪽 카드형 */
         .reporter-section {
-            border-top: 1px solid #d1d8dd;
-            border-bottom: 1px solid #d1d8dd;
-            padding: 24px 0;
+            background-color: #f8f9fa;
+            border: 1px solid #e1e4e8;
+            border-top: 2px solid #111111;
+            padding: 24px;
             margin: 40px 0 50px 0;
             display: flex;
             align-items: center;
         }
 
         .reporter-avatar {
-            width: 65px;
-            height: 65px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             object-fit: cover;
             margin-right: 20px;
@@ -559,6 +572,22 @@
             font-size: 14px;
             color: #555555;
             line-height: 1.5;
+        }
+
+        .reporter-info p:empty {
+            display: none;
+        }
+
+        .reporter-email {
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #a61c1c;
+            text-decoration: none;
+        }
+
+        .reporter-email:hover {
+            text-decoration: underline;
         }
 
         /* 제목 구분선 아래: 기사 본문(가운데, 상단에 가로 유틸리티 바) + 전체 주요 기사(오른쪽) */
@@ -860,57 +889,42 @@
             }
         }
 
-        /* 넓은 화면: 기자 카드를 본문 왼쪽에 배치 */
+        /* 넓은 화면: 유틸리티 바를 본문 왼쪽에 세로로 배치 (스크롤을 따라다님) */
         @media (min-width: 1280px) {
             .article-col { position: relative; }
 
-            .reporter-section {
+            .article-toolbar {
                 position: absolute;
                 top: 0;
                 right: 100%;
-                width: 240px;
-                margin: 0 40px 0 0;
-                padding: 20px;
-                border: 1px solid #d1d8dd;
-                display: grid;
-                grid-template-columns: 56px minmax(0, 1fr);
-                column-gap: 12px;
-                row-gap: 14px;
+                height: 100%;
+                margin: 0 24px 0 0;
+                padding: 0;
+                display: block;
+            }
+
+            .toolbar-inner {
+                position: sticky;
+                top: 80px;
+                flex-direction: column;
                 align-items: center;
+                width: 54px;
+                padding: 6px;
+                gap: 2px;
+                background-color: #ffffff;
+                border: 1px solid #d1d8dd;
             }
 
-            .reporter-avatar {
-                width: 56px;
-                height: 56px;
-                margin-right: 0;
-            }
-
-            .reporter-info { display: contents; }
-
-            .reporter-head {
-                grid-column: 2;
-                grid-row: 1;
-                min-width: 0;
-            }
-
-            .reporter-avatar[hidden] + .reporter-info .reporter-head { grid-column: 1 / -1; }
-
-            .reporter-info h3 { font-size: 15px; margin-bottom: 2px; }
-            .reporter-dept { margin-bottom: 0; }
-
-            .reporter-info p {
-                grid-column: 1 / -1;
-                grid-row: 2;
-                padding-top: 14px;
-                border-top: 1px solid #e1e4e8;
-                font-size: 13px;
-                color: #666666;
+            .toolbar-divider {
+                width: 24px;
+                height: 1px;
+                margin: 4px 0;
             }
         }
 
-        /* 1280~1479px: 왼쪽 기자 카드 자리를 확보 */
+        /* 1280~1479px: 왼쪽 유틸리티 바 자리를 확보 */
         @media (min-width: 1280px) and (max-width: 1479px) {
-            .page-wrapper { max-width: none; padding: 0 20px 0 300px; }
+            .page-wrapper { max-width: none; padding: 0 20px 0 170px; }
         }
 
         /* 넓은 화면: 기사 본문이 사이트 정중앙, 주요 기사는 본문 오른쪽에 붙음 */
@@ -943,6 +957,151 @@
             .footer-bar { margin: 0 6px; }
             footer { padding: 20px 15px; }
         }
+
+        /* 유틸리티 바 안쪽 (가로: 오른쪽 정렬 / 넓은 화면: 세로) */
+        .toolbar-inner {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        /* 기사 듣기(TTS) 재생 중 표시 */
+        .toolbar-btn.active,
+        .util-btn.active {
+            box-shadow: inset 0 0 0 2px #C91C1C;
+            color: #C91C1C;
+        }
+
+        /* 제목 바로 아래 짧은 요약 */
+        .article-summary {
+            font-size: 17px;
+            line-height: 1.7;
+            color: #444444;
+            background-color: #f6f7f8;
+            border-left: 4px solid #C91C1C;
+            padding: 14px 18px;
+            margin: 0 0 22px 0;
+        }
+
+        /* 오른쪽 칸: 오피니언 */
+        .popular-aside {
+            max-height: calc(100vh - 110px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+
+        .opinion-head {
+            margin-top: 28px;
+            padding: 12px 0;
+            font-size: 16px;
+            font-weight: 800;
+            color: #111111;
+            border-bottom: 2px solid #a61c1c;
+        }
+
+        .opinion-list {
+            list-style: none;
+        }
+
+        .opinion-item a {
+            display: block;
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.5;
+            color: #222222;
+            text-decoration: none;
+        }
+
+        .opinion-item:last-child a {
+            border-bottom: none;
+        }
+
+        .opinion-item a:hover {
+            color: #868e96;
+        }
+
+        @media (max-width: 1100px) {
+            .popular-aside { max-height: none; overflow: visible; }
+        }
+
+        /* ===== 다크 모드 ===== */
+        html[data-theme="dark"] { color-scheme: dark; }
+        html[data-theme="dark"] body { color: #e4e4e4; background-color: #121212; }
+        html[data-theme="dark"] .large-header,
+        html[data-theme="dark"] .header-main-bar,
+        html[data-theme="dark"] .sub-info-bar,
+        html[data-theme="dark"] .fixed-small-header { background-color: #121212; border-color: #333333; }
+        html[data-theme="dark"] .sub-info-bar { color: #aaaaaa; border-bottom-color: #444444; }
+        html[data-theme="dark"] .sub-nav-categories a { color: #dddddd; }
+        html[data-theme="dark"] .sub-nav-categories a:hover { color: #ff6b6b; }
+        html[data-theme="dark"] .fixed-small-header { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
+        html[data-theme="dark"] .logo-img-large,
+        html[data-theme="dark"] .logo-img-small,
+        html[data-theme="dark"] .footer-logo-img { filter: invert(1) hue-rotate(180deg); }
+        html[data-theme="dark"] .mobile-utility-bar .util-btn { border-right-color: #333333; color: #bbbbbb; }
+        html[data-theme="dark"] .util-btn,
+        html[data-theme="dark"] .toolbar-btn { color: #cccccc; }
+        html[data-theme="dark"] .util-btn:hover,
+        html[data-theme="dark"] .toolbar-btn:hover { background-color: #262626; color: #ffffff; }
+        html[data-theme="dark"] .toolbar-btn img,
+        html[data-theme="dark"] .util-btn img,
+        html[data-theme="dark"] .share-popup-close img { filter: invert(1); }
+        html[data-theme="dark"] .toolbar-btn.active,
+        html[data-theme="dark"] .util-btn.active { color: #ff6b6b; box-shadow: inset 0 0 0 2px #ff6b6b; }
+        html[data-theme="dark"] .toolbar-divider { background-color: #444444; }
+        html[data-theme="dark"] .toolbar-inner { background-color: #121212; border-color: #333333; }
+        html[data-theme="dark"] .share-popup { background-color: #1e1e1e; border-color: #333333; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); }
+        html[data-theme="dark"] .share-popup-head { border-bottom-color: #333333; color: #eeeeee; }
+        html[data-theme="dark"] .article-category { color: #ff6b6b; }
+        html[data-theme="dark"] .article-title { color: #f5f5f5; }
+        html[data-theme="dark"] .article-summary { color: #cccccc; background-color: #1c1c1c; border-left-color: #ff6b6b; }
+        html[data-theme="dark"] .article-info { color: #9aa0a6; border-bottom-color: #bbbbbb; }
+        html[data-theme="dark"] .article-image-container img,
+        html[data-theme="dark"] .article-image-wrap img { border-color: #333333; }
+        html[data-theme="dark"] .article-img-caption { color: #aaaaaa; }
+        html[data-theme="dark"] .article-content,
+        html[data-theme="dark"] .article-content p { color: #e6e6e6; }
+        html[data-theme="dark"] .article-copyright { color: #8a9097; }
+        html[data-theme="dark"] .ad-box,
+        html[data-theme="dark"] .ad-label { color: #999999; }
+        html[data-theme="dark"] .reporter-section { background-color: #1a1a1a; border-color: #333333; border-top-color: #bbbbbb; }
+        html[data-theme="dark"] .reporter-avatar { border-color: #444444; }
+        html[data-theme="dark"] .reporter-info h3 { color: #f5f5f5; }
+        html[data-theme="dark"] .reporter-dept { color: #9aa0a6; }
+        html[data-theme="dark"] .reporter-info p { color: #bbbbbb; }
+        html[data-theme="dark"] .reporter-email { color: #ff6b6b; }
+        html[data-theme="dark"] .popular-aside,
+        html[data-theme="dark"] .category-news { border-top-color: #bbbbbb; }
+        html[data-theme="dark"] .popular-head,
+        html[data-theme="dark"] .opinion-head { color: #f5f5f5; border-bottom-color: #ff6b6b; }
+        html[data-theme="dark"] .popular-item a,
+        html[data-theme="dark"] .opinion-item a,
+        html[data-theme="dark"] .cat-news-link { color: #dddddd; border-bottom-color: #2a2a2a; }
+        html[data-theme="dark"] .popular-item:last-child a,
+        html[data-theme="dark"] .opinion-item:last-child a,
+        html[data-theme="dark"] .cat-news-item:last-child .cat-news-link { border-bottom: none; }
+        html[data-theme="dark"] .popular-rank { color: #666666; }
+        html[data-theme="dark"] .popular-item:nth-child(-n+3) .popular-rank { color: #ff6b6b; }
+        html[data-theme="dark"] .popular-title,
+        html[data-theme="dark"] .category-news-title,
+        html[data-theme="dark"] .cat-news-name { color: #f0f0f0; }
+        html[data-theme="dark"] .popular-item a:hover .popular-title,
+        html[data-theme="dark"] .cat-news-link:hover .cat-news-name,
+        html[data-theme="dark"] .opinion-item a:hover { color: #9aa0a6; }
+        html[data-theme="dark"] .popular-empty { color: #9aa0a6; }
+        html[data-theme="dark"] .cat-news-summary { color: #aaaaaa; }
+        html[data-theme="dark"] .cat-news-date { color: #9aa0a6; }
+        html[data-theme="dark"] .cat-news-thumb { background-color: #262626; border-color: #333333; }
+        html[data-theme="dark"] .error-message { color: #dddddd; }
+        html[data-theme="dark"] .error-btn { background-color: #1e1e1e; border-color: #444444; color: #dddddd; }
+        html[data-theme="dark"] .error-btn.primary { background-color: #f0f0f0; border-color: #f0f0f0; color: #111111; }
+        html[data-theme="dark"] footer { background-color: #1a1a1a; color: #9aa0a6; }
+        html[data-theme="dark"] .footer-row { color: #aaaaaa; }
+        html[data-theme="dark"] .footer-bar { color: #444444; }
+        html[data-theme="dark"] .footer-desc { color: #999999; }
+        html[data-theme="dark"] .footer-copyright { color: #888888; }
     </style>
 </head>
 <body>
@@ -983,6 +1142,8 @@
         <div class="mobile-utility-bar">
             <button class="util-btn" onclick="changeFontSize(1)">A+</button>
             <button class="util-btn" onclick="changeFontSize(-1)">A-</button>
+            <button class="util-btn tts-btn" onclick="startTTS()" aria-label="기사 듣기"><img src="assets/speak.png" alt="기사 듣기" class="util-icon"></button>
+            <button class="util-btn theme-btn" onclick="toggleTheme()" aria-label="다크 모드"><img src="assets/dark.png" alt="다크 모드" class="util-icon"></button>
             <button class="util-btn" onclick="openPrintWindow()"><img src="assets/print.png" alt="인쇄" class="util-icon"></button>
             <button class="util-btn" onclick="toggleSharePopup(this, event)"><img src="assets/share.png" alt="공유" class="util-icon"></button>
         </div>
@@ -998,6 +1159,7 @@
                     <div class="article-header">
                         <a href="#" class="article-category" id="articleCategory">카테고리</a>
                         <h1 class="article-title" id="articleTitle"></h1>
+                        <p class="article-summary" id="articleSummary" style="display:none;"></p>
                     </div>
 
                     <div class="article-info">
@@ -1008,6 +1170,7 @@
                     <div class="article-col">
                         <!-- PC용 가로 유틸리티 바 (오른쪽 아이콘) -->
                         <div class="article-toolbar" id="articleToolbar">
+                          <div class="toolbar-inner">
                             <button type="button" class="toolbar-btn" title="글자 줄이기" aria-label="글자 줄이기" onclick="changeFontSize(-1)">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 19L8.5 5l6 14M4.8 14h7.4"/><path d="M17 7h5"/></svg>
                             </button>
@@ -1015,8 +1178,12 @@
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 19L8.5 5l6 14M4.8 14h7.4"/><path d="M17 7h5M19.5 4.5v5"/></svg>
                             </button>
                             <span class="toolbar-divider"></span>
+                            <button type="button" class="toolbar-btn tts-btn" title="기사 듣기" aria-label="기사 듣기" onclick="startTTS()"><img src="assets/speak.png" alt="기사 듣기"></button>
+                            <button type="button" class="toolbar-btn theme-btn" title="다크 모드" aria-label="다크 모드" onclick="toggleTheme()"><img src="assets/dark.png" alt="다크 모드"></button>
+                            <span class="toolbar-divider"></span>
                             <button type="button" class="toolbar-btn" title="공유하기" aria-label="공유하기" onclick="toggleSharePopup(this, event)"><img src="assets/share.png" alt="공유"></button>
                             <button type="button" class="toolbar-btn" title="인쇄하기" aria-label="인쇄하기" onclick="openPrintWindow()"><img src="assets/print.png" alt="인쇄"></button>
+                          </div>
                         </div>
 
                         <div id="articleImageArea"></div>
@@ -1032,6 +1199,7 @@
                                     <div class="reporter-dept" id="reporterDept"></div>
                                 </div>
                                 <p id="reporterBio"></p>
+                                <a class="reporter-email" id="reporterEmail" href="#" style="display:none;"></a>
                             </div>
                         </div>
 
@@ -1056,6 +1224,8 @@
                         <ol class="popular-list" id="popularList">
                             <li class="popular-empty">불러오는 중...</li>
                         </ol>
+                        <div class="opinion-head" id="opinionHead" style="display:none;">오피니언</div>
+                        <ul class="opinion-list" id="opinionList"></ul>
                     </aside>
                 </div>
             </div>
@@ -1177,6 +1347,19 @@
                     categoryEl.href = `category.html?type=${categoryType}`;
 
                     document.getElementById('articleTitle').innerText = data.title;
+
+                    // 제목 아래 짧은 요약 (기사 JSON의 "summary" 값, 없으면 표시하지 않음)
+                    const articleSummary = pickField(data, ['summary', '요약']);
+                    const summaryEl = document.getElementById('articleSummary');
+                    if (summaryEl) {
+                        if (articleSummary) {
+                            summaryEl.innerText = articleSummary;
+                            summaryEl.style.display = 'block';
+                        } else {
+                            summaryEl.style.display = 'none';
+                        }
+                    }
+
                     renderArticleDate(data);
                     
                     const imageArea = document.getElementById('articleImageArea');
@@ -1260,6 +1443,7 @@
                             summaryText = data.content[0].value;
                         }
                     }
+                    if (articleSummary) summaryText = articleSummary;
                     document.getElementById('ogDesc').setAttribute('content', summaryText);
 
                     if (mainImgUrl && mainImgUrl.trim() !== "") {
@@ -1299,6 +1483,17 @@
             document.getElementById('reporterDept').innerText = info.department;
             document.getElementById('reporterBio').innerText = info.description;
 
+            const emailEl = document.getElementById('reporterEmail');
+            if (emailEl) {
+                if (info.email) {
+                    emailEl.href = 'mailto:' + info.email;
+                    emailEl.innerText = info.email;
+                    emailEl.style.display = 'inline-block';
+                } else {
+                    emailEl.style.display = 'none';
+                }
+            }
+
             const avatar = document.getElementById('reporterAvatar');
             if (info.photo) {
                 avatar.onerror = function() { avatar.hidden = true; };
@@ -1309,7 +1504,7 @@
             }
 
             const section = document.getElementById('reporterSection');
-            if (section) section.style.display = (info.name || info.description) ? '' : 'none';
+            if (section) section.style.display = (info.name || info.description) ? 'flex' : 'none';
         }
 
         async function loadReporter(data) {
@@ -1321,7 +1516,8 @@
                 name: pickField(data, ['reporter']),
                 photo: pickField(data, ['reporterAvatar']),
                 department: pickField(data, ['reporterDepartment', 'reporterDept']),
-                description: pickField(data, ['reporterBio'])
+                description: pickField(data, ['reporterBio']),
+                email: pickField(data, ['reporterEmail'])
             };
 
             if (id) {
@@ -1334,7 +1530,8 @@
                         name: pickField(r, ['name', 'reporterName', '기자명']),
                         photo: pickField(r, ['photo', 'avatar', 'image', 'profile', '프사', '기자프사']),
                         department: pickField(r, ['department', 'dept', 'team', '소속', '부서', '소속부서']),
-                        description: pickField(r, ['description', 'bio', 'desc', '설명'])
+                        description: pickField(r, ['description', 'bio', 'desc', '설명']),
+                        email: pickField(r, ['email', 'mail', '이메일'])
                     });
                     return;
                 } catch (e) {
@@ -1354,6 +1551,7 @@
         // ===== 전체 주요 기사 / (카테고리명) 뉴스 =====
         const POPULAR_COUNT = 5;
         const CATEGORY_NEWS_COUNT = 5;
+        const OPINION_COUNT = 4;
         const POPULAR_CACHE_KEY = 'seoArticleListCache2';
         const POPULAR_CACHE_MS = 10 * 60 * 1000;
 
@@ -1400,7 +1598,9 @@
                             title: d.title || '',
                             category: d.category || '',
                             date: d.date || '',
-                            summary: extractSummary(d.content),
+                            summary: (typeof d.summary === 'string' && d.summary.trim() !== '')
+                                ? d.summary.trim().replace(/\s+/g, ' ').slice(0, 160)
+                                : extractSummary(d.content),
                             image: extractImage(d),
                             views: typeof d.views === 'number' ? d.views : 0
                         };
@@ -1427,6 +1627,12 @@
                 .sort((a, b) => (b.views - a.views) || b.id.localeCompare(a.id))
                 .slice(0, POPULAR_COUNT);
             renderPopular(popular);
+
+            // 오른쪽 칸 오피니언: 최신 기사 3~4개
+            const opinions = list.filter(a => a.category === '오피니언')
+                .sort((a, b) => b.id.localeCompare(a.id))
+                .slice(0, OPINION_COUNT);
+            renderOpinion(opinions);
 
             // (카테고리명) 뉴스: 같은 카테고리 최신 기사
             const categoryNews = list
@@ -1461,6 +1667,29 @@
                 title.innerText = art.title;
                 a.appendChild(rank);
                 a.appendChild(title);
+                li.appendChild(a);
+                listEl.appendChild(li);
+            });
+        }
+
+        function renderOpinion(items) {
+            const head = document.getElementById('opinionHead');
+            const listEl = document.getElementById('opinionList');
+            if (!head || !listEl) return;
+            listEl.innerHTML = '';
+
+            if (items.length === 0) {
+                head.style.display = 'none';
+                return;
+            }
+
+            head.style.display = 'block';
+            items.forEach(art => {
+                const li = document.createElement('li');
+                li.className = 'opinion-item';
+                const a = document.createElement('a');
+                a.href = 'viewer.html?id=' + encodeURIComponent(art.id);
+                a.innerText = art.title;
                 li.appendChild(a);
                 listEl.appendChild(li);
             });
@@ -1558,6 +1787,121 @@
             
             lastScrollTop = winScroll <= 0 ? 0 : winScroll;
         });
+
+        // ===== 기사 듣기 (TTS) =====
+        // 한 번 누르면 제목 → 요약 → 본문 순서로 끝까지 읽습니다.
+        // 요약을 읽지 않으려면 아래 TTS_READ_SUMMARY 를 false 로 바꾸세요.
+        const TTS_READ_SUMMARY = true;
+        let ttsActive = false;
+
+        function splitForTTS(text) {
+            // 긴 문장은 브라우저가 중간에 끊을 수 있어 짧게 나눠 순서대로 읽습니다.
+            const MAX = 160;
+            const sentences = text.match(/[^.!?。]+[.!?。]*\s*/g) || [text];
+            const chunks = [];
+            let cur = '';
+            sentences.forEach(s => {
+                while (s.length > MAX * 1.5) {
+                    let cut = s.lastIndexOf(' ', MAX);
+                    if (cut < 40) cut = MAX;
+                    if (cur) { chunks.push(cur.trim()); cur = ''; }
+                    chunks.push(s.slice(0, cut).trim());
+                    s = s.slice(cut);
+                }
+                if (cur && (cur + s).length > MAX) { chunks.push(cur.trim()); cur = s; }
+                else cur += s;
+            });
+            if (cur.trim()) chunks.push(cur.trim());
+            return chunks.filter(c => c);
+        }
+
+        function buildTTSChunks() {
+            const parts = [];
+            const title = document.getElementById('articleTitle');
+            if (title && title.innerText.trim()) parts.push(title.innerText.trim());
+            const sum = document.getElementById('articleSummary');
+            if (TTS_READ_SUMMARY && sum && sum.style.display !== 'none' && sum.innerText.trim()) {
+                parts.push(sum.innerText.trim());
+            }
+            document.querySelectorAll('#articleBody > p').forEach(p => {
+                const txt = p.innerText.trim();
+                if (txt) parts.push(txt);
+            });
+            let chunks = [];
+            parts.forEach(p => { chunks = chunks.concat(splitForTTS(p)); });
+            return chunks;
+        }
+
+        function setTTSButtons(active) {
+            document.querySelectorAll('.tts-btn').forEach(btn => {
+                btn.classList.toggle('active', active);
+                btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+                btn.title = active ? '기사를 읽는 중입니다' : '기사 듣기';
+            });
+        }
+
+        function finishTTS() {
+            ttsActive = false;
+            setTTSButtons(false);
+        }
+
+        function startTTS() {
+            if (!('speechSynthesis' in window)) {
+                showShareToast('이 브라우저는 기사 듣기를 지원하지 않습니다.');
+                return;
+            }
+            if (ttsActive) return; // 한 번 누르면 끝까지 읽음
+
+            const chunks = buildTTSChunks();
+            if (chunks.length === 0) return;
+
+            ttsActive = true;
+            setTTSButtons(true);
+
+            const voices = window.speechSynthesis.getVoices();
+            const koVoice = voices.find(v => /^ko/i.test(v.lang));
+            let i = 0;
+
+            const next = function() {
+                if (i >= chunks.length) { finishTTS(); return; }
+                const u = new SpeechSynthesisUtterance(chunks[i++]);
+                u.lang = 'ko-KR';
+                if (koVoice) u.voice = koVoice;
+                u.rate = 1;
+                u.onend = next;
+                u.onerror = finishTTS;
+                window.speechSynthesis.speak(u);
+            };
+            next();
+        }
+
+        window.addEventListener('beforeunload', function() {
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        });
+
+        // ===== 다크 / 라이트 모드 =====
+        function applyThemeButtons() {
+            const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                const img = btn.querySelector('img');
+                // 현재가 라이트면 '다크로 바꾸기' 아이콘, 다크면 '라이트로 바꾸기' 아이콘을 보여줌
+                if (img) {
+                    img.src = dark ? 'assets/light.png' : 'assets/dark.png';
+                    img.alt = dark ? '라이트 모드' : '다크 모드';
+                }
+                btn.title = dark ? '라이트 모드' : '다크 모드';
+                btn.setAttribute('aria-label', btn.title);
+            });
+        }
+
+        function toggleTheme() {
+            const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            try { localStorage.setItem('seoTheme', next); } catch (e) {}
+            applyThemeButtons();
+        }
+
+        applyThemeButtons();
 
         let currentFontSize = 18;
         function changeFontSize(step) {
@@ -1804,7 +2148,7 @@
             const ph = popup.offsetHeight;
             let left, top;
 
-            if (shareAnchor.closest('.mobile-utility-bar') || shareAnchor.closest('.article-toolbar')) {
+            if (shareAnchor.closest('.mobile-utility-bar') || (shareAnchor.closest('.article-toolbar') && window.innerWidth < 1280)) {
                 // 모바일·가로 유틸리티 바: 버튼 아래, 오른쪽 끝 맞춤
                 left = r.right - pw;
                 top = r.bottom + 6;
