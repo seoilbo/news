@@ -989,10 +989,9 @@
             font-size: 17px;
             line-height: 1.7;
             color: #444444;
-            background-color: #f6f7f8;
             border-left: 4px solid #C91C1C;
-            padding: 14px 18px;
-            margin: 0 0 22px 0;
+            padding: 2px 0 2px 16px;
+            margin: 0 0 26px 0;
         }
 
         /* 오른쪽 칸: 오피니언 */
@@ -1112,7 +1111,7 @@
         html[data-theme="dark"] .share-popup-head { border-bottom-color: #333333; color: #eeeeee; }
         html[data-theme="dark"] .article-category { color: #ff6b6b; }
         html[data-theme="dark"] .article-title { color: #f5f5f5; }
-        html[data-theme="dark"] .article-summary { color: #cccccc; background-color: #1c1c1c; border-left-color: #ff6b6b; }
+        html[data-theme="dark"] .article-summary { color: #cccccc; border-left-color: #ff6b6b; }
         html[data-theme="dark"] .article-info { color: #9aa0a6; border-bottom-color: #bbbbbb; }
         html[data-theme="dark"] .article-image-container img,
         html[data-theme="dark"] .article-image-wrap img { border-color: #333333; }
@@ -1215,7 +1214,6 @@
                     <div class="article-header">
                         <a href="#" class="article-category" id="articleCategory">카테고리</a>
                         <h1 class="article-title" id="articleTitle"></h1>
-                        <p class="article-summary" id="articleSummary" style="display:none;"></p>
                     </div>
 
                     <div class="article-info">
@@ -1241,6 +1239,8 @@
                             <button type="button" class="toolbar-btn" title="인쇄하기" aria-label="인쇄하기" onclick="openPrintWindow()"><img src="assets/print.png" alt="인쇄"></button>
                           </div>
                         </div>
+
+                        <p class="article-summary" id="articleSummary" style="display:none;"></p>
 
                         <div id="articleImageArea"></div>
 
@@ -1405,7 +1405,8 @@
                     document.getElementById('articleTitle').innerText = data.title;
 
                     // 제목 아래 짧은 요약 (기사 JSON의 "summary" 값, 없으면 표시하지 않음)
-                    const articleSummary = pickField(data, ['summary', '요약']);
+                    const articleSummaryRaw = pickField(data, ['summary', '요약']);
+                    const articleSummary = articleSummaryRaw ? articleSummaryRaw.replace(/<br\s*\/?>/gi, '\n').trim() : '';
                     const summaryEl = document.getElementById('articleSummary');
                     if (summaryEl) {
                         if (articleSummary) {
@@ -1499,7 +1500,7 @@
                             summaryText = data.content[0].value;
                         }
                     }
-                    if (articleSummary) summaryText = articleSummary;
+                    if (articleSummary) summaryText = articleSummary.replace(/\s+/g, ' ');
                     document.getElementById('ogDesc').setAttribute('content', summaryText);
 
                     if (mainImgUrl && mainImgUrl.trim() !== "") {
@@ -1655,7 +1656,7 @@
                             category: d.category || '',
                             date: d.date || '',
                             summary: (typeof d.summary === 'string' && d.summary.trim() !== '')
-                                ? d.summary.trim().replace(/\s+/g, ' ').slice(0, 160)
+                                ? d.summary.replace(/<br\s*\/?>/gi, ' ').replace(/\s+/g, ' ').trim().slice(0, 160)
                                 : extractSummary(d.content),
                             image: extractImage(d),
                             views: typeof d.views === 'number' ? d.views : 0
