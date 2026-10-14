@@ -201,8 +201,6 @@
             line-height: 1.15;
             color: #ffffff;
             background: rgba(220, 20, 60, 0.78);
-            border: 2px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
             cursor: pointer;
         }
 
@@ -811,7 +809,7 @@
         const ZONE_KML_URLS = ['jae/jae.kml', 'assets/jae.kml', 'jae.kml'];
 
         const DEBUG = true;       // 문제가 해결되면 false 로 바꾸면 콘솔 안내 로그가 사라짐
-        const ZOOM_ZONES = 13;    // 이 배율보다 더 축소하면 구역 대신 자치구별 개수 원을 표시
+        const ZOOM_ZONES = 14;    // 이 배율보다 더 축소하면 구역 대신 자치구별 개수 원을 표시 (숫자가 클수록 원이 더 빨리 나타남)
         const BOUND_PAD = 0.08;   // 서울 경계 바깥으로 벗어날 수 있는 여유 (경계 크기 대비 비율)
 
         let guList = [];          // { name, rings, bounds, center, count }
@@ -819,7 +817,32 @@
         let seoulBounds = null;
         let circlesGroup = null;
 
-        function loadKml(url) {
+        /* ---------- KML 읽기 ----------
+           KML을 직접 내려받아 먼저 검사합니다.
+           - 이름·설명(이미지 주소 포함)에 '&' 같은 특수문자가 있어 XML이 깨진 경우를 자동 보정
+           - 그래도 깨져 있으면 어디가 문제인지 화면에 표시 (예전에는 도형이 0개로 조용히 사라졌음) */
+        const kmlTried = [];
+        const kmlInfo = {};      // url -> { placemarks, fixed }
+        let zoneKmlUrl = '';
+
+        function sanitizeKml(text) {
+            return String(text)
+                .replace(/^\uFEFF/, '')                                              // BOM
+                .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '')            // XML에서 쓸 수 없는 제어문자
+                .replace(/<description>([\s\S]*?)<\/description>/g, function(m, inner) {   // CDATA 없이 적힌 HTML(<img> 등) 설명을 CDATA로 감쌈
+                    if (inner.indexOf('<') === -1 || inner.indexOf('<![CDATA[') !== -1) return m;
+                    return '<description><![CDATA[' + inner.replace(/\]\]>/g, ']]]]><![CDATA[>') + ']]></description>';
+                })
+                .replace(/&(?!(?:amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+);)/g, '&amp;'); // 엔티티가 아닌 '&'
+        }
+
+        function parseXml(text) {
+            const doc = new DOMParser().parseFromString(text, 'text/xml');
+            const errEl = doc.getElementsByTagName('parsererror')[0];
+            return { doc: doc, error: errEl ? errEl.textContent.trim().replace(/\s+/g, ' ').slice(0, 220) : '' };
+        }
+
+        function loadKmlLegacy(url) {
             return new Promise(function(resolve, reject) {
                 omnivore.kml(url)
                     .on('ready', function() { resolve(this); })
@@ -827,17 +850,53 @@
             });
         }
 
-        // 주소 목록을 앞에서부터 차례로 시도 (실패한 경로는 kmlTried에 기록)
-        const kmlTried = [];
-        function loadFirst(urls) {
-            return urls.reduce(function(p, url) {
-                return p.catch(function() {
-                    return loadKml(url).catch(function(err) {
-                        kmlTried.push(url);
-                        throw err;
-                    });
-                });
-            }, Promise.reject());
+        async function loadKml(url) {
+            if (!(omnivore.kml && typeof omnivore.kml.parse === 'function')) {
+                return loadKmlLegacy(url);
+            }
+
+            let res;
+            try {
+                res = await fetch(url, { cache: 'no-cache' });
+            } catch (e) {
+                e.notFound = true;
+                throw e;
+            }
+            if (!res.ok) {
+                const err = new Error(url + ' 을(를) 찾을 수 없습니다 (HTTP ' + res.status + ')');
+                err.notFound = true;
+                throw err;
+            }
+
+            const raw = await res.text();
+            const text = sanitizeKml(raw);
+            const parsed = parseXml(text);
+            kmlInfo[url] = {
+                placemarks: parsed.doc.getElementsByTagName('Placemark').length,
+                fixed: text !== raw
+            };
+
+            if (parsed.error) {
+                throw new Error(url + ' 의 XML 형식이 올바르지 않습니다: ' + parsed.error);
+            }
+            return omnivore.kml.parse(text);
+        }
+
+        // 주소 목록을 앞에서부터 시도 (파일이 없을 때만 다음 주소로. 형식 오류는 바로 알림)
+        async function loadFirst(urls) {
+            let lastErr = null;
+            for (let i = 0; i < urls.length; i++) {
+                try {
+                    const layer = await loadKml(urls[i]);
+                    zoneKmlUrl = urls[i];
+                    return layer;
+                } catch (err) {
+                    kmlTried.push(urls[i]);
+                    lastErr = err;
+                    if (!err.notFound) throw err;
+                }
+            }
+            throw lastErr;
         }
 
         /* ---------- 도형 계산 ---------- */
@@ -1092,17 +1151,17 @@
 
         /* ---------- 배율·화면 위치에 따라 원 / 구역 표시 전환 ----------
            - ZOOM_ZONES 보다 축소: 자치구별 개수 원만 표시
-           - 그 이상 확대: 화면에 걸친 자치구의 구역만 표시
-             (한 자치구 안에만 있으면 그 자치구의 구역만) */
+           - 그 이상 확대: 화면 중심에 있는 자치구의 구역만 표시 */
         function setZoneVisible(zone, show) {
             const on = map.hasLayer(zone.layer);
             if (show && !on) zone.layer.addTo(map);
             else if (!show && on) map.removeLayer(zone.layer);
         }
 
-        function guInView() {
+        // 지금 화면의 중심이 되는 자치구 하나 (화면 안 점들이 가장 많이 속한 자치구, 정중앙 점은 가중치)
+        function dominantGu() {
             const b = map.getBounds();
-            const set = new Set();
+            const counts = {};
             const N = 10;
             for (let i = 0; i <= N; i++) {
                 for (let j = 0; j <= N; j++) {
@@ -1111,17 +1170,25 @@
                         b.getWest() + (b.getEast() - b.getWest()) * j / N
                     );
                     const name = guOf(pt);
-                    if (name) set.add(name);
+                    if (name) counts[name] = (counts[name] || 0) + 1;
                 }
             }
-            return set;
+            const centerGu = guOf(map.getCenter());
+            if (centerGu) counts[centerGu] = (counts[centerGu] || 0) + 5;
+
+            let best = '';
+            let bestN = 0;
+            Object.keys(counts).forEach(function(name) {
+                if (counts[name] > bestN) { best = name; bestN = counts[name]; }
+            });
+            return best;
         }
 
         function updateView() {
             if (zones.length === 0 && !circlesGroup) return;
 
             const zoomedOut = !!circlesGroup && map.getZoom() < ZOOM_ZONES;
-            if (DEBUG) console.log('[동네개발맵] 화면 갱신 - 배율 ' + map.getZoom() + (zoomedOut ? ' (축소: 원 표시)' : ' (확대: 구역 표시)') + ', 화면 속 자치구: ' + (guList.length ? Array.from(guInView()).join(', ') || '(없음)' : '(자치구 KML 없음)'));
+            if (DEBUG) console.log('[동네개발맵] 화면 갱신 - 배율 ' + map.getZoom() + (zoomedOut ? ' (축소: 원 표시)' : ' (확대: 구역 표시)') + ', 화면 중심 자치구: ' + (guList.length ? dominantGu() || '(없음)' : '(자치구 KML 없음)'));
 
             if (zoomedOut) {
                 if (!map.hasLayer(circlesGroup)) circlesGroup.addTo(map);
@@ -1131,12 +1198,13 @@
 
             if (circlesGroup && map.hasLayer(circlesGroup)) map.removeLayer(circlesGroup);
 
-            const visible = guList.length > 0 ? guInView() : null;
+            // 확대하면 화면 중심 자치구의 구역만 표시 (자치구를 알 수 없는 구역과 선택한 구역은 항상 표시)
+            const current = guList.length > 0 ? dominantGu() : '';
             zones.forEach(function(z) {
                 const show = z === currentZone ||
-                    !visible || visible.size === 0 ||
+                    !current ||
                     !guByName[z.district] ||
-                    visible.has(z.district);
+                    z.district === current;
                 setZoneVisible(z, show);
             });
             if (DEBUG) console.log('[동네개발맵] 지도에 표시 중인 구역: ' + zones.filter(function(z) { return map.hasLayer(z.layer); }).length + ' / ' + zones.length);
@@ -1170,22 +1238,27 @@
             if (guRes.status === 'fulfilled') {
                 try { buildSeoul(guRes.value); } catch (e) { console.error('자치구 KML 처리 오류:', e); }
             } else {
-                console.warn('자치구 KML(' + GU_KML_URL + ')을 불러오지 못해 자치구 기능 없이 표시합니다.', guRes.reason);
+                console.warn('자치구 KML(' + GU_KML_URL + ')을 불러오지 못해 자치구 기능 없이 표시합니다.', guRes.reason && guRes.reason.message ? guRes.reason.message : guRes.reason);
             }
 
             if (zoneRes.status !== 'fulfilled') {
+                const reason = (zoneRes.reason && zoneRes.reason.message) ? zoneRes.reason.message : String(zoneRes.reason);
                 console.error('구역 KML을 불러오지 못했습니다. 시도한 경로:', kmlTried.join(', '), zoneRes.reason);
-                folderListEl.innerHTML = '<div class="panel-msg error">구역 파일(KML)을 불러오지 못했습니다.<br>확인한 경로: ' +
-                    esc(kmlTried.join(', ')) + '<br>파일 위치와 이름을 확인해 주세요.</div>';
+                folderListEl.innerHTML = '<div class="panel-msg error">구역 파일(KML)을 불러오지 못했습니다.<br>' + esc(reason) +
+                    '<br>확인한 경로: ' + esc(kmlTried.join(', ')) + '</div>';
                 return;
             }
 
             try {
                 buildZones(zoneRes.value);
                 initDone = true;
+                if (DEBUG) console.log('[동네개발맵] ' + zoneKmlUrl + ' → Placemark ' + ((kmlInfo[zoneKmlUrl] || {}).placemarks) + '개' + ((kmlInfo[zoneKmlUrl] || {}).fixed ? ', 특수문자 자동 보정함' : ''));
                 if (DEBUG) console.log('[동네개발맵] 구역 ' + zones.length + '개, 자치구 ' + guList.length + '개 인식, 구역이 속한 자치구:', zones.map(function(z) { return z.name + ' → ' + (z.district || '(없음)'); }));
                 if (zones.length === 0) {
-                    folderListEl.innerHTML = '<div class="panel-msg error">KML을 불러왔지만 구역 도형이 없습니다. (KML 안에 도형이 있는지 확인)</div>';
+                    const info = kmlInfo[zoneKmlUrl] || {};
+                    folderListEl.innerHTML = '<div class="panel-msg error">' + esc(zoneKmlUrl) + ' 을(를) 읽었지만 구역 도형이 없습니다.<br>' +
+                        'Placemark ' + (info.placemarks != null ? info.placemarks : '?') + '개 중 도형(면·선·점)으로 변환된 것: 0개' +
+                        (info.fixed ? '<br>(특수문자를 자동 보정했지만 도형을 찾지 못했습니다)' : '') + '</div>';
                     return;
                 }
                 buildZoneList();
