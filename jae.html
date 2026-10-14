@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="동네개발맵 - 서오일보">
+    <meta property="og:title" content="동네개발맵 | 서오일보">
     <meta property="og:type" content="website">
     <meta property="og:image" content="assets/thum_OG.jpg">
-    <title>동네개발맵 - 서오일보</title>
+    <title>동네개발맵 | 서오일보</title>
     <link rel="icon" href="assets/favi.png" type="image/png">
 
     <!-- Leaflet CSS -->
@@ -181,6 +181,40 @@
             font-size: 13px;
             font-weight: 600;
             border-radius: 0;
+        }
+
+        /* 축소했을 때 보이는 자치구별 정비구역 개수 원 (크림슨 반투명) */
+        .gu-circle-icon {
+            background: none;
+            border: none;
+        }
+
+        .gu-circle {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            line-height: 1.15;
+            color: #ffffff;
+            background: rgba(220, 20, 60, 0.78);
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+            cursor: pointer;
+        }
+
+        .gu-name {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .gu-count {
+            font-size: 18px;
+            font-weight: 800;
         }
 
         /* 검색 */
@@ -731,7 +765,13 @@
         /* =====================================================
            지도 초기화
         ===================================================== */
-        const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([37.5665, 126.9780], 13);
+        const map = L.map('map', { zoomControl: false, attributionControl: false, maxBoundsViscosity: 1.0 }).setView([37.5665, 126.9780], 13);
+
+        // 자치구 경계선 / 서울 밖 흐림 막 전용 레이어 (구역 도형 아래, 클릭 방해 없음)
+        map.createPane('maskPane').style.zIndex = 350;
+        map.createPane('boundaryPane').style.zIndex = 390;
+        map.getPane('maskPane').style.pointerEvents = 'none';
+        map.getPane('boundaryPane').style.pointerEvents = 'none';
 
         L.control.zoom({ position: 'bottomright' }).addTo(map);
         L.control.attribution({ position: 'bottomleft' }).addTo(map);
@@ -741,7 +781,7 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        window.addEventListener('resize', function() { map.invalidateSize(); });
+        window.addEventListener('resize', function() { map.invalidateSize(); applySeoulLimits(); });
 
         const defaultStyle = { color: '#3388ff', fillColor: '#3388ff', fillOpacity: 0.2 };
         const selectedStyle = { color: '#ff0000', fillColor: '#ff4757', fillOpacity: 0.5, weight: 3 };
@@ -756,67 +796,374 @@
         const backBtn = document.getElementById('backBtn');
         const backLabelEl = document.getElementById('backLabel');
 
-        let zones = [];            // { name, description, district, haystack, layer }
+        let zones = [];            // { name, description, district, haystack, layer }  (지도에는 배율·위치에 따라 필요할 때만 추가)
         let currentZone = null;
         let mobileMap = true;      // 모바일: true = 지도 화면, false = 목록·검색 화면
         let openedFrom = 'map';    // 구역을 연 곳: 'map' | 'panel'
 
         /* =====================================================
            KML 불러오기
+           - jae/seoulgu.kml : 서울 25개 자치구 경계 (도형 이름: 동대문구, 금천구 ...)
+           - jae/jae.kml     : 정비구역 (아직 옮기기 전이면 assets/jae.kml 도 자동으로 시도)
+           자치구 KML이 없어도 구역 지도는 그대로 동작합니다 (원 표시·경계·서울 밖 제한만 빠짐)
         ===================================================== */
-        if (typeof omnivore === 'undefined') {
-            console.error('Omnivore 라이브러리를 불러오지 못했습니다.');
-            folderListEl.innerHTML = '<div class="panel-msg error">지도 라이브러리를 불러오지 못했습니다.</div>';
-        } else {
-            omnivore.kml('assets/jae.kml')
-                .on('ready', function() {
-                    const kmlLayer = this;
+        const GU_KML_URL = 'jae/seoulgu.kml';
+        const ZONE_KML_URLS = ['jae/jae.kml', 'assets/jae.kml'];
 
-                    kmlLayer.eachLayer(function(layer) {
-                        const props = (layer.feature && layer.feature.properties) || {};
-                        const name = props.name || '이름 없는 구역';
-                        const description = props.description || '';
-                        const district = getDistrict(name, description);
+        const ZOOM_ZONES = 13;    // 이 배율보다 더 축소하면 구역 대신 자치구별 개수 원을 표시
+        const BOUND_PAD = 0.08;   // 서울 경계 바깥으로 벗어날 수 있는 여유 (경계 크기 대비 비율)
 
-                        if (layer.setStyle) layer.setStyle(defaultStyle);
+        let guList = [];          // { name, rings, bounds, center, count }
+        const guByName = {};
+        let seoulBounds = null;
+        let circlesGroup = null;
 
-                        // 마우스를 올리면 구역 이름 표시
-                        if (layer.bindTooltip) {
-                            layer.bindTooltip(esc(name), { sticky: true, direction: 'top', className: 'zone-tip' });
-                        }
-
-                        const zone = {
-                            name: name,
-                            description: description,
-                            district: district,
-                            haystack: norm(name + ' ' + district + ' ' + stripTags(description)),
-                            layer: layer
-                        };
-                        zones.push(zone);
-
-                        layer.on('click', function(e) {
-                            L.DomEvent.stopPropagation(e);
-                            openZone(zone, 'map');
-                        });
-                    });
-
-                    buildZoneList();
-                    renderLeft();
-
-                    // 전체 구역이 한눈에 보이도록 지도 범위 맞춤
-                    try {
-                        const bounds = kmlLayer.getBounds();
-                        if (bounds && bounds.isValid()) {
-                            map.fitBounds(bounds, { padding: [40, 40], maxZoom: 15 });
-                        }
-                    } catch (err) { /* 점 하나뿐이면 기본 시점 유지 */ }
-                })
-                .on('error', function(err) {
-                    console.error('KML Load Error:', err);
-                    folderListEl.innerHTML = '<div class="panel-msg error">구역 정보를 불러오지 못했습니다. (assets/jae.kml 경로 확인)</div>';
-                })
-                .addTo(map);
+        function loadKml(url) {
+            return new Promise(function(resolve, reject) {
+                omnivore.kml(url)
+                    .on('ready', function() { resolve(this); })
+                    .on('error', function(err) { reject(err); });
+            });
         }
+
+        // 주소 목록을 앞에서부터 차례로 시도
+        function loadFirst(urls) {
+            return urls.reduce(function(p, url) {
+                return p.catch(function() { return loadKml(url); });
+            }, Promise.reject());
+        }
+
+        /* ---------- 도형 계산 ---------- */
+        function isLatLng(p) {
+            return p && typeof p.lat === 'number' && typeof p.lng === 'number';
+        }
+
+        function flattenRings(arr, out) {
+            if (!arr || !arr.length) return;
+            if (isLatLng(arr[0])) { out.push(arr); return; }
+            arr.forEach(function(a) { flattenRings(a, out); });
+        }
+
+        function collectRings(layer, out) {
+            if (layer.getLatLngs) {
+                flattenRings(layer.getLatLngs(), out);
+            } else if (layer.eachLayer) {
+                layer.eachLayer(function(l) { collectRings(l, out); });
+            }
+        }
+
+        function ringArea(ring) {
+            let a = 0;
+            for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+                a += ring[j].lng * ring[i].lat - ring[i].lng * ring[j].lat;
+            }
+            return a / 2;
+        }
+
+        // 가장 큰 고리의 무게중심
+        function centroidOf(rings) {
+            let best = rings[0];
+            let bestA = Math.abs(ringArea(best));
+            rings.forEach(function(r) {
+                const a = Math.abs(ringArea(r));
+                if (a > bestA) { best = r; bestA = a; }
+            });
+
+            if (bestA < 1e-12) {
+                let lat = 0, lng = 0;
+                best.forEach(function(p) { lat += p.lat; lng += p.lng; });
+                return L.latLng(lat / best.length, lng / best.length);
+            }
+
+            let cx = 0, cy = 0, a = 0;
+            for (let i = 0, j = best.length - 1; i < best.length; j = i++) {
+                const f = best[j].lng * best[i].lat - best[i].lng * best[j].lat;
+                cx += (best[j].lng + best[i].lng) * f;
+                cy += (best[j].lat + best[i].lat) * f;
+                a += f;
+            }
+            a /= 2;
+            return L.latLng(cy / (6 * a), cx / (6 * a));
+        }
+
+        function pointInRing(pt, ring) {
+            let inside = false;
+            for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+                const xi = ring[i].lng, yi = ring[i].lat;
+                const xj = ring[j].lng, yj = ring[j].lat;
+                if ((yi > pt.lat) !== (yj > pt.lat) &&
+                    pt.lng < (xj - xi) * (pt.lat - yi) / (yj - yi) + xi) {
+                    inside = !inside;
+                }
+            }
+            return inside;
+        }
+
+        function inGu(pt, gu) {
+            if (!gu.bounds.contains(pt)) return false;
+            return gu.rings.some(function(ring) { return pointInRing(pt, ring); });
+        }
+
+        // 좌표가 속한 자치구 이름 (없으면 '')
+        function guOf(pt) {
+            for (let i = 0; i < guList.length; i++) {
+                if (inGu(pt, guList[i])) return guList[i].name;
+            }
+            return '';
+        }
+
+        function zoneCenter(layer) {
+            if (layer.getLatLng) return layer.getLatLng();
+            const rings = [];
+            collectRings(layer, rings);
+            if (rings.length > 0) return centroidOf(rings);
+            return layer.getBounds().getCenter();
+        }
+
+        function layerBounds(layer) {
+            return layer.getBounds ? layer.getBounds() : L.latLngBounds([layer.getLatLng()]);
+        }
+
+        /* ---------- 서울 자치구: 경계선 / 서울 밖 흐림 / 이동 제한 ---------- */
+        function buildSeoul(guLayer) {
+            guLayer.eachLayer(function(l) {
+                const props = (l.feature && l.feature.properties) || {};
+                const name = String(props.name || '').trim();
+                const rings = [];
+                collectRings(l, rings);
+                if (!name || rings.length === 0) return;
+
+                const bounds = L.latLngBounds([]);
+                rings.forEach(function(r) { r.forEach(function(p) { bounds.extend(p); }); });
+                guList.push({ name: name, rings: rings, bounds: bounds, center: null, count: 0 });
+            });
+
+            if (guList.length === 0) return;
+
+            seoulBounds = L.latLngBounds([]);
+            const allRings = [];
+
+            guList.forEach(function(gu) {
+                seoulBounds.extend(gu.bounds);
+                guByName[gu.name] = gu;
+
+                // 개수 원은 도형 안쪽에 오도록 (무게중심이 밖이면 경계상자 중심)
+                const c = centroidOf(gu.rings);
+                const b = gu.bounds.getCenter();
+                gu.center = inGu(c, gu) ? c : (inGu(b, gu) ? b : c);
+
+                gu.rings.forEach(function(ring) {
+                    allRings.push(ring);
+                    // 자치구 경계선 (얇게)
+                    L.polygon(ring, {
+                        pane: 'boundaryPane',
+                        interactive: false,
+                        color: '#6b7580',
+                        weight: 1,
+                        opacity: 0.8,
+                        fill: false
+                    }).addTo(map);
+                });
+            });
+
+            // 서울 밖 흐리게: 큰 사각형에서 자치구 도형을 구멍으로 뚫은 반투명 막
+            const o = seoulBounds.pad(1);
+            const outer = [o.getSouthWest(), o.getNorthWest(), o.getNorthEast(), o.getSouthEast()];
+            L.polygon([outer].concat(allRings), {
+                pane: 'maskPane',
+                interactive: false,
+                stroke: false,
+                fillColor: '#eef1f3',
+                fillOpacity: 0.72
+            }).addTo(map);
+
+            applySeoulLimits();
+        }
+
+        // 서울 밖으로 일정 거리 이상 벗어나지 못하게 + 그 이상 축소 못 하게
+        function applySeoulLimits() {
+            if (!seoulBounds) return;
+            const limit = seoulBounds.pad(BOUND_PAD);
+            map.setMaxBounds(limit);
+            map.setMinZoom(map.getBoundsZoom(limit));
+        }
+
+        /* ---------- 정비구역 ---------- */
+        function buildZones(kmlLayer) {
+            kmlLayer.eachLayer(function(layer) {
+                const props = (layer.feature && layer.feature.properties) || {};
+                const name = props.name || '이름 없는 구역';
+                const description = props.description || '';
+
+                if (layer.setStyle) layer.setStyle(defaultStyle);
+
+                // 마우스를 올리면 구역 이름 표시
+                if (layer.bindTooltip) {
+                    layer.bindTooltip(esc(name), { sticky: true, direction: 'top', className: 'zone-tip' });
+                }
+
+                // 자치구는 도형 위치로 판별하고, 안 되면 KML 설명·이름의 구 이름으로 판별
+                let district = '';
+                if (guList.length > 0) {
+                    try { district = guOf(zoneCenter(layer)); } catch (e) { district = ''; }
+                }
+                if (!district) district = getDistrict(name, description);
+
+                const zone = {
+                    name: name,
+                    description: description,
+                    district: district,
+                    haystack: norm(name + ' ' + district + ' ' + stripTags(description)),
+                    layer: layer
+                };
+                zones.push(zone);
+
+                if (guByName[district]) guByName[district].count++;
+
+                layer.on('click', function(e) {
+                    L.DomEvent.stopPropagation(e);
+                    openZone(zone, 'map');
+                });
+            });
+
+            buildCircles();
+        }
+
+        // 축소했을 때 보이는 크림슨 반투명 원: 자치구 이름 + 정비구역 개수
+        function buildCircles() {
+            if (guList.length === 0) return;
+
+            const markers = [];
+            guList.forEach(function(gu) {
+                if (gu.count === 0) return;
+
+                const icon = L.divIcon({
+                    className: 'gu-circle-icon',
+                    html: '<div class="gu-circle"><span class="gu-name">' + esc(gu.name) + '</span><span class="gu-count">' + gu.count + '</span></div>',
+                    iconSize: [72, 72],
+                    iconAnchor: [36, 36]
+                });
+
+                const marker = L.marker(gu.center, { icon: icon, keyboard: false });
+                marker.on('click', function(e) {
+                    L.DomEvent.stopPropagation(e);
+                    zoomToGu(gu);
+                });
+                markers.push(marker);
+            });
+
+            circlesGroup = L.layerGroup(markers);
+        }
+
+        // 원을 누르면 그 자치구의 정비구역이 보이는 배율로 확대
+        function zoomToGu(gu) {
+            let b = null;
+            zones.forEach(function(z) {
+                if (z.district !== gu.name) return;
+                const zb = layerBounds(z.layer);
+                b = b ? b.extend(zb) : L.latLngBounds(zb.getSouthWest(), zb.getNorthEast());
+            });
+            if (!b || !b.isValid()) b = gu.bounds;
+
+            let zoom = map.getBoundsZoom(b.pad(0.25));
+            zoom = Math.min(Math.max(zoom, ZOOM_ZONES), 16);
+            map.setView(b.getCenter(), zoom);
+        }
+
+        // 처음 화면: 등록된 구역이 모두 보이도록
+        function fitToZones() {
+            let b = null;
+            zones.forEach(function(z) {
+                const zb = layerBounds(z.layer);
+                b = b ? b.extend(zb) : L.latLngBounds(zb.getSouthWest(), zb.getNorthEast());
+            });
+            if (b && b.isValid()) {
+                map.fitBounds(b, { padding: [40, 40], maxZoom: 15 });
+            }
+        }
+
+        /* ---------- 배율·화면 위치에 따라 원 / 구역 표시 전환 ----------
+           - ZOOM_ZONES 보다 축소: 자치구별 개수 원만 표시
+           - 그 이상 확대: 화면에 걸친 자치구의 구역만 표시
+             (한 자치구 안에만 있으면 그 자치구의 구역만) */
+        function setZoneVisible(zone, show) {
+            const on = map.hasLayer(zone.layer);
+            if (show && !on) zone.layer.addTo(map);
+            else if (!show && on) map.removeLayer(zone.layer);
+        }
+
+        function guInView() {
+            const b = map.getBounds();
+            const set = new Set();
+            const N = 10;
+            for (let i = 0; i <= N; i++) {
+                for (let j = 0; j <= N; j++) {
+                    const pt = L.latLng(
+                        b.getSouth() + (b.getNorth() - b.getSouth()) * i / N,
+                        b.getWest() + (b.getEast() - b.getWest()) * j / N
+                    );
+                    const name = guOf(pt);
+                    if (name) set.add(name);
+                }
+            }
+            return set;
+        }
+
+        function updateView() {
+            if (zones.length === 0 && !circlesGroup) return;
+
+            const zoomedOut = !!circlesGroup && map.getZoom() < ZOOM_ZONES;
+
+            if (zoomedOut) {
+                if (!map.hasLayer(circlesGroup)) circlesGroup.addTo(map);
+                zones.forEach(function(z) { setZoneVisible(z, z === currentZone); });
+                return;
+            }
+
+            if (circlesGroup && map.hasLayer(circlesGroup)) map.removeLayer(circlesGroup);
+
+            const visible = guList.length > 0 ? guInView() : null;
+            zones.forEach(function(z) {
+                const show = z === currentZone ||
+                    !visible || visible.size === 0 ||
+                    !guByName[z.district] ||
+                    visible.has(z.district);
+                setZoneVisible(z, show);
+            });
+        }
+
+        async function initMapData() {
+            if (typeof omnivore === 'undefined') {
+                console.error('Omnivore 라이브러리를 불러오지 못했습니다.');
+                folderListEl.innerHTML = '<div class="panel-msg error">지도 라이브러리를 불러오지 못했습니다.</div>';
+                return;
+            }
+
+            const results = await Promise.allSettled([loadFirst(ZONE_KML_URLS), loadKml(GU_KML_URL)]);
+            const zoneRes = results[0];
+            const guRes = results[1];
+
+            if (guRes.status === 'fulfilled') {
+                try { buildSeoul(guRes.value); } catch (e) { console.error('자치구 KML 처리 오류:', e); }
+            } else {
+                console.warn('자치구 KML(' + GU_KML_URL + ')을 불러오지 못해 자치구 기능 없이 표시합니다.', guRes.reason);
+            }
+
+            if (zoneRes.status !== 'fulfilled') {
+                console.error('KML Load Error:', zoneRes.reason);
+                folderListEl.innerHTML = '<div class="panel-msg error">구역 정보를 불러오지 못했습니다. (jae/jae.kml 경로 확인)</div>';
+                return;
+            }
+
+            buildZones(zoneRes.value);
+            buildZoneList();
+            renderLeft();
+            fitToZones();
+            updateView();
+            map.on('moveend', updateView);
+        }
+
+        initMapData();
 
         /* =====================================================
            구역 목록 (자치구 폴더)
@@ -923,6 +1270,7 @@
                 currentZone.layer.setStyle(defaultStyle);
             }
             currentZone = zone;
+            setZoneVisible(zone, true);
             if (zone.layer.setStyle) zone.layer.setStyle(selectedStyle);
 
             backLabelEl.textContent = (isMobile() && openedFrom === 'map') ? '지도로 돌아가기' : '목록으로 돌아가기';
@@ -959,6 +1307,7 @@
                 currentZone.layer.setStyle(defaultStyle);
             }
             currentZone = null;
+            updateView();
         }
 
         function moveToZone(layer) {
@@ -1014,7 +1363,7 @@
             if (articlesState === 'loading') {
                 articleHtml = '<div class="panel-title">기사</div><div class="panel-msg">기사를 불러오는 중...</div>';
             } else if (articlesState === 'ready') {
-                const hits = allArticles.filter(function(a) { return articleText(a).includes(q); }).slice(0, 10);
+                const hits = allArticles.filter(function(a) { return isRealEstate(a) && articleText(a).includes(q); }).slice(0, 10);
                 if (hits.length > 0) {
                     articleHtml = '<div class="panel-title">기사<span class="count">' + hits.length + '</span></div>' + hits.map(newsItemHtml).join('');
                 }
