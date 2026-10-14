@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="동네개발맵 | 서오일보">
+    <meta property="og:title" content="동네개발맵 - 서오일보">
     <meta property="og:type" content="website">
     <meta property="og:image" content="assets/thum_OG.jpg">
-    <title>동네개발맵 | 서오일보</title>
+    <title>동네개발맵 - 서오일보</title>
     <link rel="icon" href="assets/favi.png" type="image/png">
 
     <!-- Leaflet CSS -->
@@ -808,8 +808,9 @@
            자치구 KML이 없어도 구역 지도는 그대로 동작합니다 (원 표시·경계·서울 밖 제한만 빠짐)
         ===================================================== */
         const GU_KML_URL = 'jae/seoulgu.kml';
-        const ZONE_KML_URLS = ['jae/jae.kml', 'assets/jae.kml'];
+        const ZONE_KML_URLS = ['jae/jae.kml', 'assets/jae.kml', 'jae.kml'];
 
+        const DEBUG = true;       // 문제가 해결되면 false 로 바꾸면 콘솔 안내 로그가 사라짐
         const ZOOM_ZONES = 13;    // 이 배율보다 더 축소하면 구역 대신 자치구별 개수 원을 표시
         const BOUND_PAD = 0.08;   // 서울 경계 바깥으로 벗어날 수 있는 여유 (경계 크기 대비 비율)
 
@@ -826,10 +827,16 @@
             });
         }
 
-        // 주소 목록을 앞에서부터 차례로 시도
+        // 주소 목록을 앞에서부터 차례로 시도 (실패한 경로는 kmlTried에 기록)
+        const kmlTried = [];
         function loadFirst(urls) {
             return urls.reduce(function(p, url) {
-                return p.catch(function() { return loadKml(url); });
+                return p.catch(function() {
+                    return loadKml(url).catch(function(err) {
+                        kmlTried.push(url);
+                        throw err;
+                    });
+                });
             }, Promise.reject());
         }
 
@@ -1052,6 +1059,7 @@
                 markers.push(marker);
             });
 
+            if (markers.length === 0) return;
             circlesGroup = L.layerGroup(markers);
         }
 
@@ -1113,10 +1121,11 @@
             if (zones.length === 0 && !circlesGroup) return;
 
             const zoomedOut = !!circlesGroup && map.getZoom() < ZOOM_ZONES;
+            if (DEBUG) console.log('[동네개발맵] 화면 갱신 - 배율 ' + map.getZoom() + (zoomedOut ? ' (축소: 원 표시)' : ' (확대: 구역 표시)') + ', 화면 속 자치구: ' + (guList.length ? Array.from(guInView()).join(', ') || '(없음)' : '(자치구 KML 없음)'));
 
             if (zoomedOut) {
                 if (!map.hasLayer(circlesGroup)) circlesGroup.addTo(map);
-                zones.forEach(function(z) { setZoneVisible(z, z === currentZone); });
+                zones.forEach(function(z) { setZoneVisible(z, z === currentZone || !guByName[z.district]); });
                 return;
             }
 
@@ -1130,9 +1139,23 @@
                     visible.has(z.district);
                 setZoneVisible(z, show);
             });
+            if (DEBUG) console.log('[동네개발맵] 지도에 표시 중인 구역: ' + zones.filter(function(z) { return map.hasLayer(z.layer); }).length + ' / ' + zones.length);
         }
 
+        let initDone = false;
+
         async function initMapData() {
+            if (DEBUG) console.log('[동네개발맵] 시작 - 자치구 지원 버전 (구역 경로 후보: ' + ZONE_KML_URLS.join(', ') + ')');
+
+            // 15초가 지나도 응답이 없으면 화면에 알림
+            setTimeout(function() {
+                if (!initDone) {
+                    console.warn('[동네개발맵] KML 응답이 15초 넘게 없습니다. Network 탭을 확인해 주세요.');
+                    if (zones.length === 0) {
+                        folderListEl.innerHTML = '<div class="panel-msg error">구역 파일 응답이 없습니다. (F12 → Network 탭에서 jae.kml 상태 확인)</div>';
+                    }
+                }
+            }, 15000);
             if (typeof omnivore === 'undefined') {
                 console.error('Omnivore 라이브러리를 불러오지 못했습니다.');
                 folderListEl.innerHTML = '<div class="panel-msg error">지도 라이브러리를 불러오지 못했습니다.</div>';
@@ -1142,6 +1165,7 @@
             const results = await Promise.allSettled([loadFirst(ZONE_KML_URLS), loadKml(GU_KML_URL)]);
             const zoneRes = results[0];
             const guRes = results[1];
+            if (DEBUG) console.log('[동네개발맵] 불러오기 결과 - 구역 KML:', zoneRes.status, '| 자치구 KML:', guRes.status);
 
             if (guRes.status === 'fulfilled') {
                 try { buildSeoul(guRes.value); } catch (e) { console.error('자치구 KML 처리 오류:', e); }
@@ -1150,17 +1174,30 @@
             }
 
             if (zoneRes.status !== 'fulfilled') {
-                console.error('KML Load Error:', zoneRes.reason);
-                folderListEl.innerHTML = '<div class="panel-msg error">구역 정보를 불러오지 못했습니다. (jae/jae.kml 경로 확인)</div>';
+                console.error('구역 KML을 불러오지 못했습니다. 시도한 경로:', kmlTried.join(', '), zoneRes.reason);
+                folderListEl.innerHTML = '<div class="panel-msg error">구역 파일(KML)을 불러오지 못했습니다.<br>확인한 경로: ' +
+                    esc(kmlTried.join(', ')) + '<br>파일 위치와 이름을 확인해 주세요.</div>';
                 return;
             }
 
-            buildZones(zoneRes.value);
-            buildZoneList();
-            renderLeft();
-            fitToZones();
-            updateView();
-            map.on('moveend', updateView);
+            try {
+                buildZones(zoneRes.value);
+                initDone = true;
+                if (DEBUG) console.log('[동네개발맵] 구역 ' + zones.length + '개, 자치구 ' + guList.length + '개 인식, 구역이 속한 자치구:', zones.map(function(z) { return z.name + ' → ' + (z.district || '(없음)'); }));
+                if (zones.length === 0) {
+                    folderListEl.innerHTML = '<div class="panel-msg error">KML을 불러왔지만 구역 도형이 없습니다. (KML 안에 도형이 있는지 확인)</div>';
+                    return;
+                }
+                buildZoneList();
+                renderLeft();
+                fitToZones();
+                updateView();
+                map.on('moveend', updateView);
+            } catch (e) {
+                initDone = true;
+                console.error('구역 처리 오류:', e);
+                folderListEl.innerHTML = '<div class="panel-msg error">구역 정보를 처리하는 중 오류가 발생했습니다. (F12 콘솔 확인)</div>';
+            }
         }
 
         initMapData();
