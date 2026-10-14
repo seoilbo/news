@@ -13,13 +13,20 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <style>
+        :root {
+            --hover-bg: #f2f4f6;   /* 헤더를 제외한 모든 hover 반응: 연한 회색 */
+            --line: #d1d8dd;
+            --px: 20px;            /* 왼쪽 패널 좌우 여백 */
+            --search-h: 57px;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* 페이지 전체는 스크롤 없이 화면 높이에 고정: 헤더 + 지도 */
+        /* 페이지 전체는 스크롤 없이 화면 높이에 고정: 헤더 + 분할 화면 */
         html, body {
             overflow: hidden;
         }
@@ -44,7 +51,7 @@
             width: 100%;
             flex-shrink: 0;
             background-color: #ffffff;
-            border-bottom: 1px solid #d1d8dd;
+            border-bottom: 1px solid var(--line);
             position: relative;
             z-index: 10;
         }
@@ -82,7 +89,7 @@
 
         .sub-info-bar {
             background-color: #ffffff;
-            border-top: 1px solid #d1d8dd;
+            border-top: 1px solid var(--line);
             border-bottom: 1px solid #000000;
             font-size: 12px;
             color: #555555;
@@ -123,22 +130,50 @@
             transition: none;
         }
 
+        /* 헤더 hover는 기존 그대로 (빨강 + 굵게) */
         .sub-nav-categories a:hover {
             color: #a61c1c;
             font-weight: 700;
         }
 
-        /* ===== 지도 화면 ===== */
-        .map-stage {
+        /* ===== 분할 화면: 왼쪽 정보·기사 / 오른쪽 지도 ===== */
+        .split {
             flex: 1;
             min-height: 0;
+            display: flex;
             position: relative;
             isolation: isolate;
         }
 
+        .left-panel {
+            width: 400px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            background: #ffffff;
+            border-right: 1px solid var(--line);
+            position: relative;
+            z-index: 2;
+        }
+
         #map {
-            position: absolute;
-            inset: 0;
+            flex: 1;
+            min-width: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 구역을 눌렀을 때 도형 바깥에 생기는 네모(포커스 테두리) 제거 */
+        .leaflet-container {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .leaflet-container .leaflet-interactive:focus,
+        .leaflet-container path:focus,
+        .leaflet-container svg:focus,
+        .leaflet-container *:focus {
+            outline: none !important;
         }
 
         .zone-tip {
@@ -148,103 +183,96 @@
             border-radius: 0;
         }
 
-        /* ===== 플로팅 패널 (도형을 눌렀을 때만 표시) ===== */
-        .float-wrap {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            bottom: 16px;
-            width: 380px;
-            z-index: 1100;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            pointer-events: none;
-        }
-
-        .float-wrap[hidden] {
-            display: none;
-        }
-
-        .float-wrap > * {
-            pointer-events: auto;
-        }
-
-        .panel-close {
-            align-self: flex-end;
+        /* 검색 */
+        .search-bar {
+            height: var(--search-h);
             flex-shrink: 0;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 12px;
+            padding: 0 var(--px);
             background: #ffffff;
-            border: 1px solid #d1d8dd;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .search-bar input {
+            flex: 1;
+            min-width: 0;
+            height: 36px;
+            padding: 0 12px;
+            border: 1px solid #c9d0d6;
+            border-radius: 0;
+            font: inherit;
+            font-size: 14px;
+            color: #222222;
+            background: #ffffff;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: #111111;
+        }
+
+        .toggle-btn {
+            display: none;
+            height: 36px;
+            padding: 0 14px;
+            background: #ffffff;
+            border: 1px solid #c9d0d6;
             font-size: 13px;
             font-weight: 700;
             color: #111111;
             cursor: pointer;
         }
 
-        .panel-close:hover {
-            color: #a61c1c;
+        .toggle-btn:hover {
+            background: var(--hover-bg);
         }
 
-        .panel-close:focus-visible {
-            outline: 2px solid #a61c1c;
-            outline-offset: 2px;
-        }
-
-        .close-arrow {
-            width: 14px;
-            height: 14px;
-            order: 2;
-        }
-
-        .label-desktop { order: 1; }
-        .label-mobile { display: none; }
-
-        .float-card {
+        /* 패널 본문 */
+        .panel-body {
+            flex: 1;
+            min-height: 0;
             display: flex;
             flex-direction: column;
+        }
+
+        .view {
+            display: none;
+            flex: 1;
             min-height: 0;
-            background: #ffffff;
-            border: 1px solid #d1d8dd;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
+            flex-direction: column;
         }
 
-        .info-card {
-            flex: 0 1 auto;
-            max-height: 62%;
+        .view.active {
+            display: flex;
         }
 
-        .news-card {
-            flex: 0 1 auto;
-        }
-
-        /* 스크롤은 플로팅 안에서만 */
-        .card-scroll {
+        .scroll {
+            flex: 1;
             min-height: 0;
             overflow-y: auto;
             overscroll-behavior: contain;
-            padding: 18px 20px;
-        }
-
-        .news-card .card-scroll {
-            padding: 0 20px 12px;
+            padding-bottom: 12px;
         }
 
         .panel-title {
             flex-shrink: 0;
-            padding: 14px 20px 8px;
+            padding: 14px var(--px) 6px;
             font-size: 14px;
             font-weight: 800;
             color: #a61c1c;
             letter-spacing: -0.3px;
         }
 
+        .panel-title .count {
+            margin-left: 6px;
+            font-weight: 500;
+            color: #999999;
+        }
+
         .panel-msg {
-            padding: 12px 0;
+            padding: 14px var(--px);
             font-size: 13px;
             color: #888888;
         }
@@ -253,7 +281,122 @@
             color: #a61c1c;
         }
 
+        /* 구역 목록 (자치구 폴더) */
+        .folder-title {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px var(--px) 8px;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #e5e8eb;
+            font-size: 13px;
+            font-weight: 700;
+            color: #555555;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .folder-title:hover {
+            background: var(--hover-bg);
+        }
+
+        .folder-count {
+            margin-left: 6px;
+            font-weight: 500;
+            color: #999999;
+        }
+
+        .folder-items[hidden] {
+            display: none;
+        }
+
+        .item-row {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 10px;
+            padding: 10px var(--px);
+            background: transparent;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: #222222;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .item-row:hover {
+            background: var(--hover-bg);
+        }
+
+        .row-sub {
+            flex-shrink: 0;
+            font-size: 12px;
+            font-weight: 500;
+            color: #999999;
+        }
+
         /* 구역 상세 */
+        .back-btn {
+            align-self: stretch;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px var(--px);
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #e5e8eb;
+            font-size: 14px;
+            font-weight: 600;
+            color: #111111;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .back-btn:hover {
+            background: var(--hover-bg);
+        }
+
+        .back-arrow-img {
+            width: 14px;
+            height: 14px;
+            transform: rotate(180deg);
+        }
+
+        .detail-scroll {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-area {
+            flex: 0 1 auto;
+            max-height: 55%;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            padding: 18px var(--px);
+            border-bottom: 1px solid #222222;
+        }
+
+        .news-area {
+            flex: 1 1 0;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-scroll {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+        }
+
         .detail-image-wrapper {
             width: 100%;
             max-height: 200px;
@@ -297,22 +440,18 @@
             color: #a61c1c;
         }
 
-        /* 관련 뉴스 */
+        /* 기사 목록 (관련 뉴스 / 검색 결과 공통) */
         .news-item {
             display: flex;
             gap: 10px;
-            padding: 10px 0;
+            padding: 10px var(--px);
             border-bottom: 1px solid #eeeeee;
             text-decoration: none;
             color: inherit;
         }
 
-        .news-item:last-child {
-            border-bottom: none;
-        }
-
-        .news-item:hover .news-title {
-            color: #777777;
+        .news-item:hover {
+            background: var(--hover-bg);
         }
 
         .news-thumb {
@@ -351,65 +490,89 @@
             color: #888888;
         }
 
-        /* ===== 모바일: 구역을 누르면 지도에서 상세 화면으로 전환 ===== */
+        .folder-title:focus-visible,
+        .item-row:focus-visible,
+        .back-btn:focus-visible,
+        .toggle-btn:focus-visible,
+        .news-item:focus-visible {
+            outline: 2px solid #a61c1c !important;
+            outline-offset: -2px;
+        }
+
+        /* ===== 모바일 =====
+           기본: 위에 검색 줄 + 지도
+           '목록' 버튼 / 검색창 선택: 목록·검색 화면으로 전환
+           구역을 누르면: 지도에서 구역 상세 화면으로 전환 */
         @media (max-width: 768px) {
+            :root { --px: 16px; }
+
             .sub-info-bar { display: none; }
             .header-main-bar { height: 70px; }
             .logo-img-large { height: 40px; }
 
-            .float-wrap {
-                inset: 0;
+            .left-panel {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
                 width: auto;
-                gap: 0;
-                background: #ffffff;
+                z-index: 1100;
+                border-right: none;
+                border-bottom: 1px solid var(--line);
+            }
+
+            #map {
+                position: absolute;
+                top: var(--search-h);
+                left: 0;
+                right: 0;
+                bottom: 0;
+                flex: none;
+            }
+
+            .toggle-btn {
+                display: inline-block;
+            }
+
+            /* 지도 화면: 검색 줄만 보임 */
+            .split[data-mobilemap="1"][data-detail="0"] .panel-body {
+                display: none;
+            }
+
+            /* 목록·검색 화면 또는 상세 화면: 패널이 화면 전체를 덮음 */
+            .split[data-mobilemap="0"] .left-panel,
+            .split[data-detail="1"] .left-panel {
+                bottom: 0;
+                border-bottom: none;
+            }
+
+            /* 상세 화면에서는 검색 줄 대신 돌아가기 버튼 */
+            .split[data-detail="1"] .search-bar {
+                display: none;
+            }
+
+            /* 상세 화면은 한 화면으로 이어서 스크롤 */
+            .detail-scroll {
+                display: block;
                 overflow-y: auto;
                 overscroll-behavior: contain;
-                pointer-events: auto;
             }
 
-            .panel-close {
-                position: sticky;
-                top: 0;
-                z-index: 2;
-                align-self: stretch;
-                justify-content: flex-start;
-                padding: 14px 16px;
-                border: none;
-                border-bottom: 1px solid #d1d8dd;
-                box-shadow: none;
-                font-size: 14px;
-            }
-
-            .close-arrow {
-                order: 0;
-                transform: rotate(180deg);
-            }
-
-            .label-desktop { display: none; }
-            .label-mobile { display: inline; order: 1; }
-
-            .float-card {
-                flex: none;
+            .info-area {
                 max-height: none;
-                border: none;
-                box-shadow: none;
-            }
-
-            .card-scroll {
                 overflow: visible;
-                padding: 16px;
+                border-bottom: none;
             }
 
-            .news-card {
-                border-top: 8px solid #f2f4f6;
+            .news-area {
+                display: block;
+                min-height: 0;
+                border-top: 8px solid var(--hover-bg);
             }
 
-            .news-card .card-scroll {
-                padding: 0 16px 24px;
-            }
-
-            .panel-title {
-                padding: 14px 16px 8px;
+            .news-scroll {
+                overflow: visible;
+                padding-bottom: 24px;
             }
         }
     </style>
@@ -442,29 +605,47 @@
         </div>
     </div>
 
-    <!-- 지도 (남은 화면을 모두 채움) -->
-    <main class="map-stage">
-        <div id="map"></div>
+    <!-- 분할 화면: 왼쪽 = 검색·구역 정보·기사 / 오른쪽 = 지도 -->
+    <main class="split" id="split" data-detail="0" data-mobilemap="1">
+        <aside class="left-panel">
+            <div class="search-bar">
+                <input id="searchInput" type="search" placeholder="구역·기사 검색" autocomplete="off" aria-label="구역과 기사 검색">
+                <button class="toggle-btn" id="toggleBtn" type="button">목록</button>
+            </div>
 
-        <!-- 플로팅: 구역 정보 + 관련 뉴스 (도형을 눌렀을 때만 표시) -->
-        <div class="float-wrap" id="floatWrap" hidden>
-            <button class="panel-close" id="closeBtn" type="button" aria-label="닫기">
-                <img src="assets/rarrow.png" class="close-arrow" alt="" onerror="this.style.display='none'">
-                <span class="label-desktop">닫기</span>
-                <span class="label-mobile">지도로 돌아가기</span>
-            </button>
-
-            <section class="float-card info-card">
-                <div class="card-scroll" id="detail-content"></div>
-            </section>
-
-            <section class="float-card news-card">
-                <div class="panel-title">관련 뉴스</div>
-                <div class="card-scroll" id="news-list">
-                    <div class="panel-msg">뉴스를 불러오는 중...</div>
+            <div class="panel-body">
+                <!-- 1. 구역 목록 -->
+                <div id="listView" class="view active">
+                    <div class="scroll" id="folder-list">
+                        <div class="panel-msg">구역 정보를 불러오는 중...</div>
+                    </div>
                 </div>
-            </section>
-        </div>
+
+                <!-- 2. 검색 결과 -->
+                <div id="searchView" class="view">
+                    <div class="scroll" id="search-results"></div>
+                </div>
+
+                <!-- 3. 구역 상세: 정보 + 관련 뉴스 -->
+                <div id="detailView" class="view">
+                    <button class="back-btn" id="backBtn" type="button">
+                        <img src="assets/rarrow.png" class="back-arrow-img" alt="" onerror="this.style.display='none'">
+                        <span id="backLabel">목록으로 돌아가기</span>
+                    </button>
+                    <div class="detail-scroll">
+                        <section class="info-area" id="detail-content"></section>
+                        <section class="news-area">
+                            <div class="panel-title">관련 뉴스</div>
+                            <div class="news-scroll" id="news-list">
+                                <div class="panel-msg">뉴스를 불러오는 중...</div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div id="map"></div>
     </main>
 
     <!-- Leaflet JS 및 Omnivore (KML 로더) -->
@@ -496,6 +677,14 @@
             });
         }
 
+        function norm(s) {
+            return String(s == null ? '' : s).replace(/\s+/g, '').toLowerCase();
+        }
+
+        function stripTags(s) {
+            return String(s == null ? '' : s).replace(/<[^>]*>/g, ' ');
+        }
+
         function getImageUrl(imageField) {
             if (!imageField) return null;
             if (typeof imageField === 'string') return imageField;
@@ -515,9 +704,9 @@
         }
 
         /* =====================================================
-           자치구 판별 (상세 화면의 구 이름 표시용)
+           자치구 판별
            - 서울 25개 구 이름이 KML 설명(또는 이름)에 있으면 그 구
-           - 구 이름이 없으면 표시하지 않음
+           - 구 이름이 없으면 '기타 구역' 폴더
         ===================================================== */
         const SEOUL_GU = [
             '강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구',
@@ -526,9 +715,10 @@
         ];
         // 동 이름만 적힌 경우를 위한 보조 매핑 (필요하면 추가)
         const AREA_ALIAS = { '반포': '서초구' };
+        const ETC = '기타 구역';
 
         function getDistrict(name, description) {
-            const text = (String(description || '').replace(/<[^>]*>/g, ' ') + ' ' + String(name || ''));
+            const text = stripTags(description) + ' ' + String(name || '');
             for (const gu of SEOUL_GU) {
                 if (text.includes(gu)) return gu;
             }
@@ -543,8 +733,7 @@
         ===================================================== */
         const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([37.5665, 126.9780], 13);
 
-        // 오른쪽은 플로팅 패널이 열리므로 컨트롤과 저작권 표기는 왼쪽 아래에 둠
-        L.control.zoom({ position: 'bottomleft' }).addTo(map);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
         L.control.attribution({ position: 'bottomleft' }).addTo(map);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -557,19 +746,27 @@
         const defaultStyle = { color: '#3388ff', fillColor: '#3388ff', fillOpacity: 0.2 };
         const selectedStyle = { color: '#ff0000', fillColor: '#ff4757', fillOpacity: 0.5, weight: 3 };
 
-        const floatWrapEl = document.getElementById('floatWrap');
+        const splitEl = document.getElementById('split');
+        const searchInput = document.getElementById('searchInput');
+        const toggleBtn = document.getElementById('toggleBtn');
+        const folderListEl = document.getElementById('folder-list');
+        const searchResultsEl = document.getElementById('search-results');
         const detailContentEl = document.getElementById('detail-content');
         const newsListEl = document.getElementById('news-list');
-        const closeBtn = document.getElementById('closeBtn');
+        const backBtn = document.getElementById('backBtn');
+        const backLabelEl = document.getElementById('backLabel');
 
+        let zones = [];            // { name, description, district, haystack, layer }
         let currentZone = null;
+        let mobileMap = true;      // 모바일: true = 지도 화면, false = 목록·검색 화면
+        let openedFrom = 'map';    // 구역을 연 곳: 'map' | 'panel'
 
         /* =====================================================
            KML 불러오기
         ===================================================== */
         if (typeof omnivore === 'undefined') {
             console.error('Omnivore 라이브러리를 불러오지 못했습니다.');
-            alert('지도 라이브러리를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.');
+            folderListEl.innerHTML = '<div class="panel-msg error">지도 라이브러리를 불러오지 못했습니다.</div>';
         } else {
             omnivore.kml('assets/jae.kml')
                 .on('ready', function() {
@@ -579,6 +776,7 @@
                         const props = (layer.feature && layer.feature.properties) || {};
                         const name = props.name || '이름 없는 구역';
                         const description = props.description || '';
+                        const district = getDistrict(name, description);
 
                         if (layer.setStyle) layer.setStyle(defaultStyle);
 
@@ -587,13 +785,23 @@
                             layer.bindTooltip(esc(name), { sticky: true, direction: 'top', className: 'zone-tip' });
                         }
 
-                        const zone = { name: name, description: description, district: getDistrict(name, description), layer: layer };
+                        const zone = {
+                            name: name,
+                            description: description,
+                            district: district,
+                            haystack: norm(name + ' ' + district + ' ' + stripTags(description)),
+                            layer: layer
+                        };
+                        zones.push(zone);
 
                         layer.on('click', function(e) {
                             L.DomEvent.stopPropagation(e);
-                            openZone(zone);
+                            openZone(zone, 'map');
                         });
                     });
+
+                    buildZoneList();
+                    renderLeft();
 
                     // 전체 구역이 한눈에 보이도록 지도 범위 맞춤
                     try {
@@ -605,26 +813,109 @@
                 })
                 .on('error', function(err) {
                     console.error('KML Load Error:', err);
-                    alert('구역 정보를 불러오지 못했습니다. (assets/jae.kml 경로 확인)');
+                    folderListEl.innerHTML = '<div class="panel-msg error">구역 정보를 불러오지 못했습니다. (assets/jae.kml 경로 확인)</div>';
                 })
                 .addTo(map);
         }
 
         /* =====================================================
+           구역 목록 (자치구 폴더)
+        ===================================================== */
+        function makeZoneRow(zone) {
+            const row = document.createElement('button');
+            row.type = 'button';
+            row.className = 'item-row';
+            row.innerHTML = '<span class="row-name">' + esc(zone.name) + '</span>' +
+                (zone.district ? '<span class="row-sub">' + esc(zone.district) + '</span>' : '');
+            row.addEventListener('click', function() { openZone(zone, 'panel'); });
+            return row;
+        }
+
+        function buildZoneList() {
+            if (zones.length === 0) {
+                folderListEl.innerHTML = '<div class="panel-msg">표시할 구역이 없습니다.</div>';
+                return;
+            }
+
+            const keyOf = function(z) { return z.district || ETC; };
+
+            // 폴더 순서: 처음 등장한 순서, '기타 구역'은 항상 마지막
+            const keys = [];
+            zones.forEach(function(z) { if (keys.indexOf(keyOf(z)) === -1) keys.push(keyOf(z)); });
+            keys.sort(function(a, b) { return (a === ETC) - (b === ETC); });
+
+            folderListEl.innerHTML = '';
+
+            keys.forEach(function(key) {
+                const items = zones
+                    .filter(function(z) { return keyOf(z) === key; })
+                    .sort(function(a, b) { return a.name.localeCompare(b.name, 'ko'); });
+
+                const group = document.createElement('div');
+
+                const title = document.createElement('button');
+                title.type = 'button';
+                title.className = 'folder-title';
+                title.innerHTML = '<span>' + esc(key) + '<span class="folder-count">' + items.length + '</span></span><span class="folder-toggle">−</span>';
+
+                const itemsEl = document.createElement('div');
+                itemsEl.className = 'folder-items';
+
+                title.addEventListener('click', function() {
+                    const willHide = !itemsEl.hidden;
+                    itemsEl.hidden = willHide;
+                    title.querySelector('.folder-toggle').textContent = willHide ? '+' : '−';
+                });
+
+                items.forEach(function(zone) {
+                    const row = makeZoneRow(zone);
+                    // 폴더 안에서는 자치구 표기를 생략
+                    const sub = row.querySelector('.row-sub');
+                    if (sub) sub.remove();
+                    itemsEl.appendChild(row);
+                });
+
+                group.appendChild(title);
+                group.appendChild(itemsEl);
+                folderListEl.appendChild(group);
+            });
+        }
+
+        /* =====================================================
+           왼쪽 패널 상태 (목록 / 검색 결과 / 구역 상세)
+        ===================================================== */
+        function renderLeft() {
+            const q = norm(searchInput.value);
+            const view = currentZone ? 'detail' : (q ? 'search' : 'list');
+
+            splitEl.dataset.detail = currentZone ? '1' : '0';
+            splitEl.dataset.mobilemap = mobileMap ? '1' : '0';
+            toggleBtn.textContent = mobileMap ? '목록' : '지도';
+
+            ['list', 'search', 'detail'].forEach(function(v) {
+                document.getElementById(v + 'View').classList.toggle('active', v === view);
+            });
+
+            if (view === 'search') renderSearch(q);
+        }
+
+        /* =====================================================
            구역 선택 / 해제
         ===================================================== */
-        function openZone(zone) {
+        function openZone(zone, from) {
+            openedFrom = from;
             selectZone(zone);
-            floatWrapEl.hidden = false;
-            floatWrapEl.scrollTop = 0;
+            renderLeft();
             detailContentEl.scrollTop = 0;
             newsListEl.scrollTop = 0;
+            document.querySelector('.detail-scroll').scrollTop = 0;
             moveToZone(zone.layer);
         }
 
-        function closePanel() {
-            floatWrapEl.hidden = true;
+        function closeDetail() {
             clearSelection();
+            if (isMobile()) mobileMap = (openedFrom === 'map');
+            renderLeft();
         }
 
         function selectZone(zone) {
@@ -633,6 +924,8 @@
             }
             currentZone = zone;
             if (zone.layer.setStyle) zone.layer.setStyle(selectedStyle);
+
+            backLabelEl.textContent = (isMobile() && openedFrom === 'map') ? '지도로 돌아가기' : '목록으로 돌아가기';
 
             // 설명 안의 이미지는 상단에 따로 배치
             let description = zone.description;
@@ -668,24 +961,85 @@
             currentZone = null;
         }
 
-        // 데스크톱에서는 오른쪽 플로팅에 가리지 않도록 오른쪽 여백을 더 둠
         function moveToZone(layer) {
-            const options = isMobile()
-                ? { padding: [60, 60], maxZoom: 16 }
-                : { paddingTopLeft: [60, 60], paddingBottomRight: [440, 60], maxZoom: 16 };
-
             if (layer.getBounds) {
-                map.fitBounds(layer.getBounds(), options);
+                map.fitBounds(layer.getBounds(), { padding: [60, 60], maxZoom: 16 });
             } else if (layer.getLatLng) {
                 map.setView(layer.getLatLng(), 16);
             }
         }
 
-        closeBtn.addEventListener('click', closePanel);
-        map.on('click', closePanel);
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && !floatWrapEl.hidden) closePanel();
+        backBtn.addEventListener('click', closeDetail);
+
+        map.on('click', function() {
+            if (currentZone) closeDetail();
         });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key !== 'Escape') return;
+            if (document.activeElement === searchInput && searchInput.value) {
+                searchInput.value = '';
+                renderLeft();
+            } else if (currentZone) {
+                closeDetail();
+            }
+        });
+
+        /* =====================================================
+           검색 (구역: 이름·설명·자치구 / 기사: 제목·본문)
+        ===================================================== */
+        searchInput.addEventListener('focus', function() {
+            if (isMobile() && !currentZone && mobileMap) {
+                mobileMap = false;
+                renderLeft();
+            }
+        });
+
+        searchInput.addEventListener('input', function() {
+            if (currentZone) clearSelection();
+            if (isMobile()) mobileMap = false;
+            renderLeft();
+        });
+
+        toggleBtn.addEventListener('click', function() {
+            mobileMap = !mobileMap;
+            if (mobileMap) searchInput.blur();
+            renderLeft();
+        });
+
+        function renderSearch(q) {
+            const zoneHits = zones.filter(function(z) { return z.haystack.includes(q); });
+            let articleHtml = '';
+
+            if (articlesState === 'loading') {
+                articleHtml = '<div class="panel-title">기사</div><div class="panel-msg">기사를 불러오는 중...</div>';
+            } else if (articlesState === 'ready') {
+                const hits = allArticles.filter(function(a) { return articleText(a).includes(q); }).slice(0, 10);
+                if (hits.length > 0) {
+                    articleHtml = '<div class="panel-title">기사<span class="count">' + hits.length + '</span></div>' + hits.map(newsItemHtml).join('');
+                }
+            }
+
+            searchResultsEl.innerHTML = '';
+
+            if (zoneHits.length > 0) {
+                const title = document.createElement('div');
+                title.className = 'panel-title';
+                title.innerHTML = '구역<span class="count">' + zoneHits.length + '</span>';
+                searchResultsEl.appendChild(title);
+                zoneHits.forEach(function(z) { searchResultsEl.appendChild(makeZoneRow(z)); });
+            }
+
+            if (articleHtml) {
+                const wrap = document.createElement('div');
+                wrap.innerHTML = articleHtml;
+                searchResultsEl.appendChild(wrap);
+            }
+
+            if (zoneHits.length === 0 && !articleHtml) {
+                searchResultsEl.innerHTML = '<div class="panel-msg">‘' + esc(searchInput.value.trim()) + '’에 대한 검색 결과가 없습니다.</div>';
+            }
+        }
 
         /* =====================================================
            관련 뉴스
@@ -730,10 +1084,7 @@
                 articlesState = 'error';
             }
             renderNews();
-        }
-
-        function norm(s) {
-            return String(s == null ? '' : s).replace(/\s+/g, '').toLowerCase();
+            renderLeft();
         }
 
         function articleText(art) {
@@ -789,6 +1140,7 @@
                 : '<div class="panel-msg">이 구역과 연결된 기사가 아직 없습니다.</div>';
         }
 
+        renderLeft();
         fetchArticles();
     </script>
 </body>
