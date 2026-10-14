@@ -38,6 +38,9 @@ if (fs.existsSync(path.join(__dirname, 'viewer.html'))) {
 if (fs.existsSync(path.join(__dirname, 'articles'))) {
     copyRecursiveSync(path.join(__dirname, 'articles'), path.join(distDir, 'articles'));
 }
+if (fs.existsSync(path.join(__dirname, 'jae'))) {
+    copyRecursiveSync(path.join(__dirname, 'jae'), path.join(distDir, 'jae'));
+}
 if (fs.existsSync(path.join(__dirname, 'images'))) {
     copyRecursiveSync(path.join(__dirname, 'images'), path.join(distDir, 'images'));
 }
