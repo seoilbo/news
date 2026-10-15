@@ -176,18 +176,19 @@
             outline: none !important;
         }
 
-        /* 구역 이름: 호버 없이 도형 위에 항상 표시 */
+        /* 구역 이름: 호버 없이, 테두리가 둥근 사각형 안에 항상 표시 */
         .leaflet-tooltip.zone-label {
-            background: transparent;
-            border: none;
-            box-shadow: none;
-            padding: 0;
+            padding: 2px 8px;
+            background: #ffffff;
+            border: 1px solid #222222;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
             font-family: inherit;
             font-size: 12px;
-            font-weight: 800;
+            font-weight: 700;
+            line-height: 1.4;
             color: #111111;
             white-space: nowrap;
-            text-shadow: -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff, 0 0 4px #ffffff;
         }
 
         /* 지도 왼쪽 위: 현재 위치 (서울특별시 ○○구 ○○동) */
@@ -786,10 +787,8 @@
 
         // 자치구 경계선 / 서울 밖 흐림 막 전용 레이어 (구역 도형 아래, 클릭 방해 없음)
         map.createPane('maskPane').style.zIndex = 350;
-        map.createPane('dimPane').style.zIndex = 360;
         map.createPane('boundaryPane').style.zIndex = 390;
         map.getPane('maskPane').style.pointerEvents = 'none';
-        map.getPane('dimPane').style.pointerEvents = 'none';
         map.getPane('boundaryPane').style.pointerEvents = 'none';
 
         L.control.zoom({ position: 'bottomright' }).addTo(map);
@@ -843,11 +842,9 @@
         const ZOOM_ZONES = 14;    // 이 배율보다 더 축소하면 구역 대신 자치구별 개수 원을 표시 (숫자가 클수록 원이 더 빨리 나타남)
         const BOUND_PAD = 0.08;   // 서울 경계 바깥으로 벗어날 수 있는 여유 (경계 크기 대비 비율)
 
-        const BORDER_NORMAL = { color: '#6b7580', weight: 1, opacity: 0.8 };      // 자치구 경계 (얇게)
-        const BORDER_ACTIVE = { color: '#dc143c', weight: 3, opacity: 0.95 };     // 지금 있는 자치구 경계 (진하게)
-        const DIM_OPACITY = 0.65;                                                  // 다른 자치구를 흐리게 하는 정도
+        const BORDER_STYLE = { color: '#56616c', weight: 1.5, opacity: 0.9 };      // 자치구 경계선 (얇지만 또렷하게)
 
-        let guList = [];          // { name, rings, bounds, center, count, borders, dims }
+        let guList = [];          // { name, rings, bounds, center, count }
         const guByName = {};
         let seoulBounds = null;
         let circlesGroup = null;
@@ -1053,26 +1050,15 @@
                 const b = gu.bounds.getCenter();
                 gu.center = inGu(c, gu) ? c : (inGu(b, gu) ? b : c);
 
-                gu.borders = [];
-                gu.dims = [];
                 gu.rings.forEach(function(ring) {
                     allRings.push(ring);
 
-                    // 다른 자치구를 흐리게 만들 때 쓰는 막 (평소에는 투명)
-                    gu.dims.push(L.polygon(ring, {
-                        pane: 'dimPane',
-                        interactive: false,
-                        stroke: false,
-                        fillColor: '#eef1f3',
-                        fillOpacity: 0
-                    }).addTo(map));
-
                     // 자치구 경계선
-                    gu.borders.push(L.polygon(ring, Object.assign({
+                    L.polygon(ring, Object.assign({
                         pane: 'boundaryPane',
                         interactive: false,
                         fill: false
-                    }, BORDER_NORMAL)).addTo(map));
+                    }, BORDER_STYLE)).addTo(map);
                 });
             });
 
@@ -1132,6 +1118,7 @@
                     description: description,
                     district: district,
                     haystack: norm(name + ' ' + district + ' ' + stripTags(description)),
+                    bounds: layerBounds(layer),
                     layer: layer
                 };
                 zones.push(zone);
@@ -1203,7 +1190,7 @@
 
         /* ---------- 배율·화면 위치에 따라 원 / 구역 표시 전환 ----------
            - ZOOM_ZONES 보다 축소: 자치구별 개수 원만 표시
-           - 그 이상 확대: 화면 중심에 있는 자치구의 구역만 표시 */
+           - 그 이상 확대: 자치구와 상관없이 지도 화면에 보이는 범위의 구역을 표시 */
         function setZoneVisible(zone, show) {
             const on = map.hasLayer(zone.layer);
             if (show && !on) zone.layer.addTo(map);
@@ -1234,23 +1221,6 @@
                 if (counts[name] > bestN) { best = name; bestN = counts[name]; }
             });
             return best;
-        }
-
-        /* ---------- 지금 있는 자치구 강조 ----------
-           확대 상태에서 화면 중심 자치구의 경계를 굵은 크림슨으로 바꾸고, 나머지 자치구는 흐리게 */
-        let highlightedGu = null;
-
-        function highlightGu(name) {
-            if (highlightedGu === name) return;
-            highlightedGu = name;
-            guList.forEach(function(gu) {
-                const active = !!name && gu.name === name;
-                gu.dims.forEach(function(p) { p.setStyle({ fillOpacity: (!name || active) ? 0 : DIM_OPACITY }); });
-                gu.borders.forEach(function(p) {
-                    p.setStyle(active ? BORDER_ACTIVE : BORDER_NORMAL);
-                    if (active) p.bringToFront();
-                });
-            });
         }
 
         /* ---------- 현재 위치 표시: 서울특별시 ○○구 ○○동 ----------
@@ -1321,9 +1291,8 @@
             // 화면 중심 자치구 (축소 상태에서는 의미가 없으므로 비움)
             const current = (guList.length > 0 && !lowZoom) ? dominantGu() : '';
 
-            if (DEBUG) console.log('[동네개발맵] 화면 갱신 - 배율 ' + map.getZoom() + (zoomedOut ? ' (축소: 원 표시)' : ' (확대: 구역 표시)') + ', 화면 중심 자치구: ' + (guList.length ? (current || '(없음)') : '(자치구 KML 없음)'));
+            if (DEBUG) console.log('[동네개발맵] 화면 갱신 - 배율 ' + map.getZoom() + (zoomedOut ? ' (축소: 원 표시)' : ' (확대: 구역 표시)') + ', 현재 위치 자치구: ' + (guList.length ? (current || '(없음)') : '(자치구 KML 없음)'));
 
-            highlightGu(current);
             updateLocation(current, !lowZoom);
 
             if (zoomedOut) {
@@ -1334,13 +1303,10 @@
 
             if (circlesGroup && map.hasLayer(circlesGroup)) map.removeLayer(circlesGroup);
 
-            // 확대하면 화면 중심 자치구의 구역만 표시 (자치구를 알 수 없는 구역과 선택한 구역은 항상 표시)
+            // 확대하면 자치구와 상관없이, 지금 지도 화면에 걸리는 구역을 모두 표시 (선택한 구역은 항상 표시)
+            const viewBounds = map.getBounds().pad(0.3);
             zones.forEach(function(z) {
-                const show = z === currentZone ||
-                    !current ||
-                    !guByName[z.district] ||
-                    z.district === current;
-                setZoneVisible(z, show);
+                setZoneVisible(z, z === currentZone || viewBounds.intersects(z.bounds));
             });
             if (DEBUG) console.log('[동네개발맵] 지도에 표시 중인 구역: ' + zones.filter(function(z) { return map.hasLayer(z.layer); }).length + ' / ' + zones.length);
         }
