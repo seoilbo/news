@@ -238,6 +238,37 @@
             object-fit: cover;
         }
 
+        /* 최상단 대표 기사: 왼쪽 제목+내용, 오른쪽 큰 사진 */
+        .article-card-featured {
+            gap: 28px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid #e1e4e8;
+        }
+
+        .article-card-featured .article-card-text {
+            justify-content: center;
+        }
+
+        .article-card-featured .article-card-title {
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1.35;
+            margin-bottom: 14px;
+        }
+
+        .article-card-featured .article-card-desc {
+            font-size: 15px;
+            line-height: 1.7;
+            -webkit-line-clamp: 6;
+            margin-bottom: 16px;
+        }
+
+        .article-card-featured .article-card-thumb {
+            width: 52%;
+            height: auto;
+            aspect-ratio: 3 / 2;
+        }
+
         .no-article-box {
             text-align: center;
             padding: 80px 0;
@@ -326,6 +357,23 @@
             }
             .article-card-desc {
                 display: none; /* 모바일에서는 요약문 숨김 처리로 깔끔하게 정렬 */
+            }
+            /* 대표 기사는 모바일에서 사진이 위, 글이 아래 */
+            .article-card-featured {
+                flex-direction: column-reverse;
+                gap: 14px;
+            }
+            .article-card-featured .article-card-thumb {
+                width: 100%;
+            }
+            .article-card-featured .article-card-title {
+                font-size: 21px;
+                margin-bottom: 8px;
+            }
+            .article-card-featured .article-card-desc {
+                display: -webkit-box;
+                font-size: 14px;
+                -webkit-line-clamp: 3;
             }
             .footer-top {
                 flex-direction: column;
@@ -456,7 +504,7 @@
             for (const item of content) {
                 const text = typeof item === 'string' ? item : (item && item.type === 'text' ? item.value : '');
                 if (text && String(text).trim()) {
-                    return String(text).trim().replace(/\s+/g, ' ').slice(0, 200);
+                    return String(text).trim().replace(/\s+/g, ' ').slice(0, 400);
                 }
             }
             return '';
@@ -562,17 +610,14 @@
             }
 
             let html = '';
-            articles.forEach(art => {
+            articles.forEach((art, idx) => {
                 // 이미지가 없거나 불러오지 못하면 썸네일 영역 자체를 표시하지 않음
                 const thumbHtml = art.image
                     ? `<div class="article-card-thumb"><img src="${escapeHtml(art.image)}" alt="썸네일 이미지" onerror="this.parentElement.remove()"></div>`
                     : '';
 
-                // 기자 이름 표시 (데이터에 reporter가 없으면 기본 '서오일보' 출력)
-                const reporterText = art.reporter || '서오일보';
-
                 html += `
-                    <a href="viewer.html?id=${encodeURIComponent(art.id)}" class="article-card-item">
+                    <a href="viewer.html?id=${encodeURIComponent(art.id)}" class="article-card-item${idx === 0 ? ' article-card-featured' : ''}">
                         <div class="article-card-text">
                             <div>
                                 <h2 class="article-card-title">${escapeHtml(art.title)}</h2>
@@ -580,8 +625,6 @@
                             </div>
                             <div class="article-card-info">
                                 <span>${escapeHtml(art.date)}</span>
-                                <span>|</span>
-                                <span>${escapeHtml(reporterText)}</span>
                             </div>
                         </div>
                         ${thumbHtml}
