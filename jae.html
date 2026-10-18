@@ -628,11 +628,6 @@
             }
         }
 
-        /* OpenStreetMap 타일을 회색조로 차분하게 (구역·경계 색이 더 돋보이도록) */
-        .tiles-soft {
-            filter: grayscale(0.9) brightness(1.06) contrast(0.92);
-        }
-
         /* ===== 캡쳐 모드 (12341234 + Enter → 55 + Enter) =====
            지도 외에는 모두 숨김. 해제: Esc 또는 55 + Enter */
         body.capture-mode .large-header,
@@ -648,7 +643,25 @@
             }
         }
 
-        /* 캡쳐 모드에서 선택한 구역 가운데에 붙는 '대상지' 표시 */
+        /* 캡쳐 모드: 구역 이름과 '대상지'는 각 구역의 색으로, 글자 테두리를 따라 흰색 윤곽 */
+        body.capture-mode .leaflet-tooltip.zone-label {
+            padding: 0;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--zone-color, #3388ff);
+            text-shadow:
+                -2px 0 #fff, 2px 0 #fff, 0 -2px #fff, 0 2px #fff,
+                -2px -2px #fff, 2px -2px #fff, -2px 2px #fff, 2px 2px #fff,
+                -1px -2px #fff, 1px -2px #fff, -1px 2px #fff, 1px 2px #fff,
+                -2px -1px #fff, 2px -1px #fff, -2px 1px #fff, 2px 1px #fff,
+                0 0 4px #fff;
+        }
+
+        /* 선택한 구역(대상지) 정가운데에 붙는 '대상지' 글자 */
         .target-tag-icon {
             background: none;
             border: none;
@@ -659,16 +672,35 @@
             left: 0;
             top: 0;
             transform: translate(-50%, -50%);
-            padding: 5px 14px;
-            background: #e0262d;
-            border-radius: 10px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-            font-size: 18px;
+            font-size: 22px;
             font-weight: 800;
             letter-spacing: -0.3px;
             line-height: 1.3;
+            white-space: nowrap;
+            text-shadow:
+                -2px 0 #fff, 2px 0 #fff, 0 -2px #fff, 0 2px #fff,
+                -2px -2px #fff, 2px -2px #fff, -2px 2px #fff, 2px 2px #fff,
+                -1px -2px #fff, 1px -2px #fff, -1px 2px #fff, 1px 2px #fff,
+                -2px -1px #fff, 2px -1px #fff, -2px 1px #fff, 2px 1px #fff,
+                0 0 4px #fff;
+        }
+
+        /* 대상지 반경(500m·1km) 표시 글자 */
+        .ring-label-icon {
+            background: none;
+            border: none;
+        }
+
+        .ring-label {
+            position: absolute;
+            left: 0;
+            top: 0;
+            transform: translate(-50%, -115%);
+            font-size: 12px;
+            font-weight: 800;
             color: #ffffff;
             white-space: nowrap;
+            text-shadow: 0 0 3px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.85);
         }
 
         /* 모드 전환 안내 (잠깐 보였다 사라짐) */
@@ -853,8 +885,10 @@
         // 자치구 경계선 / 서울 밖 흐림 막 전용 레이어 (구역 도형 아래, 클릭 방해 없음)
         map.createPane('maskPane').style.zIndex = 350;
         map.createPane('boundaryPane').style.zIndex = 390;
+        map.createPane('ringPane').style.zIndex = 420;
         map.getPane('maskPane').style.pointerEvents = 'none';
         map.getPane('boundaryPane').style.pointerEvents = 'none';
+        map.getPane('ringPane').style.pointerEvents = 'none';
 
         L.control.zoom({ position: 'bottomright' }).addTo(map);
         L.control.attribution({ position: 'bottomleft' }).addTo(map);
@@ -872,7 +906,7 @@
         /* 지도 배경 (위에서부터 키가 입력된 것을 사용)
            1) MapTiler  : cloud.maptiler.com 에서 무료 키 발급 → MAPTILER_KEY 에 붙여 넣기 (OpenMapTiles 기반, 깔끔한 'dataviz-light')
            2) CARTO     : carto.com/basemaps/apikey 에서 무료 키 발급 → CARTO_KEY 에 붙여 넣기
-           3) 키가 없으면: 키가 필요 없는 OpenStreetMap 타일을 회색조로 은은하게 처리
+           3) 키가 없으면: 키가 필요 없는 기본 OpenStreetMap 지도
            ※ 키는 공개 코드에 그대로 들어갑니다. MapTiler 대시보드에서 키를 이 사이트 주소에서만 쓰도록 제한해 두세요. */
         const MAPTILER_KEY = '';
         const MAPTILER_STYLE = 'dataviz-light';   // 다른 스타일: 'streets-v4' 등 (MapTiler 지도 목록의 ID)
@@ -902,7 +936,6 @@
                 url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                 options: {
                     maxZoom: 19,
-                    className: 'tiles-soft',
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }
             };
@@ -934,6 +967,7 @@
         let targetHidden = false;  // true = '대상지' 표시를 끈 상태 (캡쳐 모드에서 0 + Enter)
         let targetMarker = null;   // 지도 위 '대상지' 표시
         let targetZone = null;     // '대상지' 표시가 붙어 있는 구역
+        let ringGroup = null;      // 대상지 반경(500m·1km) 표시
 
         /* =====================================================
            KML 불러오기
@@ -1235,6 +1269,9 @@
                     L.DomEvent.stopPropagation(e);
                     openZone(zone, 'map');
                 });
+
+                // 이름표가 열릴 때 구역 색을 입힘 (캡쳐 모드에서 글자색으로 사용)
+                layer.on('tooltipopen', function() { applyLabelColor(zone); });
             });
 
             buildCircles();
@@ -1584,11 +1621,14 @@
         }
 
         function selectZone(zone) {
+            const prevZone = currentZone;
             if (currentZone && currentZone !== zone && currentZone.layer.setStyle) {
                 currentZone.layer.setStyle(defaultStyle);
             }
             if (currentZone !== zone) targetHidden = false;   // 다른 구역을 고르면 '대상지' 표시를 다시 켬
             currentZone = zone;
+            if (prevZone) applyLabelColor(prevZone);
+            applyLabelColor(zone);
             setZoneVisible(zone, true);
             if (zone.layer.setStyle) zone.layer.setStyle(selectedStyle);
 
@@ -1623,10 +1663,12 @@
         }
 
         function clearSelection() {
+            const prevZone = currentZone;
             if (currentZone && currentZone.layer.setStyle) {
                 currentZone.layer.setStyle(defaultStyle);
             }
             currentZone = null;
+            if (prevZone) applyLabelColor(prevZone);
             updateTargetTag();
             updateView();
         }
@@ -1931,30 +1973,76 @@
             } catch (e) { /* 이름표가 아직 없으면 무시 */ }
         }
 
+        // 지금 지도에 칠해진 구역 색 (선택한 구역은 빨강, 나머지는 기본 파랑)
+        function zoneColor(zone) {
+            return zone === currentZone ? selectedStyle.color : defaultStyle.color;
+        }
+
+        function applyLabelColor(zone) {
+            try {
+                const tip = zone.layer.getTooltip && zone.layer.getTooltip();
+                const el = tip && tip.getElement && tip.getElement();
+                if (el) el.style.setProperty('--zone-color', zoneColor(zone));
+            } catch (e) { /* 이름표가 아직 없으면 무시 */ }
+        }
+
+        /* ---------- 대상지 반경: 흰 점선 500m · 1km ---------- */
+        const RING_RADII = [500, 1000];
+        const SHOW_RING_LABELS = true;   // 점선 위 '500m', '1km' 글자 (끄려면 false)
+
+        function drawRings(center) {
+            const parts = [];
+            RING_RADII.forEach(function(r) {
+                // 밝은 지도에서도 흰 점선이 보이도록 아주 옅은 그림자 선을 아래에 깔아 둠
+                parts.push(L.circle(center, { pane: 'ringPane', radius: r, interactive: false, fill: false, color: '#000000', opacity: 0.25, weight: 4 }));
+                parts.push(L.circle(center, { pane: 'ringPane', radius: r, interactive: false, fill: false, color: '#ffffff', opacity: 1, weight: 2.5, dashArray: '9 9' }));
+                if (SHOW_RING_LABELS) {
+                    const top = L.latLng(center.lat + r / 111320, center.lng);
+                    parts.push(L.marker(top, {
+                        pane: 'ringPane',
+                        interactive: false,
+                        keyboard: false,
+                        icon: L.divIcon({
+                            className: 'ring-label-icon',
+                            html: '<div class="ring-label">' + (r >= 1000 ? (r / 1000) + 'km' : r + 'm') + '</div>',
+                            iconSize: [0, 0]
+                        })
+                    }));
+                }
+            });
+            ringGroup = L.layerGroup(parts).addTo(map);
+        }
+
         function updateTargetTag() {
             if (targetMarker) { map.removeLayer(targetMarker); targetMarker = null; }
+            if (ringGroup) { map.removeLayer(ringGroup); ringGroup = null; }
 
-            const want = captureMode && currentZone && !targetHidden;
+            const active = captureMode && currentZone;      // 캡쳐 모드에서 구역이 선택돼 있음
+            const wantTag = active && !targetHidden;        // '대상지' 글자를 보이는 상태
 
             // 이전 구역의 이름표 복구
-            if (targetZone && (!want || targetZone !== currentZone)) {
+            if (targetZone && (!wantTag || targetZone !== currentZone)) {
                 setLabelHidden(targetZone, false);
                 targetZone = null;
             }
-            if (!want) return;
+            if (!active) return;
 
-            targetMarker = L.marker(labelPoint(currentZone.layer), {
+            const center = labelPoint(currentZone.layer);
+            drawRings(center);                              // 반경은 '대상지' 글자를 꺼도 그대로 표시
+            if (!wantTag) return;
+
+            targetMarker = L.marker(center, {
                 pane: 'tooltipPane',
                 interactive: false,
                 keyboard: false,
                 icon: L.divIcon({
                     className: 'target-tag-icon',
-                    html: '<div class="target-tag">대상지</div>',
+                    html: '<div class="target-tag" style="color:' + zoneColor(currentZone) + '">대상지</div>',
                     iconSize: [0, 0]
                 })
             }).addTo(map);
 
-            // 같은 자리의 원래 이름표는 숨김 (대상지 표시로 대체)
+            // 같은 자리의 원래 이름표는 숨김 (대상지 글자로 대체)
             targetZone = currentZone;
             setLabelHidden(currentZone, true);
         }
