@@ -6,7 +6,7 @@
     <meta property="og:title" content="동네개발맵 - 서오일보">
     <meta property="og:type" content="website">
     <meta property="og:image" content="assets/thum_OG.jpg">
-    <title>동네개발맵 - 서오일보</title>
+    <title>동네개발맵 | 서오일보</title>
     <link rel="icon" href="assets/favi.png" type="image/png">
 
     <!-- Leaflet CSS -->
@@ -628,31 +628,47 @@
             }
         }
 
-        /* ===== 캡쳐 모드 =====
-           12341234 또는 55 + Enter : 헤더·검색창·확대 버튼을 숨김
-           0 + Enter                : 지도 외에 모두 숨김 (같은 번호를 다시 입력하거나 Esc 로 해제) */
-        body.capture-mode .large-header,
-        body.capture-mode .search-bar,
-        body.capture-mode .leaflet-control-zoom {
-            display: none;
+        /* OpenStreetMap 타일을 회색조로 차분하게 (구역·경계 색이 더 돋보이도록) */
+        .tiles-soft {
+            filter: grayscale(0.9) brightness(1.06) contrast(0.92);
         }
 
-        body.capture-map-only .large-header,
-        body.capture-map-only .left-panel,
-        body.capture-map-only .leaflet-control-zoom,
-        body.capture-map-only .loc-chip {
+        /* ===== 캡쳐 모드 (12341234 + Enter → 55 + Enter) =====
+           지도 외에는 모두 숨김. 해제: Esc 또는 55 + Enter */
+        body.capture-mode .large-header,
+        body.capture-mode .left-panel,
+        body.capture-mode .leaflet-control-zoom,
+        body.capture-mode .loc-chip {
             display: none !important;
         }
 
         @media (max-width: 768px) {
-            body.capture-map-only #map,
-            body.capture-mode .split[data-detail="0"] #map {
+            body.capture-mode #map {
                 top: 0;
             }
+        }
 
-            body.capture-mode .split[data-detail="0"] .left-panel {
-                display: none;
-            }
+        /* 캡쳐 모드에서 선택한 구역 가운데에 붙는 '대상지' 표시 */
+        .target-tag-icon {
+            background: none;
+            border: none;
+        }
+
+        .target-tag {
+            position: absolute;
+            left: 0;
+            top: 0;
+            transform: translate(-50%, -50%);
+            padding: 5px 14px;
+            background: #e0262d;
+            border-radius: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+            color: #ffffff;
+            white-space: nowrap;
         }
 
         /* 모드 전환 안내 (잠깐 보였다 사라짐) */
@@ -853,34 +869,31 @@
         locControl.addTo(map);
         const locEl = locControl.getContainer();
 
-        // 지도 배경: 밝고 깔끔한 CARTO Positron (도로·지명만 은은하게). 바꾸고 싶으면 BASEMAP 만 수정
-        const BASEMAP = {
-            url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-            options: {
-                subdomains: 'abcd',
-                maxZoom: 20,
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            }
-        };
-        const FALLBACK_BASEMAP = {
-            url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            options: { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }
-        };
+        /* 지도 배경
+           CARTO 배경 지도는 2026년 9월부터 API 키가 없으면 'API KEY REQUIRED' 글씨가 찍힌 타일을 돌려줍니다.
+           - 기본값: 키가 필요 없는 OpenStreetMap 타일을 회색조로 은은하게 처리 (한글 지명 그대로, 깔끔한 톤)
+           - 더 깔끔한 CARTO Positron을 쓰려면 carto.com/basemaps/apikey 에서 무료 키(월 500만 타일, 계정 불필요)를
+             발급받아 아래 CARTO_KEY 에 붙여 넣으세요. */
+        const CARTO_KEY = '';
 
-        const baseLayer = L.tileLayer(BASEMAP.url, BASEMAP.options).addTo(map);
-
-        // 배경 타일이 계속 실패하면(차단·점검 등) 기본 OpenStreetMap 지도로 자동 전환
-        let tileErrors = 0;
-        let usingFallback = false;
-        baseLayer.on('tileerror', function() {
-            tileErrors++;
-            if (tileErrors >= 8 && !usingFallback) {
-                usingFallback = true;
-                map.removeLayer(baseLayer);
-                L.tileLayer(FALLBACK_BASEMAP.url, FALLBACK_BASEMAP.options).addTo(map);
-                if (typeof DEBUG !== 'undefined' && DEBUG) console.warn('[동네개발맵] 배경 지도를 불러오지 못해 OpenStreetMap으로 전환했습니다.');
+        const BASEMAP = CARTO_KEY
+            ? {
+                url: 'https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png?key=' + encodeURIComponent(CARTO_KEY),
+                options: {
+                    maxZoom: 20,
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                }
             }
-        });
+            : {
+                url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                options: {
+                    maxZoom: 19,
+                    className: 'tiles-soft',
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }
+            };
+
+        L.tileLayer(BASEMAP.url, BASEMAP.options).addTo(map);
 
         window.addEventListener('resize', function() { map.invalidateSize(); applySeoulLimits(); });
 
@@ -901,6 +914,12 @@
         let currentZone = null;
         let mobileMap = true;      // 모바일: true = 지도 화면, false = 목록·검색 화면
         let openedFrom = 'map';    // 구역을 연 곳: 'map' | 'panel'
+
+        // 캡쳐 모드 상태
+        let captureMode = false;   // true = 지도만 표시
+        let targetHidden = false;  // true = '대상지' 표시를 끈 상태 (캡쳐 모드에서 0 + Enter)
+        let targetMarker = null;   // 지도 위 '대상지' 표시
+        let targetZone = null;     // '대상지' 표시가 붙어 있는 구역
 
         /* =====================================================
            KML 불러오기
@@ -1554,6 +1573,7 @@
             if (currentZone && currentZone !== zone && currentZone.layer.setStyle) {
                 currentZone.layer.setStyle(defaultStyle);
             }
+            if (currentZone !== zone) targetHidden = false;   // 다른 구역을 고르면 '대상지' 표시를 다시 켬
             currentZone = zone;
             setZoneVisible(zone, true);
             if (zone.layer.setStyle) zone.layer.setStyle(selectedStyle);
@@ -1585,6 +1605,7 @@
                 '<div class="detail-desc">' + (description.trim() ? description : '상세 정보가 없습니다.') + '</div>';
 
             renderNews();
+            updateTargetTag();
         }
 
         function clearSelection() {
@@ -1592,6 +1613,7 @@
                 currentZone.layer.setStyle(defaultStyle);
             }
             currentZone = null;
+            updateTargetTag();
             updateView();
         }
 
@@ -1612,7 +1634,8 @@
         document.addEventListener('keydown', function(e) {
             if (e.key !== 'Escape') return;
             if (captureMode) {
-                setCaptureMode('');
+                stage1Until = 0;
+                setCaptureMode(false);
                 return;
             }
             if (document.activeElement === searchInput && searchInput.value) {
@@ -1779,16 +1802,22 @@
         }
 
         /* =====================================================
-           캡쳐 모드 (화면 캡쳐용으로 불필요한 화면 요소 숨기기)
-           - 12341234 또는 55 를 입력하고 Enter : 캡쳐 모드 (헤더·검색창·확대 버튼 숨김, 왼쪽 정보 패널은 유지)
-           - 0 을 입력하고 Enter                : 지도만 보이는 모드 (그 외 전부 숨김)
-           - 같은 번호를 다시 입력하고 Enter 하거나 Esc : 해제
-           검색창에 글자를 입력하는 중에는 동작하지 않음
-           (저작권 표기는 지도 이용 조건이라 두 모드 모두 남겨 둠)
+           캡쳐 모드 (2단계 입력)
+           1단계: 12341234 입력 후 Enter  → 아무 알림 없이 통과 (60초 안에 2단계 입력)
+           2단계: 55 입력 후 Enter        → 알림이 뜨며 '지도만' 표시 (헤더·패널·버튼 모두 숨김)
+           캡쳐 모드에서
+             · 선택한 구역은 도형 정가운데에 빨간 배경·흰 글씨 '대상지'로 표시
+             · 0 입력 후 Enter : '대상지' 표시 끄기 / 다시 켜기
+             · 55 입력 후 Enter 또는 Esc : 캡쳐 모드 해제
+           검색창에 글자를 입력하는 중에는 동작하지 않음. 번호는 아래 상수에서 바꿀 수 있음.
+           (지도 저작권 표기는 지도 이용 조건이라 캡쳐 모드에서도 남겨 둠)
         ===================================================== */
-        const CAPTURE_CODES = { '12341234': 'capture', '55': 'capture', '0': 'mapOnly' };
-        const CAPTURE_LABELS = { capture: '캡쳐 모드', mapOnly: '지도만 보기' };
-        let captureMode = '';
+        const STAGE1_CODE = '12341234';
+        const STAGE2_CODE = '55';
+        const TARGET_TOGGLE_CODE = '0';
+        const STAGE1_TTL_MS = 60000;
+
+        let stage1Until = 0;
         let codeBuffer = '';
         let codeTimer = null;
         let toastTimer = null;
@@ -1801,21 +1830,135 @@
             toastEl.textContent = text;
             toastEl.classList.add('show');
             clearTimeout(toastTimer);
-            toastTimer = setTimeout(function() { toastEl.classList.remove('show'); }, 2000);
+            toastTimer = setTimeout(function() { toastEl.classList.remove('show'); }, 2200);
         }
 
-        function setCaptureMode(mode) {
-            captureMode = mode;
-            document.body.classList.toggle('capture-mode', mode === 'capture');
-            document.body.classList.toggle('capture-map-only', mode === 'mapOnly');
+        /* ---------- 구역 '정가운데' 계산 ----------
+           무게중심은 오목한 도형에서 도형 밖으로 나갈 수 있어서,
+           도형 안쪽에서 경계까지 가장 멀리 떨어진 지점(시각적 중심)을 찾아 사용 */
+        function distToEdge(lat, lng, ring, k) {
+            let min = Infinity;
+            const px = lng * k, py = lat;
+            for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+                const ax = ring[j].lng * k, ay = ring[j].lat;
+                const bx = ring[i].lng * k, by = ring[i].lat;
+                const dx = bx - ax, dy = by - ay;
+                const len2 = dx * dx + dy * dy;
+                let t = len2 === 0 ? 0 : ((px - ax) * dx + (py - ay) * dy) / len2;
+                t = Math.max(0, Math.min(1, t));
+                const cx = ax + t * dx, cy = ay + t * dy;
+                const d = (px - cx) * (px - cx) + (py - cy) * (py - cy);
+                if (d < min) min = d;
+            }
+            return Math.sqrt(min);
+        }
+
+        function labelPoint(layer) {
+            if (layer.getLatLng) return layer.getLatLng();
+
+            const rings = [];
+            collectRings(layer, rings);
+            if (rings.length === 0) return layer.getBounds().getCenter();
+
+            let ring = rings[0];
+            let bestArea = Math.abs(ringArea(ring));
+            rings.forEach(function(r) {
+                const a = Math.abs(ringArea(r));
+                if (a > bestArea) { ring = r; bestArea = a; }
+            });
+
+            const b = L.latLngBounds(ring);
+            const k = Math.cos(b.getCenter().lat * Math.PI / 180);
+            const N = 12;
+            let x0 = b.getWest(), x1 = b.getEast(), y0 = b.getSouth(), y1 = b.getNorth();
+
+            // 경계에서 가장 멀리 떨어진 점이 여럿이면(길쭉한 사각형 등) 무게중심에 가까운 점을 선택
+            const c = centroidOf(rings);
+            const near = function(p) { return Math.pow((p.lng - c.lng) * k, 2) + Math.pow(p.lat - c.lat, 2); };
+            let bestPt = null;
+
+            for (let round = 0; round < 5; round++) {
+                const cands = [];
+                let maxD = -1;
+                for (let i = 0; i <= N; i++) {
+                    for (let j = 0; j <= N; j++) {
+                        const lng = x0 + (x1 - x0) * i / N;
+                        const lat = y0 + (y1 - y0) * j / N;
+                        if (!pointInRing({ lat: lat, lng: lng }, ring)) continue;
+                        const d = distToEdge(lat, lng, ring, k);
+                        cands.push({ lat: lat, lng: lng, d: d });
+                        if (d > maxD) maxD = d;
+                    }
+                }
+                if (cands.length === 0) break;
+
+                bestPt = null;
+                cands.forEach(function(p) {
+                    if (p.d < maxD * 0.98) return;
+                    if (!bestPt || near(p) < near(bestPt)) bestPt = p;
+                });
+
+                // 찾은 지점 주변으로 범위를 좁혀 다시 탐색
+                const dx = (x1 - x0) / N * 1.5;
+                const dy = (y1 - y0) / N * 1.5;
+                x0 = bestPt.lng - dx; x1 = bestPt.lng + dx;
+                y0 = bestPt.lat - dy; y1 = bestPt.lat + dy;
+            }
+
+            return bestPt ? L.latLng(bestPt.lat, bestPt.lng) : centroidOf(rings);
+        }
+
+        /* ---------- '대상지' 표시 ---------- */
+        function setLabelHidden(zone, hidden) {
+            try {
+                const tip = zone.layer.getTooltip && zone.layer.getTooltip();
+                const el = tip && tip.getElement && tip.getElement();
+                if (el) el.style.display = hidden ? 'none' : '';
+            } catch (e) { /* 이름표가 아직 없으면 무시 */ }
+        }
+
+        function updateTargetTag() {
+            if (targetMarker) { map.removeLayer(targetMarker); targetMarker = null; }
+
+            const want = captureMode && currentZone && !targetHidden;
+
+            // 이전 구역의 이름표 복구
+            if (targetZone && (!want || targetZone !== currentZone)) {
+                setLabelHidden(targetZone, false);
+                targetZone = null;
+            }
+            if (!want) return;
+
+            targetMarker = L.marker(labelPoint(currentZone.layer), {
+                pane: 'tooltipPane',
+                interactive: false,
+                keyboard: false,
+                icon: L.divIcon({
+                    className: 'target-tag-icon',
+                    html: '<div class="target-tag">대상지</div>',
+                    iconSize: [0, 0]
+                })
+            }).addTo(map);
+
+            // 같은 자리의 원래 이름표는 숨김 (대상지 표시로 대체)
+            targetZone = currentZone;
+            setLabelHidden(currentZone, true);
+        }
+
+        function setCaptureMode(on) {
+            captureMode = on;
+            document.body.classList.toggle('capture-mode', on);
+            if (on) targetHidden = false;
 
             // 화면 구성이 바뀌었으니 지도 크기를 다시 맞춤
             map.invalidateSize();
             applySeoulLimits();
             setTimeout(function() { map.invalidateSize(); }, 120);
 
-            showToast(mode ? CAPTURE_LABELS[mode] + ' 켜짐 (해제: Esc 또는 같은 번호 + Enter)' : '캡쳐 모드 해제');
-            if (DEBUG) console.log('[동네개발맵] 캡쳐 모드:', mode || '해제');
+            updateTargetTag();
+
+            showToast(on ? '캡쳐 모드 켜짐  (0 + Enter: 대상지 표시 끄기/켜기 · 55 + Enter 또는 Esc: 해제)' : '캡쳐 모드 해제');
+            if (DEBUG) console.log('[동네개발맵] 캡쳐 모드:', on ? '켜짐' : '해제');
         }
 
         document.addEventListener('keydown', function(e) {
@@ -1833,13 +1976,33 @@
             }
 
             if (e.key === 'Enter') {
-                const mode = CAPTURE_CODES[codeBuffer];
+                const code = codeBuffer;
                 codeBuffer = '';
                 clearTimeout(codeTimer);
-                if (mode) {
-                    e.preventDefault();   // 포커스된 버튼이 함께 눌리는 것 방지
-                    setCaptureMode(captureMode === mode ? '' : mode);
+                if (!code) return;   // 숫자 없이 누른 Enter는 그대로 둠
+
+                let handled = false;
+                if (captureMode) {
+                    if (code === TARGET_TOGGLE_CODE) {
+                        targetHidden = !targetHidden;       // 알림 없이 '대상지' 표시만 껐다 켰다
+                        updateTargetTag();
+                        handled = true;
+                    } else if (code === STAGE2_CODE) {
+                        setCaptureMode(false);
+                        handled = true;
+                    }
+                } else if (code === STAGE1_CODE) {
+                    stage1Until = Date.now() + STAGE1_TTL_MS;   // 1단계: 아무 알림 없음
+                    handled = true;
+                } else if (code === STAGE2_CODE && Date.now() < stage1Until) {
+                    stage1Until = 0;
+                    setCaptureMode(true);                       // 2단계: 알림과 함께 켜짐
+                    handled = true;
+                } else {
+                    stage1Until = 0;                            // 틀린 번호면 1단계부터 다시
                 }
+
+                if (handled) e.preventDefault();   // 포커스된 버튼이 함께 눌리는 것 방지
                 return;
             }
 
