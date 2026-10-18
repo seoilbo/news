@@ -627,6 +627,55 @@
                 padding-bottom: 24px;
             }
         }
+
+        /* ===== 캡쳐 모드 =====
+           12341234 또는 55 + Enter : 헤더·검색창·확대 버튼을 숨김
+           0 + Enter                : 지도 외에 모두 숨김 (같은 번호를 다시 입력하거나 Esc 로 해제) */
+        body.capture-mode .large-header,
+        body.capture-mode .search-bar,
+        body.capture-mode .leaflet-control-zoom {
+            display: none;
+        }
+
+        body.capture-map-only .large-header,
+        body.capture-map-only .left-panel,
+        body.capture-map-only .leaflet-control-zoom,
+        body.capture-map-only .loc-chip {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            body.capture-map-only #map,
+            body.capture-mode .split[data-detail="0"] #map {
+                top: 0;
+            }
+
+            body.capture-mode .split[data-detail="0"] .left-panel {
+                display: none;
+            }
+        }
+
+        /* 모드 전환 안내 (잠깐 보였다 사라짐) */
+        .cap-toast {
+            position: fixed;
+            left: 50%;
+            bottom: 24px;
+            transform: translateX(-50%);
+            z-index: 2000;
+            padding: 8px 14px;
+            background: rgba(17, 17, 17, 0.85);
+            border-radius: 8px;
+            font-size: 13px;
+            color: #ffffff;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .cap-toast.show {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -804,10 +853,34 @@
         locControl.addTo(map);
         const locEl = locControl.getContainer();
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+        // 지도 배경: 밝고 깔끔한 CARTO Positron (도로·지명만 은은하게). 바꾸고 싶으면 BASEMAP 만 수정
+        const BASEMAP = {
+            url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+            options: {
+                subdomains: 'abcd',
+                maxZoom: 20,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            }
+        };
+        const FALLBACK_BASEMAP = {
+            url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            options: { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }
+        };
+
+        const baseLayer = L.tileLayer(BASEMAP.url, BASEMAP.options).addTo(map);
+
+        // 배경 타일이 계속 실패하면(차단·점검 등) 기본 OpenStreetMap 지도로 자동 전환
+        let tileErrors = 0;
+        let usingFallback = false;
+        baseLayer.on('tileerror', function() {
+            tileErrors++;
+            if (tileErrors >= 8 && !usingFallback) {
+                usingFallback = true;
+                map.removeLayer(baseLayer);
+                L.tileLayer(FALLBACK_BASEMAP.url, FALLBACK_BASEMAP.options).addTo(map);
+                if (typeof DEBUG !== 'undefined' && DEBUG) console.warn('[동네개발맵] 배경 지도를 불러오지 못해 OpenStreetMap으로 전환했습니다.');
+            }
+        });
 
         window.addEventListener('resize', function() { map.invalidateSize(); applySeoulLimits(); });
 
@@ -1538,6 +1611,10 @@
 
         document.addEventListener('keydown', function(e) {
             if (e.key !== 'Escape') return;
+            if (captureMode) {
+                setCaptureMode('');
+                return;
+            }
             if (document.activeElement === searchInput && searchInput.value) {
                 searchInput.value = '';
                 renderLeft();
@@ -1700,6 +1777,74 @@
                 ? list.map(newsItemHtml).join('')
                 : '<div class="panel-msg">이 구역과 연결된 기사가 아직 없습니다.</div>';
         }
+
+        /* =====================================================
+           캡쳐 모드 (화면 캡쳐용으로 불필요한 화면 요소 숨기기)
+           - 12341234 또는 55 를 입력하고 Enter : 캡쳐 모드 (헤더·검색창·확대 버튼 숨김, 왼쪽 정보 패널은 유지)
+           - 0 을 입력하고 Enter                : 지도만 보이는 모드 (그 외 전부 숨김)
+           - 같은 번호를 다시 입력하고 Enter 하거나 Esc : 해제
+           검색창에 글자를 입력하는 중에는 동작하지 않음
+           (저작권 표기는 지도 이용 조건이라 두 모드 모두 남겨 둠)
+        ===================================================== */
+        const CAPTURE_CODES = { '12341234': 'capture', '55': 'capture', '0': 'mapOnly' };
+        const CAPTURE_LABELS = { capture: '캡쳐 모드', mapOnly: '지도만 보기' };
+        let captureMode = '';
+        let codeBuffer = '';
+        let codeTimer = null;
+        let toastTimer = null;
+
+        const toastEl = document.createElement('div');
+        toastEl.className = 'cap-toast';
+        document.body.appendChild(toastEl);
+
+        function showToast(text) {
+            toastEl.textContent = text;
+            toastEl.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(function() { toastEl.classList.remove('show'); }, 2000);
+        }
+
+        function setCaptureMode(mode) {
+            captureMode = mode;
+            document.body.classList.toggle('capture-mode', mode === 'capture');
+            document.body.classList.toggle('capture-map-only', mode === 'mapOnly');
+
+            // 화면 구성이 바뀌었으니 지도 크기를 다시 맞춤
+            map.invalidateSize();
+            applySeoulLimits();
+            setTimeout(function() { map.invalidateSize(); }, 120);
+
+            showToast(mode ? CAPTURE_LABELS[mode] + ' 켜짐 (해제: Esc 또는 같은 번호 + Enter)' : '캡쳐 모드 해제');
+            if (DEBUG) console.log('[동네개발맵] 캡쳐 모드:', mode || '해제');
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+            const t = e.target;
+            const tag = (t && t.tagName) || '';
+            if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (t && t.isContentEditable)) return;
+
+            if (/^[0-9]$/.test(e.key)) {
+                codeBuffer += e.key;
+                clearTimeout(codeTimer);
+                codeTimer = setTimeout(function() { codeBuffer = ''; }, 2500);   // 2.5초 안에 이어서 입력
+                return;
+            }
+
+            if (e.key === 'Enter') {
+                const mode = CAPTURE_CODES[codeBuffer];
+                codeBuffer = '';
+                clearTimeout(codeTimer);
+                if (mode) {
+                    e.preventDefault();   // 포커스된 버튼이 함께 눌리는 것 방지
+                    setCaptureMode(captureMode === mode ? '' : mode);
+                }
+                return;
+            }
+
+            if (e.key !== 'Shift') codeBuffer = '';
+        });
 
         renderLeft();
         fetchArticles();
