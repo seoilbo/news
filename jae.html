@@ -869,14 +869,28 @@
         locControl.addTo(map);
         const locEl = locControl.getContainer();
 
-        /* 지도 배경
-           CARTO 배경 지도는 2026년 9월부터 API 키가 없으면 'API KEY REQUIRED' 글씨가 찍힌 타일을 돌려줍니다.
-           - 기본값: 키가 필요 없는 OpenStreetMap 타일을 회색조로 은은하게 처리 (한글 지명 그대로, 깔끔한 톤)
-           - 더 깔끔한 CARTO Positron을 쓰려면 carto.com/basemaps/apikey 에서 무료 키(월 500만 타일, 계정 불필요)를
-             발급받아 아래 CARTO_KEY 에 붙여 넣으세요. */
+        /* 지도 배경 (위에서부터 키가 입력된 것을 사용)
+           1) MapTiler  : cloud.maptiler.com 에서 무료 키 발급 → MAPTILER_KEY 에 붙여 넣기 (OpenMapTiles 기반, 깔끔한 'dataviz-light')
+           2) CARTO     : carto.com/basemaps/apikey 에서 무료 키 발급 → CARTO_KEY 에 붙여 넣기
+           3) 키가 없으면: 키가 필요 없는 OpenStreetMap 타일을 회색조로 은은하게 처리
+           ※ 키는 공개 코드에 그대로 들어갑니다. MapTiler 대시보드에서 키를 이 사이트 주소에서만 쓰도록 제한해 두세요. */
+        const MAPTILER_KEY = '';
+        const MAPTILER_STYLE = 'dataviz-light';   // 다른 스타일: 'streets-v4' 등 (MapTiler 지도 목록의 ID)
         const CARTO_KEY = '';
 
-        const BASEMAP = CARTO_KEY
+        const BASEMAP = MAPTILER_KEY
+            ? {
+                url: 'https://api.maptiler.com/maps/' + encodeURIComponent(MAPTILER_STYLE) + '/{z}/{x}/{y}.png?key=' + encodeURIComponent(MAPTILER_KEY),
+                options: {
+                    tileSize: 512,       // 512px 타일 권장 설정
+                    zoomOffset: -1,
+                    minZoom: 1,
+                    maxZoom: 20,
+                    crossOrigin: true,
+                    attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+                }
+            }
+            : CARTO_KEY
             ? {
                 url: 'https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png?key=' + encodeURIComponent(CARTO_KEY),
                 options: {
