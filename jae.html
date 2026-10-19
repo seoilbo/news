@@ -696,11 +696,50 @@
             left: 0;
             top: 0;
             transform: translate(-50%, -115%);
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 800;
-            color: #ffffff;
+            color: #111111;
             white-space: nowrap;
-            text-shadow: 0 0 3px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.85);
+            text-shadow:
+                -2px 0 #fff, 2px 0 #fff, 0 -2px #fff, 0 2px #fff,
+                -2px -2px #fff, 2px -2px #fff, -2px 2px #fff, 2px 2px #fff,
+                -1px -2px #fff, 1px -2px #fff, -1px 2px #fff, 1px 2px #fff,
+                -2px -1px #fff, 2px -1px #fff, -2px 1px #fff, 2px 1px #fff,
+                0 0 4px #fff;
+        }
+
+        /* 캡쳐 모드: 주변 도로·주요 시설 이름 (지도 그림 속 글씨보다 크게 덧그림) */
+        .poi-label-icon {
+            background: none;
+            border: none;
+        }
+
+        .poi-label {
+            position: absolute;
+            left: 0;
+            top: 0;
+            transform: translate(-50%, -50%);
+            font-weight: 800;
+            line-height: 1.2;
+            white-space: nowrap;
+            text-shadow:
+                -2px 0 #fff, 2px 0 #fff, 0 -2px #fff, 0 2px #fff,
+                -2px -2px #fff, 2px -2px #fff, -2px 2px #fff, 2px 2px #fff,
+                -1px -2px #fff, 1px -2px #fff, -1px 2px #fff, 1px 2px #fff,
+                -2px -1px #fff, 2px -1px #fff, -2px 1px #fff, 2px 1px #fff,
+                0 0 4px #fff;
+        }
+
+        .poi-label.facility::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            margin-right: 5px;
+            border-radius: 50%;
+            background: currentColor;
+            box-shadow: 0 0 0 2px #ffffff;
+            vertical-align: middle;
         }
 
         /* 모드 전환 안내 (잠깐 보였다 사라짐) */
@@ -886,9 +925,11 @@
         map.createPane('maskPane').style.zIndex = 350;
         map.createPane('boundaryPane').style.zIndex = 390;
         map.createPane('ringPane').style.zIndex = 420;
+        map.createPane('poiPane').style.zIndex = 430;
         map.getPane('maskPane').style.pointerEvents = 'none';
         map.getPane('boundaryPane').style.pointerEvents = 'none';
         map.getPane('ringPane').style.pointerEvents = 'none';
+        map.getPane('poiPane').style.pointerEvents = 'none';
 
         L.control.zoom({ position: 'bottomright' }).addTo(map);
         L.control.attribution({ position: 'bottomleft' }).addTo(map);
@@ -968,6 +1009,9 @@
         let targetMarker = null;   // 지도 위 '대상지' 표시
         let targetZone = null;     // '대상지' 표시가 붙어 있는 구역
         let ringGroup = null;      // 대상지 반경(500m·1km) 표시
+        let poiLayer = null;       // 주변 도로·시설 이름 표시
+        let poiData = null;        // 불러온 주변 도로·시설 { key, center, items }
+        let poiReq = 0;            // 요청 번호 (오래된 응답 무시용)
 
         /* =====================================================
            KML 불러오기
@@ -2013,9 +2057,219 @@
             ringGroup = L.layerGroup(parts).addTo(map);
         }
 
+        /* ---------- 주변 도로·주요 시설 이름 (캡쳐 모드) ----------
+           지도 그림(타일) 속 글씨는 키울 수 없어서, OpenStreetMap 데이터(Overpass API)에서
+           지하철역·학교·병원·공원·주요 도로 이름을 받아 와 더 크게 덧그립니다.
+           겹치는 글씨는 중요한 것부터 남기고 나머지는 생략하며, 지도를 움직이거나 확대·축소할 때마다 다시 배치합니다. */
+        const POI_RADIUS = 1200;   // 대상지 중심에서 이 거리(m) 안의 시설을 가져옴
+        const POI_FONT = { station: 17, school: 16, other: 15, road: 16 };   // 글자 크기(px)
+        const POI_COLOR = { station: '#0b4f9c', school: '#1b6e2b', other: '#333333', road: '#111111' };
+        const POI_LIMIT = { station: 6, school: 8, other: 6, road: 8 };      // 종류별 최대 표시 수
+        const POI_ORDER = ['station', 'school', 'other', 'road'];            // 겹칠 때 남기는 우선순위
+        const OVERPASS_URLS = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
+
+        function metersBetween(lat1, lng1, lat2, lng2) {
+            const k = Math.cos(lat1 * Math.PI / 180);
+            const dy = (lat2 - lat1) * 111320;
+            const dx = (lng2 - lng1) * 111320 * k;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        function buildOverpassQuery(c) {
+            const around = '(around:' + POI_RADIUS + ',' + c.lat.toFixed(6) + ',' + c.lng.toFixed(6) + ')';
+            return '[out:json][timeout:20];(' +
+                'nwr' + around + '["railway"~"^(station|halt)$"]["name"];' +
+                'nwr' + around + '["station"="subway"]["name"];' +
+                'nwr' + around + '["amenity"~"^(school|university|college)$"]["name"];' +
+                'nwr' + around + '["amenity"~"^(hospital|townhall)$"]["name"];' +
+                'nwr' + around + '["leisure"="park"]["name"];' +
+                ')->.f;' +
+                'way' + around + '["highway"~"^(trunk|primary|secondary|tertiary)$"]["name"]->.r;' +
+                '.f out tags center;.r out tags geom;';
+        }
+
+        async function fetchOverpass(c) {
+            const body = 'data=' + encodeURIComponent(buildOverpassQuery(c));
+            let lastErr = null;
+            for (let i = 0; i < OVERPASS_URLS.length; i++) {
+                try {
+                    const ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+                    const timer = setTimeout(function() { if (ctrl) ctrl.abort(); }, 20000);
+                    const res = await fetch(OVERPASS_URLS[i], {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: body,
+                        signal: ctrl ? ctrl.signal : undefined
+                    });
+                    clearTimeout(timer);
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    return await res.json();
+                } catch (e) {
+                    lastErr = e;
+                }
+            }
+            throw lastErr;
+        }
+
+        // 응답 → 표시할 항목 목록 (같은 이름은 하나만, 대상지에 가까운 것 우선)
+        function parsePoi(data, c) {
+            const best = {};
+            const roadRank = { trunk: 1, primary: 1, secondary: 2, tertiary: 3 };
+
+            (data.elements || []).forEach(function(el) {
+                const t = el.tags || {};
+                const name = String(t['name:ko'] || t.name || '').trim();
+                if (!name) return;
+
+                let item = null;
+                if (el.type === 'way' && t.highway && el.geometry && el.geometry.length > 1) {
+                    // 도로: 대상지에서 약 400m 떨어진 지점에 이름을 붙임 (대상지 글씨와 겹치지 않게)
+                    const g = el.geometry;
+                    let bi = 0, bd = Infinity;
+                    for (let i = 0; i < g.length; i++) {
+                        const d = Math.abs(metersBetween(c.lat, c.lng, g[i].lat, g[i].lon) - 400);
+                        if (d < bd) { bd = d; bi = i; }
+                    }
+                    const a = g[Math.max(bi - 2, 0)], b = g[Math.min(bi + 2, g.length - 1)];
+                    item = {
+                        kind: 'road', name: name, rank: roadRank[t.highway] || 4,
+                        latlng: L.latLng(g[bi].lat, g[bi].lon),
+                        a: L.latLng(a.lat, a.lon), b: L.latLng(b.lat, b.lon),
+                        dist: metersBetween(c.lat, c.lng, g[bi].lat, g[bi].lon),
+                        score: bd
+                    };
+                } else {
+                    const lat = el.lat != null ? el.lat : (el.center && el.center.lat);
+                    const lon = el.lon != null ? el.lon : (el.center && el.center.lon);
+                    if (lat == null || lon == null) return;
+
+                    let kind = '';
+                    if (t.railway === 'station' || t.railway === 'halt' || t.station === 'subway') kind = 'station';
+                    else if (/^(school|university|college)$/.test(t.amenity || '')) kind = 'school';
+                    else if (/^(hospital|townhall)$/.test(t.amenity || '') || t.leisure === 'park') kind = 'other';
+                    if (!kind) return;
+
+                    const d = metersBetween(c.lat, c.lng, lat, lon);
+                    item = { kind: kind, name: name, rank: 0, latlng: L.latLng(lat, lon), dist: d, score: d };
+                }
+
+                const key = item.kind + '|' + item.name;
+                if (!best[key] || item.score < best[key].score) best[key] = item;
+            });
+
+            return Object.keys(best).map(function(k) { return best[k]; });
+        }
+
+        function poiTextWidth(text, size) {
+            let w = 0;
+            for (let i = 0; i < text.length; i++) {
+                w += /[\u1100-\u11FF\u3130-\u318F\uAC00-\uD7AF\u4E00-\u9FFF]/.test(text[i]) ? size : size * 0.58;
+            }
+            return w;
+        }
+
+        function boxesOverlap(a, b) {
+            return a.x1 < b.x2 && a.x2 > b.x1 && a.y1 < b.y2 && a.y2 > b.y1;
+        }
+
+        function clearPoiLabels() {
+            if (poiLayer) { map.removeLayer(poiLayer); poiLayer = null; }
+        }
+
+        function renderPoiLabels() {
+            clearPoiLabels();
+            if (!captureMode || !currentZone || !poiData) return;
+
+            const size = map.getSize();
+            const placed = [];
+            const reserve = function(x, y, w, h) { placed.push({ x1: x - w / 2, y1: y - h / 2, x2: x + w / 2, y2: y + h / 2 }); };
+
+            // '대상지' 글자와 반경 글자 자리를 먼저 비워 둠
+            const cp = map.latLngToContainerPoint(poiData.center);
+            reserve(cp.x, cp.y, 96, 38);          // '대상지' 글자 (22px, 3글자)
+            RING_RADII.forEach(function(r) {
+                const tp = map.latLngToContainerPoint(L.latLng(poiData.center.lat + r / 111320, poiData.center.lng));
+                reserve(tp.x, tp.y - 10, 58, 20);     // '500m' · '1km' 글자
+            });
+
+            const counts = {};
+            const markers = [];
+            const sorted = poiData.items.slice().sort(function(x, y) {
+                return (POI_ORDER.indexOf(x.kind) - POI_ORDER.indexOf(y.kind)) || (x.rank - y.rank) || (x.dist - y.dist);
+            });
+
+            sorted.forEach(function(it) {
+                if ((counts[it.kind] || 0) >= POI_LIMIT[it.kind]) return;
+
+                const p = map.latLngToContainerPoint(it.latlng);
+                if (p.x < -60 || p.y < -40 || p.x > size.x + 60 || p.y > size.y + 40) return;   // 화면 밖
+
+                const fs = POI_FONT[it.kind];
+                const w = poiTextWidth(it.name, fs) + (it.kind === 'road' ? 0 : 14);
+                const h = fs * 1.4;
+                let bw = w, bh = h, angle = 0;
+
+                if (it.kind === 'road') {
+                    // 글씨를 도로 방향으로 눕히되, 뒤집히지 않게 -90°~90° 범위로 맞춤
+                    const pa = map.latLngToContainerPoint(it.a);
+                    const pb = map.latLngToContainerPoint(it.b);
+                    if (pa.x !== pb.x || pa.y !== pb.y) {
+                        angle = Math.atan2(pb.y - pa.y, pb.x - pa.x) * 180 / Math.PI;
+                        if (angle > 90) angle -= 180;
+                        if (angle < -90) angle += 180;
+                    }
+                    const rad = angle * Math.PI / 180;
+                    bw = Math.abs(w * Math.cos(rad)) + Math.abs(h * Math.sin(rad));
+                    bh = Math.abs(w * Math.sin(rad)) + Math.abs(h * Math.cos(rad));
+                }
+
+                const box = { x1: p.x - bw / 2 - 3, y1: p.y - bh / 2 - 2, x2: p.x + bw / 2 + 3, y2: p.y + bh / 2 + 2 };
+                if (placed.some(function(o) { return boxesOverlap(o, box); })) return;   // 겹치면 생략
+                placed.push(box);
+                counts[it.kind] = (counts[it.kind] || 0) + 1;
+
+                const style = 'font-size:' + fs + 'px;color:' + POI_COLOR[it.kind] +
+                    (angle ? ';transform:translate(-50%,-50%) rotate(' + angle.toFixed(1) + 'deg)' : '');
+                markers.push(L.marker(it.latlng, {
+                    pane: 'poiPane',
+                    interactive: false,
+                    keyboard: false,
+                    icon: L.divIcon({
+                        className: 'poi-label-icon',
+                        html: '<div class="poi-label ' + (it.kind === 'road' ? 'road' : 'facility') + '" style="' + style + '">' + esc(it.name) + '</div>',
+                        iconSize: [0, 0]
+                    })
+                }));
+            });
+
+            poiLayer = L.layerGroup(markers).addTo(map);
+            if (DEBUG) console.log('[동네개발맵] 주변 이름 표시:', JSON.stringify(counts), '(불러온 항목 ' + poiData.items.length + '개)');
+        }
+
+        async function loadPoi(center) {
+            const key = center.lat.toFixed(4) + ',' + center.lng.toFixed(4);
+            if (poiData && poiData.key === key) { renderPoiLabels(); return; }
+
+            const myReq = ++poiReq;
+            try {
+                const data = await fetchOverpass(center);
+                if (myReq !== poiReq) return;   // 그 사이 다른 구역을 골랐거나 모드를 껐으면 무시
+                poiData = { key: key, center: center, items: parsePoi(data, center) };
+                renderPoiLabels();
+            } catch (e) {
+                if (myReq !== poiReq) return;
+                poiData = null;
+                if (DEBUG) console.warn('[동네개발맵] 주변 도로·시설 정보를 불러오지 못했습니다.', e && e.message ? e.message : e);
+                showToast('주변 도로·시설 정보를 불러오지 못했어요');
+            }
+        }
+
+        map.on('moveend', function() { if (captureMode) renderPoiLabels(); });
+
         function updateTargetTag() {
             if (targetMarker) { map.removeLayer(targetMarker); targetMarker = null; }
             if (ringGroup) { map.removeLayer(ringGroup); ringGroup = null; }
+            clearPoiLabels();
 
             const active = captureMode && currentZone;      // 캡쳐 모드에서 구역이 선택돼 있음
             const wantTag = active && !targetHidden;        // '대상지' 글자를 보이는 상태
@@ -2025,10 +2279,11 @@
                 setLabelHidden(targetZone, false);
                 targetZone = null;
             }
-            if (!active) return;
+            if (!active) { poiReq++; return; }   // 진행 중이던 주변 정보 요청은 무효 처리
 
             const center = labelPoint(currentZone.layer);
-            drawRings(center);                              // 반경은 '대상지' 글자를 꺼도 그대로 표시
+            drawRings(center);
+            loadPoi(center);                                // 주변 도로·시설 이름 (캡쳐 모드)                              // 반경은 '대상지' 글자를 꺼도 그대로 표시
             if (!wantTag) return;
 
             targetMarker = L.marker(center, {
