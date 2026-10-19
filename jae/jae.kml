@@ -3,7 +3,7 @@
 <Document id="document">
 	<ex:extension>base64;CuIBCtkBCtYBCgIIARLPAQrMAQokCiAKAwjQDxoHCNLtZRD_ASEAAAAAAADwPykAAAAAAAAAABgAEg8KCAitgO8HEP8BEKAfGAAaGgoHCP___wcQQBIICK2A7wcQ_wEYoB8gACgAIl4IAhIFCP___wcyUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgAKhcIARIICP___wcQ_wEZAAAAAAAA8D8gABIECAEQAA</ex:extension>
 	<name>jae</name>
-	<gx:CascadingStyle kml:id="__managed_style_0F9107B0D741F2618054_normal">
+	<gx:CascadingStyle kml:id="__managed_style_073463C42E41F27091B0_normal">
 		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
 		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
 		<Style>
@@ -14,15 +14,16 @@
 				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
 			</IconStyle>
 			<LineStyle>
-				<color>ffd27619</color>
+				<color>ff6b7900</color>
 				<width>2.66667</width>
 			</LineStyle>
 			<PolyStyle>
-				<color>40d27619</color>
+				<color>406b7900</color>
 			</PolyStyle>
 		</Style>
 	</gx:CascadingStyle>
-	<gx:CascadingStyle kml:id="__managed_style_029FBAD99041FA2C0EC0_highlight0">
+	<gx:CascadingStyle kml:id="__managed_style_073463C42E41F27091B0_highlight">
+		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
 		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
 		<Style>
 			<IconStyle>
@@ -33,44 +34,36 @@
 				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
 			</IconStyle>
 			<LineStyle>
-				<color>ff000000</color>
+				<color>ff6b7900</color>
 				<width>4</width>
 			</LineStyle>
 			<PolyStyle>
-				<color>40000000</color>
+				<color>406b7900</color>
 			</PolyStyle>
 		</Style>
 	</gx:CascadingStyle>
-	<gx:CascadingStyle kml:id="__managed_style_029FBAD99041FA2C0EC0_normal0">
+	<gx:CascadingStyle kml:id="__managed_style_0084B040D041F26277BC_highlight">
+		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
 		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
 		<Style>
 			<IconStyle>
+				<scale>1.2</scale>
 				<Icon>
 					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
 				</Icon>
 				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
 			</IconStyle>
 			<LineStyle>
-				<color>ff000000</color>
-				<width>2.66667</width>
+				<color>ff3c8e38</color>
+				<width>4</width>
 			</LineStyle>
 			<PolyStyle>
-				<color>40000000</color>
+				<color>403c8e38</color>
 			</PolyStyle>
 		</Style>
 	</gx:CascadingStyle>
-	<StyleMap id="__managed_style_01946C607B41EFAC3FFC2">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#__managed_style_01946C607B41EFAC3FFC_normal</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#__managed_style_01946C607B41EFAC3FFC_highlight1</styleUrl>
-		</Pair>
-	</StyleMap>
-	<gx:CascadingStyle kml:id="__managed_style_01946C607B41EFAC3FFC_normal">
-		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
+	<gx:CascadingStyle kml:id="__managed_style_089673093041F418E270_normal">
+		<ex:extension>base64;EgIYAQ</ex:extension>
 		<Style>
 			<IconStyle>
 				<Icon>
@@ -84,6 +77,48 @@
 			</LineStyle>
 			<PolyStyle>
 				<color>402dc0fb</color>
+			</PolyStyle>
+			<BalloonStyle>
+				<text><![CDATA[<h2><b>제기4구역</b><br></h2><h3>청량리 힐스테이트 엘클래시<br></h3><div>위치: 동대문구 제기동<br></div><div>세대수: 909세대<br></div><div>규모: 최고 25층, 11개동<br></div><div>시공사: 현대건설<br></div>]]></text>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<gx:CascadingStyle kml:id="__managed_style_01946C607B41EFAC3FFC_highlight">
+		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
+		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
+		<Style>
+			<IconStyle>
+				<scale>1.2</scale>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>4</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>402dc0fb</color>
+			</PolyStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<gx:CascadingStyle kml:id="__managed_style_0084B040D041F26277BC_normal">
+		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
+		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LineStyle>
+				<color>ff3c8e38</color>
+				<width>2.66667</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>403c8e38</color>
 			</PolyStyle>
 		</Style>
 	</gx:CascadingStyle>
@@ -109,7 +144,17 @@
 			</BalloonStyle>
 		</Style>
 	</gx:CascadingStyle>
-	<gx:CascadingStyle kml:id="__managed_style_073463C42E41F27091B0_highlight">
+	<StyleMap id="__managed_style_0F9107B0D741F2618054">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_0F9107B0D741F2618054_normal</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_0F9107B0D741F2618054_highlight</styleUrl>
+		</Pair>
+	</StyleMap>
+	<gx:CascadingStyle kml:id="__managed_style_0F9107B0D741F2618054_highlight">
 		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
 		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
 		<Style>
@@ -121,30 +166,30 @@
 				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
 			</IconStyle>
 			<LineStyle>
-				<color>ff6b7900</color>
+				<color>ffd27619</color>
 				<width>4</width>
 			</LineStyle>
 			<PolyStyle>
-				<color>406b7900</color>
+				<color>40d27619</color>
 			</PolyStyle>
 		</Style>
 	</gx:CascadingStyle>
-	<gx:CascadingStyle kml:id="__managed_style_073463C42E41F27091B0_normal">
-		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
+	<gx:CascadingStyle kml:id="__managed_style_029FBAD99041FA2C0EC0_highlight0">
 		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
 		<Style>
 			<IconStyle>
+				<scale>1.2</scale>
 				<Icon>
 					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
 				</Icon>
 				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
 			</IconStyle>
 			<LineStyle>
-				<color>ff6b7900</color>
-				<width>2.66667</width>
+				<color>ff000000</color>
+				<width>4</width>
 			</LineStyle>
 			<PolyStyle>
-				<color>406b7900</color>
+				<color>40000000</color>
 			</PolyStyle>
 		</Style>
 	</gx:CascadingStyle>
@@ -158,27 +203,7 @@
 			<styleUrl>#__managed_style_073463C42E41F27091B0_highlight</styleUrl>
 		</Pair>
 	</StyleMap>
-	<gx:CascadingStyle kml:id="__managed_style_0084B040D041F26277BC_highlight">
-		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
-		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
-		<Style>
-			<IconStyle>
-				<scale>1.2</scale>
-				<Icon>
-					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
-				</Icon>
-				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
-			</IconStyle>
-			<LineStyle>
-				<color>ff3c8e38</color>
-				<width>4</width>
-			</LineStyle>
-			<PolyStyle>
-				<color>403c8e38</color>
-			</PolyStyle>
-		</Style>
-	</gx:CascadingStyle>
-	<gx:CascadingStyle kml:id="__managed_style_0084B040D041F26277BC_normal">
+	<gx:CascadingStyle kml:id="__managed_style_0F9107B0D741F2618054_normal">
 		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
 		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
 		<Style>
@@ -189,41 +214,22 @@
 				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
 			</IconStyle>
 			<LineStyle>
-				<color>ff3c8e38</color>
+				<color>ffd27619</color>
 				<width>2.66667</width>
 			</LineStyle>
 			<PolyStyle>
-				<color>403c8e38</color>
+				<color>40d27619</color>
 			</PolyStyle>
 		</Style>
 	</gx:CascadingStyle>
-	<gx:CascadingStyle kml:id="__managed_style_00F2CF4B6741F27435C4_normal">
-		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
-		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
-				</Icon>
-				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
-			</IconStyle>
-			<LineStyle>
-				<color>ff2dc0fb</color>
-				<width>2.66667</width>
-			</LineStyle>
-			<PolyStyle>
-				<color>40ffffff</color>
-			</PolyStyle>
-		</Style>
-	</gx:CascadingStyle>
-	<StyleMap id="__managed_style_01946C607B41EFAC3FFC1">
+	<StyleMap id="__managed_style_089673093041F418E270">
 		<Pair>
 			<key>normal</key>
-			<styleUrl>#__managed_style_01946C607B41EFAC3FFC_normal2</styleUrl>
+			<styleUrl>#__managed_style_089673093041F418E270_normal</styleUrl>
 		</Pair>
 		<Pair>
 			<key>highlight</key>
-			<styleUrl>#__managed_style_01946C607B41EFAC3FFC_highlight</styleUrl>
+			<styleUrl>#__managed_style_089673093041F418E270_highlight</styleUrl>
 		</Pair>
 	</StyleMap>
 	<gx:CascadingStyle kml:id="__managed_style_01946C607B41EFAC3FFC_normal2">
@@ -242,6 +248,34 @@
 			</LineStyle>
 			<PolyStyle>
 				<color>402dc0fb</color>
+			</PolyStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<StyleMap id="__managed_style_01946C607B41EFAC3FFC1">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC_normal2</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC_highlight</styleUrl>
+		</Pair>
+	</StyleMap>
+	<gx:CascadingStyle kml:id="__managed_style_029FBAD99041FA2C0EC0_normal0">
+		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LineStyle>
+				<color>ff000000</color>
+				<width>2.66667</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>40000000</color>
 			</PolyStyle>
 		</Style>
 	</gx:CascadingStyle>
@@ -265,28 +299,29 @@
 			</PolyStyle>
 		</Style>
 	</gx:CascadingStyle>
-	<gx:CascadingStyle kml:id="__managed_style_0F9107B0D741F2618054_highlight">
+	<StyleMap id="__managed_style_029FBAD99041FA2C0EC00">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_029FBAD99041FA2C0EC0_normal0</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_029FBAD99041FA2C0EC0_highlight0</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="__managed_style_0084B040D041F26277BC">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_0084B040D041F26277BC_normal</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_0084B040D041F26277BC_highlight</styleUrl>
+		</Pair>
+	</StyleMap>
+	<gx:CascadingStyle kml:id="__managed_style_00F2CF4B6741F27435C4_normal">
 		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
 		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
-		<Style>
-			<IconStyle>
-				<scale>1.2</scale>
-				<Icon>
-					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
-				</Icon>
-				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
-			</IconStyle>
-			<LineStyle>
-				<color>ffd27619</color>
-				<width>4</width>
-			</LineStyle>
-			<PolyStyle>
-				<color>40d27619</color>
-			</PolyStyle>
-		</Style>
-	</gx:CascadingStyle>
-	<gx:CascadingStyle kml:id="__managed_style_089673093041F418E270_normal">
-		<ex:extension>base64;EgIYAQ</ex:extension>
 		<Style>
 			<IconStyle>
 				<Icon>
@@ -299,92 +334,10 @@
 				<width>2.66667</width>
 			</LineStyle>
 			<PolyStyle>
-				<color>402dc0fb</color>
-			</PolyStyle>
-			<BalloonStyle>
-				<text><![CDATA[<h2><b>제기4구역</b><br></h2><h3>청량리 힐스테이트 엘클래시<br></h3><div>위치: 동대문구 제기동<br></div><div>세대수: 909세대<br></div><div>규모: 최고 25층, 11개동<br></div><div>시공사: 현대건설<br></div>]]></text>
-			</BalloonStyle>
-		</Style>
-	</gx:CascadingStyle>
-	<StyleMap id="__managed_style_0084B040D041F26277BC">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#__managed_style_0084B040D041F26277BC_normal</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#__managed_style_0084B040D041F26277BC_highlight</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="__managed_style_0F9107B0D741F2618054">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#__managed_style_0F9107B0D741F2618054_normal</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#__managed_style_0F9107B0D741F2618054_highlight</styleUrl>
-		</Pair>
-	</StyleMap>
-	<gx:CascadingStyle kml:id="__managed_style_01946C607B41EFAC3FFC_highlight1">
-		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
-		<Style>
-			<IconStyle>
-				<scale>1.2</scale>
-				<Icon>
-					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
-				</Icon>
-				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
-			</IconStyle>
-			<LineStyle>
-				<color>ff2dc0fb</color>
-				<width>4</width>
-			</LineStyle>
-			<PolyStyle>
-				<color>402dc0fb</color>
+				<color>40ffffff</color>
 			</PolyStyle>
 		</Style>
 	</gx:CascadingStyle>
-	<gx:CascadingStyle kml:id="__managed_style_01946C607B41EFAC3FFC_highlight">
-		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
-		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
-		<Style>
-			<IconStyle>
-				<scale>1.2</scale>
-				<Icon>
-					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
-				</Icon>
-				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
-			</IconStyle>
-			<LineStyle>
-				<color>ff2dc0fb</color>
-				<width>4</width>
-			</LineStyle>
-			<PolyStyle>
-				<color>402dc0fb</color>
-			</PolyStyle>
-		</Style>
-	</gx:CascadingStyle>
-	<StyleMap id="__managed_style_089673093041F418E270">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#__managed_style_089673093041F418E270_normal</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#__managed_style_089673093041F418E270_highlight</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="__managed_style_029FBAD99041FA2C0EC00">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#__managed_style_029FBAD99041FA2C0EC0_normal0</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#__managed_style_029FBAD99041FA2C0EC0_highlight0</styleUrl>
-		</Pair>
-	</StyleMap>
 	<StyleMap id="__managed_style_00F2CF4B6741F27435C4">
 		<Pair>
 			<key>normal</key>
@@ -827,6 +780,7 @@
 	<Folder id="058A64E40B41F274358B">
 		<ex:extension>base64;GgA</ex:extension>
 		<name>동대문구</name>
+		<open>1</open>
 		<styleUrl>#__managed_style_00F2CF4B6741F27435C4</styleUrl>
 		<Placemark id="03F17600D941FA1DC73C">
 			<name>전농8구역</name>
@@ -1309,7 +1263,7 @@
 				<range>1297.16920727893</range>
 				<altitudeMode>absolute</altitudeMode>
 			</LookAt>
-			<styleUrl>#__managed_style_01946C607B41EFAC3FFC2</styleUrl>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
 			<Polygon>
 				<outerBoundaryIs>
 					<LinearRing>
@@ -1332,7 +1286,7 @@
 				<range>739.6760457632627</range>
 				<altitudeMode>absolute</altitudeMode>
 			</LookAt>
-			<styleUrl>#__managed_style_01946C607B41EFAC3FFC2</styleUrl>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
 			<Polygon>
 				<outerBoundaryIs>
 					<LinearRing>
@@ -1355,7 +1309,7 @@
 				<range>648.7580647930737</range>
 				<altitudeMode>absolute</altitudeMode>
 			</LookAt>
-			<styleUrl>#__managed_style_01946C607B41EFAC3FFC2</styleUrl>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
 			<Polygon>
 				<outerBoundaryIs>
 					<LinearRing>
@@ -1384,6 +1338,305 @@
 					<LinearRing>
 						<coordinates>
 							127.0404529989799,37.58677433682561,0 127.040461272262,37.58698582790664,0 127.0404776350668,37.5872085931489,0 127.0404311774542,37.58745627539993,0 127.0401636055706,37.58783895418461,0 127.0399114925727,37.58821906072757,0 127.0395365491171,37.58836605127721,0 127.0389684067932,37.58778626876183,0 127.03822826956,37.58709818736948,0 127.0384353138785,37.58679556525433,0 127.0386809246183,37.58671568136687,0 127.0404529989799,37.58677433682561,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark id="0C7AE7A6074287F1F0F0">
+			<name>신이문2역세권</name>
+			<LookAt>
+				<longitude>127.0668392448528</longitude>
+				<latitude>37.60138722213957</latitude>
+				<altitude>17.73047794638793</altitude>
+				<heading>0</heading>
+				<tilt>0</tilt>
+				<gx:fovy>30</gx:fovy>
+				<range>926.7183918478258</range>
+				<altitudeMode>absolute</altitudeMode>
+			</LookAt>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							127.0647204983602,37.60084761959808,0 127.0647548475585,37.60041515189825,0 127.0651153805915,37.60008963607965,0 127.0650715460439,37.59956277065817,0 127.0659013955887,37.59953945144726,0 127.0666675436603,37.60063864027454,0 127.0659849391204,37.60083295520084,0 127.0652870455344,37.6008806180411,0 127.0647204983602,37.60084761959808,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark id="02189A9B894287F48F74">
+			<name>신이문역세권장기전세</name>
+			<LookAt>
+				<longitude>127.0667759739302</longitude>
+				<latitude>37.60214553393677</latitude>
+				<altitude>17.22871674590678</altitude>
+				<heading>0</heading>
+				<tilt>0</tilt>
+				<gx:fovy>30</gx:fovy>
+				<range>1000.732625118544</range>
+				<altitudeMode>absolute</altitudeMode>
+			</LookAt>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							127.0650980495604,37.6008705401489,0 127.0652803224583,37.60087957178716,0 127.0659843846162,37.60083465269054,0 127.0661274868055,37.60089535682729,0 127.0663405002045,37.600856754408,0 127.0665984941779,37.6007996450036,0 127.0666565518649,37.6008776253754,0 127.0668101635191,37.60088401485832,0 127.0670612168101,37.60129741373117,0 127.0673366425967,37.60213258608361,0 127.0668128313207,37.60299485885734,0 127.0650847292283,37.60295618541655,0 127.0650980495604,37.6008705401489,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark id="0DEF90C6B4428842D338">
+			<name>용두3구역</name>
+			<LookAt>
+				<longitude>127.0439107968433</longitude>
+				<latitude>37.57640558890292</latitude>
+				<altitude>16.06075477622524</altitude>
+				<heading>0</heading>
+				<tilt>0</tilt>
+				<gx:fovy>30</gx:fovy>
+				<range>1294.772828925925</range>
+				<altitudeMode>absolute</altitudeMode>
+			</LookAt>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							127.043605472349,37.57663582998781,0 127.0433855007774,37.57669740622881,0 127.0426455429805,37.57516587423382,0 127.043528354886,37.57492884442402,0 127.0446533858786,37.57639505815915,0 127.044686725605,37.57682193153113,0 127.0448741216177,37.57700365542918,0 127.0443586048336,37.57729714541919,0 127.0439996705671,37.5774053673981,0 127.043605472349,37.57663582998781,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark id="0BAFD24F9142884492D9">
+			<name>용두1-5구역</name>
+			<LookAt>
+				<longitude>127.0400800568745</longitude>
+				<latitude>37.577999450197</latitude>
+				<altitude>13.64406810993797</altitude>
+				<heading>359.9999987868522</heading>
+				<tilt>0</tilt>
+				<gx:fovy>30</gx:fovy>
+				<range>288.0694919691086</range>
+				<altitudeMode>absolute</altitudeMode>
+			</LookAt>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							127.0396322029812,37.57826639519017,0 127.0398430451772,37.57781132986169,0 127.0395820828813,37.57772069142733,0 127.0395113812739,37.57669819535637,0 127.0390215951982,37.57671160354804,0 127.0390126183866,37.57663029041704,0 127.0395511558273,37.57662903588296,0 127.0409661806406,37.57707161391728,0 127.0403498145795,37.5784846065925,0 127.0396322029812,37.57826639519017,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark id="0F34ABDE534288467923">
+			<name>용두1-4구역</name>
+			<LookAt>
+				<longitude>127.0394194101455</longitude>
+				<latitude>37.57699169015425</latitude>
+				<altitude>13.96359417924515</altitude>
+				<heading>0</heading>
+				<tilt>0</tilt>
+				<gx:fovy>30</gx:fovy>
+				<range>220.4420084451704</range>
+				<altitudeMode>absolute</altitudeMode>
+			</LookAt>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							127.0390181314154,37.57671052123627,0 127.0395118039405,37.57669899864088,0 127.0395389772047,37.5770993838211,0 127.0390559551571,37.57711542116991,0 127.0390181314154,37.57671052123627,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark id="022DB59C51428849B289">
+			<name>용두1-2구역</name>
+			<LookAt>
+				<longitude>127.0394934477431</longitude>
+				<latitude>37.57820444067139</latitude>
+				<altitude>13.23321443229354</altitude>
+				<heading>0</heading>
+				<tilt>0</tilt>
+				<gx:fovy>30</gx:fovy>
+				<range>307.3819948596429</range>
+				<altitudeMode>absolute</altitudeMode>
+			</LookAt>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							127.0389576470462,37.57814038817719,0 127.0389943727599,37.57797999137622,0 127.039060042837,37.5779866684983,0 127.0391534270239,37.57782340895645,0 127.0392035546097,37.57762496565863,0 127.0389904734681,37.57756508734801,0 127.0390086127225,37.5775155087986,0 127.0394083820846,37.57764909468978,0 127.0393985960633,37.57753574443703,0 127.0395686219937,37.57752880945942,0 127.039582094004,37.57772001911736,0 127.0398430651631,37.57781080374784,0 127.0396304014383,37.57826711948304,0 127.0393779024648,37.57819704676204,0 127.0389576470462,37.57814038817719,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark id="0AB17CB80B42884AC598">
+			<name>용두1-1구역</name>
+			<LookAt>
+				<longitude>127.0388518082103</longitude>
+				<latitude>37.57784911081735</latitude>
+				<altitude>13.27186542329835</altitude>
+				<heading>0</heading>
+				<tilt>0</tilt>
+				<gx:fovy>30</gx:fovy>
+				<range>293.1623522316295</range>
+				<altitudeMode>absolute</altitudeMode>
+			</LookAt>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							127.0389568399832,37.57814355332405,0 127.0386965718426,37.57810136434055,0 127.038536207077,37.57792734452131,0 127.0384878090222,37.57747571890365,0 127.0389916877873,37.57756491651243,0 127.0392040100501,37.57762536368714,0 127.0391543331422,37.57782460290506,0 127.0390591485088,37.57798682599699,0 127.0389945303519,37.57798121475125,0 127.0389568399832,37.57814355332405,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark id="01F3DC929E4288502029">
+			<name>청량리6구역</name>
+			<LookAt>
+				<longitude>127.04048759138</longitude>
+				<latitude>37.58862599396763</latitude>
+				<altitude>18.35603442698955</altitude>
+				<heading>-19.91825224744873</heading>
+				<tilt>2.405655303520144</tilt>
+				<gx:fovy>30</gx:fovy>
+				<range>1302.867929988715</range>
+				<altitudeMode>absolute</altitudeMode>
+			</LookAt>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							127.0404513691549,37.58677399481468,0 127.0414481701255,37.58678804374929,0 127.0414268165779,37.58687842461981,0 127.0420654362886,37.58697615801147,0 127.0420432901914,37.58710616895792,0 127.0427257500623,37.58719997811938,0 127.0421182948808,37.5898897839505,0 127.0424287974566,37.589927647922,0 127.0423519907738,37.59032151910311,0 127.0423538573608,37.59066149784611,0 127.0424060072343,37.59103115890721,0 127.0423764624547,37.59110228259904,0 127.0422998341316,37.59115997307263,0 127.0422169119597,37.59119733152709,0 127.0420979312561,37.59121670227994,0 127.0419860752026,37.59118964537006,0 127.0418773770001,37.59115208100716,0 127.0417536448889,37.59109928964001,0 127.0415645521437,37.59100014966045,0 127.0413272279207,37.59084953001784,0 127.0409574299801,37.59061232196456,0 127.0408035047324,37.59055342044631,0 127.0410230535139,37.59034788166718,0 127.0405363942113,37.58979439831915,0 127.0403732726725,37.58961420698551,0 127.0401485906879,37.58920501241645,0 127.0398243671243,37.58880600359343,0 127.039537161228,37.58836537559185,0 127.0399139377275,37.588218538116,0 127.0404324681077,37.58745317267227,0 127.0404778404089,37.5872065660848,0 127.0404513691549,37.58677399481468,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark id="0E2F04542942885494F8">
+			<name>청량리9구역</name>
+			<LookAt>
+				<longitude>127.0518565751545</longitude>
+				<latitude>37.58725559457129</latitude>
+				<altitude>29.55239168627769</altitude>
+				<heading>-19.91019939855099</heading>
+				<tilt>2.405492860195671</tilt>
+				<gx:fovy>30</gx:fovy>
+				<range>872.44971173408</range>
+				<altitudeMode>absolute</altitudeMode>
+			</LookAt>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							127.0511584860128,37.58594276319536,0 127.0511032486222,37.58607273051405,0 127.0512411520095,37.58610157358454,0 127.0513487530486,37.58619468379593,0 127.0514894005835,37.58614486897329,0 127.0514190135266,37.58652203340734,0 127.051477309792,37.58654942611732,0 127.0515698963285,37.5864964611649,0 127.0516491156243,37.5865841701952,0 127.0517849929234,37.58651866309506,0 127.0520918882463,37.5869489275313,0 127.0520578375614,37.58698076611756,0 127.0521944939843,37.5871589526629,0 127.0520380793847,37.58724448683424,0 127.0512419645136,37.5870857718764,0 127.0510299536038,37.58702359678375,0 127.0509785244294,37.58713598267234,0 127.0508901910026,37.58711980405644,0 127.0508608281908,37.58719874009414,0 127.0506275473856,37.5871560943385,0 127.0506010259662,37.58724601113442,0 127.0504090242026,37.58720366249263,0 127.0504316047679,37.58712597731248,0 127.0499211668541,37.58702089956744,0 127.0498016083295,37.58700617167393,0 127.0496719661666,37.58734187858877,0 127.0491245804884,37.58721563470244,0 127.0488572367309,37.58703639332386,0 127.0489544009017,37.58690393133621,0 127.0488691862416,37.58668527989138,0 127.0486607959682,37.58660677427525,0 127.0488233356968,37.58638940539543,0 127.0512769106984,37.5858413992781,0 127.0511584860128,37.58594276319536,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark id="0B9D53B0F1428856553C">
+			<name>전농13구역</name>
+			<LookAt>
+				<longitude>127.0572083301752</longitude>
+				<latitude>37.57705745088435</latitude>
+				<altitude>16.10021551055866</altitude>
+				<heading>-19.90670977392396</heading>
+				<tilt>2.405488015737549</tilt>
+				<gx:fovy>30</gx:fovy>
+				<range>859.6145134710241</range>
+				<altitudeMode>absolute</altitudeMode>
+			</LookAt>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							127.0553584404066,37.57558992758445,0 127.0563148733134,37.57558201342155,0 127.0570730226573,37.57542034855661,0 127.0575312811573,37.57541149566306,0 127.0576459767134,37.57665870223759,0 127.0574990674399,37.57667187252093,0 127.0575131179228,37.57687717904551,0 127.0576950290976,37.57685174514877,0 127.0576965812353,37.57699507590449,0 127.0576334744455,37.57712008104764,0 127.0575515734911,37.57716112113653,0 127.0574625402358,37.5771734872727,0 127.0573643295556,37.57716534983899,0 127.0552928972116,37.57578947232027,0 127.0553290353986,37.57564559048225,0 127.0553584404066,37.57558992758445,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark id="0A62964EFE42885A853C">
+			<name>전농15구역</name>
+			<LookAt>
+				<longitude>127.0568696316109</longitude>
+				<latitude>37.58797637089656</latitude>
+				<altitude>23.02465303264535</altitude>
+				<heading>-19.90755734190318</heading>
+				<tilt>2.406086875951318</tilt>
+				<gx:fovy>30</gx:fovy>
+				<range>2446.405810567376</range>
+				<altitudeMode>absolute</altitudeMode>
+			</LookAt>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							127.0524780244565,37.58529582463526,0 127.0530430663469,37.58470078928183,0 127.0532170630025,37.58445072503256,0 127.0541586006745,37.58440409717367,0 127.0541838337132,37.58418199934769,0 127.0540408533101,37.58415878063615,0 127.0540543562419,37.58399934463154,0 127.054307347277,37.58398651215739,0 127.0543356192065,37.58401835521864,0 127.0548350974077,37.58391737579217,0 127.0548398963618,37.58407094544474,0 127.0549049186773,37.58413520041912,0 127.0549053133277,37.58423719923293,0 127.0550053958525,37.58438916369482,0 127.0551056636505,37.58444757309482,0 127.0551133998816,37.58458780054288,0 127.0552128164612,37.58471442112815,0 127.0553610382474,37.58477711213158,0 127.0555490688819,37.58475051921916,0 127.0557202281151,37.58492253486279,0 127.0558327668088,37.58504030207909,0 127.0558080117424,37.58517112039336,0 127.0559629950829,37.5852881160537,0 127.056068733646,37.5853590133974,0 127.0560665185883,37.58553485257905,0 127.0560333433037,37.58591671691917,0 127.0560792385697,37.58604226011342,0 127.0562159566596,37.58618316168608,0 127.0562867660171,37.5862432549788,0 127.0563087489187,37.58632422822988,0 127.0562855991166,37.58639562988446,0 127.0561586392772,37.58637070682748,0 127.0561860250233,37.58627426362215,0 127.0561068478235,37.58624661838194,0 127.0560063234671,37.5862505462154,0 127.0559677792519,37.58642803593162,0 127.0552865935883,37.58719978061963,0 127.0542688547905,37.58658101679082,0 127.0541175635424,37.58655750742145,0 127.053523006211,37.58654119662437,0 127.0533348431097,37.58650147852457,0 127.0529061944517,37.58618209543398,0 127.0523610476983,37.58549955737684,0 127.0524780244565,37.58529582463526,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark id="031218A7E242885B772C">
+			<name>제기1구역</name>
+			<LookAt>
+				<longitude>127.0370438813187</longitude>
+				<latitude>37.58013460883225</latitude>
+				<altitude>14.64718182888051</altitude>
+				<heading>-19.90722352390325</heading>
+				<tilt>2.405499368777081</tilt>
+				<gx:fovy>30</gx:fovy>
+				<range>889.7020041727228</range>
+				<altitudeMode>absolute</altitudeMode>
+			</LookAt>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							127.0350871835864,37.57873273922217,0 127.0360967226156,37.57871323885414,0 127.0361110929862,37.57902594389176,0 127.0361485936938,37.57963540639182,0 127.035238006289,37.5796679413015,0 127.0351249388795,37.57927775833897,0 127.035081317638,37.5789580947497,0 127.0350871835864,37.57873273922217,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark id="0046AA740D42885BE07F">
+			<name>제기공성소규모재건축</name>
+			<LookAt>
+				<longitude>127.0364445366588</longitude>
+				<latitude>37.58098503874724</latitude>
+				<altitude>14.93695619713276</altitude>
+				<heading>-19.90751327388423</heading>
+				<tilt>2.40531472291565</tilt>
+				<gx:fovy>30</gx:fovy>
+				<range>400.450555741627</range>
+				<altitudeMode>absolute</altitudeMode>
+			</LookAt>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							127.0355225093991,37.58074483992299,0 127.0362066578843,37.58069380103186,0 127.0362643093907,37.58116775739026,0 127.0356669857477,37.58118973801798,0 127.0355225093991,37.58074483992299,0 
 						</coordinates>
 					</LinearRing>
 				</outerBoundaryIs>
@@ -1777,6 +2030,57 @@
 				</outerBoundaryIs>
 			</Polygon>
 		</Placemark>
+		<Placemark id="0BC10942754282F34B54">
+			<name>성수전략정비3구역</name>
+			<LookAt>
+				<longitude>127.0541673607822</longitude>
+				<latitude>37.5360597206899</latitude>
+				<altitude>13.07330211050179</altitude>
+				<heading>0</heading>
+				<tilt>0</tilt>
+				<gx:fovy>30</gx:fovy>
+				<range>1388.397072752559</range>
+				<altitudeMode>absolute</altitudeMode>
+			</LookAt>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							127.0532254795697,37.53497752085546,0 127.0560471167529,37.53415961290983,0 127.0562654957786,37.53486756380723,0 127.0563345132441,37.5352604181036,0 127.0562443666196,37.53548168266916,0 127.0565160131408,37.53554688587372,0 127.0564874304439,37.5356463889468,0 127.0566191016393,37.53567575269919,0 127.0565657256466,37.53579486310639,0 127.0566562465011,37.53580791347291,0 127.0565956840874,37.53602775929304,0 127.0567601191924,37.53606035143653,0 127.0566798467049,37.53624331699479,0 127.0564688561094,37.53639077655738,0 127.0566816362313,37.53648293723779,0 127.0570506021107,37.53657264494426,0 127.0570295735212,37.53674727221458,0 127.0572961965631,37.53671037823032,0 127.0571767930133,37.53697875172362,0 127.0572796421228,37.53703272668191,0 127.0572172882987,37.53724878155712,0 127.0574223059552,37.53734136001388,0 127.0573508200859,37.53759600209833,0 127.0573871391777,37.53760719365987,0 127.0573437969318,37.53775214469949,0 127.0575307160786,37.53779063142205,0 127.0575018106454,37.53788152620441,0 127.0576219281739,37.53791345701666,0 127.0575496808129,37.53810441701955,0 127.0548511850778,37.5388059221589,0 127.0532254795697,37.53497752085546,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark id="0F181AED8E4283FFB80B">
+			<name>성수전략정비4구역</name>
+			<LookAt>
+				<longitude>127.0595480008208</longitude>
+				<latitude>37.53557370101382</latitude>
+				<altitude>11.69547499967395</altitude>
+				<heading>0</heading>
+				<tilt>0</tilt>
+				<gx:fovy>30</gx:fovy>
+				<range>2921.715701207577</range>
+				<altitudeMode>absolute</altitudeMode>
+			</LookAt>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							127.056046533536,37.53415933754926,0 127.0569859745299,37.53391563085228,0 127.0571450806721,37.53441858300308,0 127.0572477884258,37.53442207773518,0 127.057397670783,37.53445730653998,0 127.059817159705,37.53541079919962,0 127.0600188311804,37.53557071531335,0 127.0609737316934,37.53720723488322,0 127.0596422613448,37.53753975707436,0 127.059463487846,37.5367481315896,0 127.0591383562063,37.53663188932925,0 127.0589393553586,37.5366015037601,0 127.0588793091207,37.53674791276821,0 127.0585870877188,37.53676372837678,0 127.0585707026726,37.53657267185971,0 127.0584887744646,37.53657283393735,0 127.0585055267389,37.53676262517671,0 127.0580954873358,37.53674579272541,0 127.0578797084663,37.5376365887684,0 127.05867166368,37.53780057347618,0 127.0575503792244,37.53810391322517,0 127.0576223180393,37.53791385181816,0 127.0575027044819,37.53788034810575,0 127.0575284859026,37.53779128274236,0 127.0573431223197,37.53775185924436,0 127.057388568812,37.53760634087226,0 127.0573512259004,37.53759565581851,0 127.0574233479069,37.53734098840588,0 127.0572166450139,37.53724831766936,0 127.0572794212597,37.537035051163,0 127.0571758045201,37.53697912551108,0 127.0572960050427,37.53670950348629,0 127.0570296112103,37.53674684373818,0 127.0570493284115,37.53657262688465,0 127.0566818633364,37.53648144592914,0 127.0564709582661,37.53638987283379,0 127.0566788246877,37.53624287508589,0 127.0567627707534,37.53605976785406,0 127.0565934805418,37.53602852687841,0 127.0566563199055,37.53580665215777,0 127.0565653528664,37.53579559125787,0 127.0566177436484,37.5356759896626,0 127.0564870083837,37.5356457934227,0 127.0565171685896,37.53554813720054,0 127.0562432230184,37.53548216330498,0 127.056336147834,37.53526023637452,0 127.0562664665995,37.53486750874247,0 127.056046533536,37.53415933754926,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Folder id="0F5BBF465B42840738E0">
+			<name>송파구</name>
+			<open>1</open>
+			<styleUrl>#__managed_style_00F2CF4B6741F27435C4</styleUrl>
+		</Folder>
 	</Folder>
 	<Folder id="07293F7E14427FA57F79">
 		<ex:extension>base64;GgA</ex:extension>
@@ -1961,6 +2265,34 @@
 					<LinearRing>
 						<coordinates>
 							126.9976568758172,37.5260179856927,0 126.9972651906401,37.52599059233248,0 126.996899604258,37.52588595327376,0 126.9964402293318,37.5258607705631,0 126.9962776576688,37.52576067202395,0 126.9959528799556,37.52510977614445,0 126.9962340194839,37.52462293409567,0 126.9958761973597,37.52456800461983,0 126.9959013884385,37.52444545653352,0 126.9950729045047,37.52412084484883,0 126.994981664212,37.52404763803252,0 126.9946172744722,37.5238702769796,0 126.9942610439752,37.52347430270403,0 126.9941988680244,37.52349186954061,0 126.9939640202813,37.5234514865232,0 126.9937805736065,37.52339655430931,0 126.9935625071172,37.52336461921521,0 126.994160857269,37.52040499180555,0 126.994222084518,37.52033376810859,0 126.9943370905935,37.52026281989846,0 126.9944924632012,37.52021917716105,0 126.9962715049537,37.52089675779217,0 126.9977630931303,37.52150410541076,0 126.9997004435674,37.52231143403465,0 127.0002682759148,37.52267138370306,0 127.0000092303287,37.52279132292439,0 126.9997087775684,37.52315806849209,0 126.9989590980699,37.52297191471639,0 126.9985052906252,37.52322458709804,0 126.9982856972573,37.52321034054417,0 126.9980514837064,37.52353581060679,0 126.9981825498841,37.52367018953577,0 126.9984256319411,37.5240057710302,0 126.9983322321215,37.52435226925326,0 126.9983904128661,37.52451948717567,0 126.9978469759489,37.52470874329669,0 126.9978245248516,37.52485677279634,0 126.9978893921247,37.52497302113763,0 126.9978525935048,37.52498717873562,0 126.9978904820826,37.52505201984487,0 126.9979255555935,37.52519244460109,0 126.9978160612774,37.52521483944066,0 126.9978348020003,37.5252931306671,0 126.9978037251583,37.52530456413856,0 126.9978256999695,37.52539469719908,0 126.997861388625,37.52547420314588,0 126.9977918894539,37.52549739859779,0 126.9978873790856,37.52563589198176,0 126.9977756767285,37.52568023519065,0 126.9977644281856,37.52576904674728,0 126.9977982354455,37.52584315029699,0 126.9976697686864,37.52589704447146,0 126.9976568758172,37.5260179856927,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+	</Folder>
+	<Folder id="07C78DC4374284078D80">
+		<ex:extension>base64;GgA</ex:extension>
+		<name>송파구</name>
+		<styleUrl>#__managed_style_00F2CF4B6741F27435C4</styleUrl>
+		<Placemark id="0DD9B5932F428408E9D4">
+			<name>잠실주공5단지재건축</name>
+			<LookAt>
+				<longitude>127.093903044441</longitude>
+				<latitude>37.51588485983626</latitude>
+				<altitude>15.24098188330346</altitude>
+				<heading>0</heading>
+				<tilt>0</tilt>
+				<gx:fovy>30</gx:fovy>
+				<range>2838.437103341567</range>
+				<altitudeMode>absolute</altitudeMode>
+			</LookAt>
+			<styleUrl>#__managed_style_01946C607B41EFAC3FFC1</styleUrl>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							127.0908746584276,37.51709253648951,0 127.090785416782,37.51680903313562,0 127.0923114137656,37.51285891390254,0 127.0927354348586,37.51218645574559,0 127.096219915313,37.51246334418519,0 127.0991305333099,37.51316024359623,0 127.0992996476681,37.51320875091733,0 127.0994179599476,37.5133241311102,0 127.0994828522532,37.51346683267604,0 127.0994827023504,37.51360573165659,0 127.0993991482212,37.51380860350501,0 127.0991864933874,37.51412877006646,0 127.0955667750538,37.5184782843456,0 127.0954622382999,37.51852077727889,0 127.0953039680312,37.5185229497906,0 127.0950841210476,37.51848465544387,0 127.0908746584276,37.51709253648951,0 
 						</coordinates>
 					</LinearRing>
 				</outerBoundaryIs>
