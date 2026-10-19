@@ -6,11 +6,13 @@
     <meta property="og:title" content="동네개발맵 - 서오일보">
     <meta property="og:type" content="website">
     <meta property="og:image" content="assets/thum_OG.jpg">
-    <title>동네개발맵 | 서오일보</title>
+    <title>동네개발맵 - 서오일보</title>
     <link rel="icon" href="assets/favi.png" type="image/png">
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- MapLibre GL (벡터 지도) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.css" crossorigin="anonymous" />
 
     <style>
         :root {
@@ -685,6 +687,30 @@
                 0 0 4px #fff;
         }
 
+        /* 지하철 노선 이름 */
+        .subway-label-icon {
+            background: none;
+            border: none;
+        }
+
+        .subway-label {
+            position: absolute;
+            left: 0;
+            top: 0;
+            transform: translate(-50%, -50%);
+            padding: 1px 7px;
+            border-radius: 10px;
+            background: currentColor;
+            font-size: 13px;
+            font-weight: 800;
+            line-height: 1.5;
+            white-space: nowrap;
+        }
+
+        .subway-label span {
+            color: #ffffff;
+        }
+
         /* 대상지 반경(500m·1km) 표시 글자 */
         .ring-label-icon {
             background: none;
@@ -838,6 +864,8 @@
 
     <!-- Leaflet JS 및 Omnivore (KML 로더) -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.0.20/leaflet-maplibre-gl.js"></script>
     <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
 
     <script>
@@ -919,15 +947,17 @@
         /* =====================================================
            지도 초기화
         ===================================================== */
-        const map = L.map('map', { zoomControl: false, attributionControl: false, maxBoundsViscosity: 1.0 }).setView([37.5665, 126.9780], 13);
+        const map = L.map('map', { zoomControl: false, attributionControl: false, maxBoundsViscosity: 1.0, minZoom: 1, maxZoom: 19 }).setView([37.5665, 126.9780], 13);
 
         // 자치구 경계선 / 서울 밖 흐림 막 전용 레이어 (구역 도형 아래, 클릭 방해 없음)
         map.createPane('maskPane').style.zIndex = 350;
         map.createPane('boundaryPane').style.zIndex = 390;
+        map.createPane('subwayPane').style.zIndex = 415;
         map.createPane('ringPane').style.zIndex = 420;
         map.createPane('poiPane').style.zIndex = 430;
         map.getPane('maskPane').style.pointerEvents = 'none';
         map.getPane('boundaryPane').style.pointerEvents = 'none';
+        map.getPane('subwayPane').style.pointerEvents = 'none';
         map.getPane('ringPane').style.pointerEvents = 'none';
         map.getPane('poiPane').style.pointerEvents = 'none';
 
@@ -944,44 +974,132 @@
         locControl.addTo(map);
         const locEl = locControl.getContainer();
 
-        /* 지도 배경 (위에서부터 키가 입력된 것을 사용)
-           1) MapTiler  : cloud.maptiler.com 에서 무료 키 발급 → MAPTILER_KEY 에 붙여 넣기 (OpenMapTiles 기반, 깔끔한 'dataviz-light')
-           2) CARTO     : carto.com/basemaps/apikey 에서 무료 키 발급 → CARTO_KEY 에 붙여 넣기
-           3) 키가 없으면: 키가 필요 없는 기본 OpenStreetMap 지도
-           ※ 키는 공개 코드에 그대로 들어갑니다. MapTiler 대시보드에서 키를 이 사이트 주소에서만 쓰도록 제한해 두세요. */
+        /* 지도 배경: 벡터 지도 (OpenFreeMap · 키 불필요)
+           MapLibre GL 로 그려서 글씨 크기와 언어를 코드로 조절합니다.
+           - 지명은 한글을 우선으로 표시
+           - 캡쳐 모드에서는 도로·시설 이름을 크게 표시
+           - MapTiler 벡터 지도를 쓰려면 MAPTILER_KEY 에 키를 넣으세요 (cloud.maptiler.com 무료)
+           - 브라우저가 WebGL 을 못 쓰거나 벡터 지도를 못 불러오면 기본 OpenStreetMap 이미지 지도로 자동 전환 */
         const MAPTILER_KEY = '';
-        const MAPTILER_STYLE = 'dataviz-light';   // 다른 스타일: 'streets-v4' 등 (MapTiler 지도 목록의 ID)
-        const CARTO_KEY = '';
+        const MAPTILER_STYLE = 'streets-v2';
+        const OPENFREEMAP_STYLE = 'liberty';   // 'liberty'(기본) | 'bright' | 'positron'
 
-        const BASEMAP = MAPTILER_KEY
+        const VECTOR = MAPTILER_KEY
             ? {
-                url: 'https://api.maptiler.com/maps/' + encodeURIComponent(MAPTILER_STYLE) + '/{z}/{x}/{y}.png?key=' + encodeURIComponent(MAPTILER_KEY),
-                options: {
-                    tileSize: 512,       // 512px 타일 권장 설정
-                    zoomOffset: -1,
-                    minZoom: 1,
-                    maxZoom: 20,
-                    crossOrigin: true,
-                    attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
-                }
-            }
-            : CARTO_KEY
-            ? {
-                url: 'https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png?key=' + encodeURIComponent(CARTO_KEY),
-                options: {
-                    maxZoom: 20,
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                }
+                style: 'https://api.maptiler.com/maps/' + encodeURIComponent(MAPTILER_STYLE) + '/style.json?key=' + encodeURIComponent(MAPTILER_KEY),
+                attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
             }
             : {
-                url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                options: {
-                    maxZoom: 19,
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }
+                style: 'https://tiles.openfreemap.org/styles/' + OPENFREEMAP_STYLE,
+                attribution: '<a href="https://openfreemap.org" target="_blank">OpenFreeMap</a> <a href="https://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
             };
 
-        L.tileLayer(BASEMAP.url, BASEMAP.options).addTo(map);
+        // 캡쳐 모드에서 키우는 글씨: 도로 이름(transportation_name), 시설·역 이름(poi)
+        // 크기는 지도 배율에 따라 커지는 값(px)이며, 지도 배율은 Leaflet 배율보다 1 작습니다.
+        const CAPTURE_TEXT = {
+            transportation_name: { size: ['interpolate', ['linear'], ['zoom'], 12, 12, 14, 17, 16, 21, 20, 24], color: '#111111' },
+            poi:                 { size: ['interpolate', ['linear'], ['zoom'], 13, 12, 14, 15, 16, 19, 20, 22], color: null }
+        };
+
+        let vectorMode = false;     // true = 벡터 지도 사용 중
+        let vectorLayer = null;
+        let glMap = null;
+        let vectorReady = false;
+        let captureTextLayers = [];
+
+        function useRasterBasemap() {
+            if (vectorLayer) { try { map.removeLayer(vectorLayer); } catch (e) { /* 무시 */ } }
+            vectorLayer = null;
+            glMap = null;
+            vectorMode = false;
+            vectorReady = false;
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+        }
+
+        function webglAvailable() {
+            try {
+                const c = document.createElement('canvas');
+                return !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl')));
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // 지도 스타일을 내려받아 한글 우선으로 바꾸고, 캡쳐 모드에서 키울 글씨 레이어를 기록
+        function koreanizeStyle(style) {
+            const KOREAN = ['coalesce', ['get', 'name:ko'], ['get', 'name'], ['get', 'name:latin']];
+            captureTextLayers = [];
+            (style.layers || []).forEach(function(l) {
+                if (l.type !== 'symbol' || !l.layout || l.layout['text-field'] == null) return;
+                if (JSON.stringify(l.layout['text-field']).indexOf('name') !== -1) {
+                    l.layout['text-field'] = KOREAN;
+                }
+                const rule = CAPTURE_TEXT[l['source-layer']];
+                if (rule) {
+                    const paint = l.paint || {};
+                    captureTextLayers.push({
+                        id: l.id,
+                        rule: rule,
+                        orig: { size: l.layout['text-size'], color: paint['text-color'], haloW: paint['text-halo-width'], haloC: paint['text-halo-color'] }
+                    });
+                }
+            });
+        }
+
+        // 캡쳐 모드: 도로·시설 이름을 키우고 흰 윤곽을 둘러 읽기 쉽게 / 해제하면 원래대로
+        function applyCaptureLabels(on) {
+            if (!vectorMode || !glMap || !vectorReady) return;   // 아직 준비 전이면 준비가 끝날 때 현재 상태를 적용
+            captureTextLayers.forEach(function(item) {
+                try {
+                    if (!glMap.getLayer(item.id)) return;
+                    if (on) {
+                        glMap.setLayoutProperty(item.id, 'text-size', item.rule.size);
+                        glMap.setPaintProperty(item.id, 'text-halo-color', '#ffffff');
+                        glMap.setPaintProperty(item.id, 'text-halo-width', 2.5);
+                        if (item.rule.color) glMap.setPaintProperty(item.id, 'text-color', item.rule.color);
+                    } else {
+                        glMap.setLayoutProperty(item.id, 'text-size', item.orig.size);
+                        glMap.setPaintProperty(item.id, 'text-halo-color', item.orig.haloC);
+                        glMap.setPaintProperty(item.id, 'text-halo-width', item.orig.haloW);
+                        glMap.setPaintProperty(item.id, 'text-color', item.orig.color);
+                    }
+                } catch (e) { /* 이 레이어만 건너뜀 */ }
+            });
+        }
+
+        async function initVectorBasemap() {
+            try {
+                const res = await fetch(VECTOR.style);
+                if (!res.ok) throw new Error('지도 스타일을 불러오지 못했습니다 (HTTP ' + res.status + ')');
+                const style = await res.json();
+                koreanizeStyle(style);
+
+                vectorLayer = L.maplibreGL({ style: style, attribution: VECTOR.attribution }).addTo(map);
+                glMap = vectorLayer.getMaplibreMap();
+                vectorMode = true;
+
+                glMap.on('load', function() {
+                    vectorReady = true;
+                    if (captureMode) applyCaptureLabels(true);
+                    if (DEBUG) console.log('[동네개발맵] 벡터 지도 준비 완료 (글씨 조절 대상 레이어 ' + captureTextLayers.length + '개)');
+                });
+                glMap.on('error', function(e) {
+                    if (DEBUG) console.warn('[동네개발맵] 벡터 지도 오류:', e && e.error && e.error.message ? e.error.message : e);
+                });
+            } catch (e) {
+                console.warn('[동네개발맵] 벡터 지도를 쓸 수 없어 기본 이미지 지도로 전환합니다.', e && e.message ? e.message : e);
+                useRasterBasemap();
+            }
+        }
+
+        if (typeof maplibregl !== 'undefined' && typeof L.maplibreGL === 'function' && webglAvailable()) {
+            initVectorBasemap();
+        } else {
+            useRasterBasemap();
+        }
 
         window.addEventListener('resize', function() { map.invalidateSize(); applySeoulLimits(); });
 
@@ -1009,7 +1127,10 @@
         let targetMarker = null;   // 지도 위 '대상지' 표시
         let targetZone = null;     // '대상지' 표시가 붙어 있는 구역
         let ringGroup = null;      // 대상지 반경(500m·1km) 표시
-        let poiLayer = null;       // 주변 도로·시설 이름 표시
+        let poiLayer = null;       // 주변 도로·시설 이름 표시 (이미지 지도로 전환됐을 때만 사용)
+        let subwayGroup = null;    // 지하철 노선 표시
+        let subwayData = null;     // 불러온 지하철 노선 { key, lines }
+        let subwayReq = 0;         // 지하철 요청 번호
         let poiData = null;        // 불러온 주변 도로·시설 { key, center, items }
         let poiReq = 0;            // 요청 번호 (오래된 응답 무시용)
 
@@ -2266,10 +2387,165 @@
 
         map.on('moveend', function() { if (captureMode) renderPoiLabels(); });
 
+        /* ---------- 지하철 노선 ----------
+           OpenStreetMap 데이터(Overpass)에서 대상지 주변의 지하철·경전철 선로를 받아
+           노선 색(OSM 에 색이 없으면 서울 노선 색)으로 굵은 선을 그리고 노선 이름표를 붙입니다. */
+        const SUBWAY_RADIUS = 1500;          // 대상지 중심에서 이 거리(m) 안의 선로
+        const SHOW_SUBWAY_LABELS = true;     // 노선 이름표('7호선') (끄려면 false)
+        const SUBWAY_COLORS = [
+            [/1\s*호선/, '#0052A4'], [/2\s*호선/, '#00A84D'], [/3\s*호선/, '#EF7C1C'], [/4\s*호선/, '#00A5DE'],
+            [/5\s*호선/, '#996CAC'], [/6\s*호선/, '#CD7C2F'], [/7\s*호선/, '#747F00'], [/8\s*호선/, '#E6186C'],
+            [/9\s*호선/, '#BDB092'], [/경의.?중앙/, '#77C4A3'], [/공항철도/, '#0090D2'], [/신분당/, '#D4003B'],
+            [/수인.?분당|분당선|수인선/, '#F5A200'], [/경춘/, '#0C8E72'], [/우이/, '#B0CE18'], [/신림/, '#6789CA'],
+            [/의정부/, '#FDA600'], [/에버라인|용인/, '#56AD2D'], [/김포/, '#A17800'], [/GTX/i, '#9B0B3D']
+        ];
+
+        function lineInfo(t) {
+            const name = String(t['name:ko'] || t.name || '');
+            const ref = String(t.ref || '');
+
+            let color = String(t.colour || t.color || '').trim();
+            if (!/^#[0-9a-fA-F]{3,8}$/.test(color) && !/^[a-zA-Z]+$/.test(color)) color = '';
+            if (!color) {
+                const text = name + ' ' + ref;
+                for (let i = 0; i < SUBWAY_COLORS.length; i++) {
+                    if (SUBWAY_COLORS[i][0].test(text)) { color = SUBWAY_COLORS[i][1]; break; }
+                }
+            }
+
+            let label = '';
+            const m1 = name.match(/\d+\s*호선/);
+            const m2 = name.match(/[가-힣A-Za-z]+선/);
+            if (m1) label = m1[0].replace(/\s/g, '');
+            else if (m2) label = m2[0];
+            else if (/^\d+$/.test(ref)) label = ref + '호선';
+
+            return { color: color, label: label };
+        }
+
+        function buildSubwayQuery(c) {
+            const around = '(around:' + SUBWAY_RADIUS + ',' + c.lat.toFixed(6) + ',' + c.lng.toFixed(6) + ')';
+            return '[out:json][timeout:25];' +
+                'rel' + around + '["route"~"^(subway|light_rail)$"]->.r;' +
+                'way(r.r)' + around + '->.w;' +
+                '.w out tags geom;.r out body;';
+        }
+
+        // 응답 → 그릴 선 목록 (선로 조각마다 속한 노선을 찾아 색·이름을 붙임)
+        function parseSubway(data) {
+            const rels = [];
+            const ways = [];
+            (data.elements || []).forEach(function(el) {
+                if (el.type === 'relation') rels.push(el);
+                else if (el.type === 'way' && el.geometry && el.geometry.length > 1) ways.push(el);
+            });
+
+            const wayRels = {};
+            rels.forEach(function(r) {
+                (r.members || []).forEach(function(m) {
+                    if (m.type === 'way') (wayRels[m.ref] = wayRels[m.ref] || []).push(r);
+                });
+            });
+
+            return ways.map(function(w) {
+                let color = '';
+                let label = '';
+                (wayRels[w.id] || []).forEach(function(r) {
+                    const info = lineInfo(r.tags || {});
+                    if (!color && info.color) color = info.color;
+                    if (!label && info.label) label = info.label;
+                });
+                return {
+                    latlngs: w.geometry.map(function(p) { return L.latLng(p.lat, p.lon); }),
+                    color: color || '#666666',
+                    label: label
+                };
+            });
+        }
+
+        function clearSubway() {
+            if (subwayGroup) { map.removeLayer(subwayGroup); subwayGroup = null; }
+        }
+
+        function drawSubway() {
+            clearSubway();
+            if (!captureMode || !currentZone || !subwayData || !subwayData.lines.length) return;
+
+            const parts = [];
+            subwayData.lines.forEach(function(ln) {
+                // 흰 테두리 위에 노선 색 선
+                parts.push(L.polyline(ln.latlngs, { pane: 'subwayPane', interactive: false, color: '#ffffff', weight: 9, opacity: 0.95, lineCap: 'round', lineJoin: 'round' }));
+                parts.push(L.polyline(ln.latlngs, { pane: 'subwayPane', interactive: false, color: ln.color, weight: 5, opacity: 1, lineCap: 'round', lineJoin: 'round' }));
+            });
+
+            if (SHOW_SUBWAY_LABELS) {
+                // 노선마다 이름표 하나: 대상지에서 약 700m 떨어진 선로 지점에 붙임
+                const best = {};
+                const c = subwayData.center;
+                subwayData.lines.forEach(function(ln) {
+                    if (!ln.label) return;
+                    ln.latlngs.forEach(function(p) {
+                        const score = Math.abs(metersBetween(c.lat, c.lng, p.lat, p.lng) - 700);
+                        if (!best[ln.label] || score < best[ln.label].score) best[ln.label] = { score: score, latlng: p, color: ln.color };
+                    });
+                });
+                Object.keys(best).forEach(function(label) {
+                    parts.push(L.marker(best[label].latlng, {
+                        pane: 'subwayPane',
+                        interactive: false,
+                        keyboard: false,
+                        icon: L.divIcon({
+                            className: 'subway-label-icon',
+                            html: '<div class="subway-label" style="color:' + best[label].color + '"><span>' + esc(label) + '</span></div>',
+                            iconSize: [0, 0]
+                        })
+                    }));
+                });
+            }
+
+            subwayGroup = L.layerGroup(parts).addTo(map);
+            if (DEBUG) console.log('[동네개발맵] 지하철 선로 ' + subwayData.lines.length + '개 표시');
+        }
+
+        async function loadSubway(center) {
+            const key = center.lat.toFixed(4) + ',' + center.lng.toFixed(4);
+            if (subwayData && subwayData.key === key) { drawSubway(); return; }
+
+            const myReq = ++subwayReq;
+            try {
+                const body = 'data=' + encodeURIComponent(buildSubwayQuery(center));
+                let data = null;
+                let lastErr = null;
+                for (let i = 0; i < OVERPASS_URLS.length && !data; i++) {
+                    try {
+                        const res = await fetch(OVERPASS_URLS[i], {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: body
+                        });
+                        if (!res.ok) throw new Error('HTTP ' + res.status);
+                        data = await res.json();
+                    } catch (e) {
+                        lastErr = e;
+                    }
+                }
+                if (!data) throw lastErr;
+                if (myReq !== subwayReq) return;   // 그 사이 다른 구역을 골랐거나 모드를 껐으면 무시
+                subwayData = { key: key, center: center, lines: parseSubway(data) };
+                drawSubway();
+            } catch (e) {
+                if (myReq !== subwayReq) return;
+                subwayData = null;
+                if (DEBUG) console.warn('[동네개발맵] 지하철 노선 정보를 불러오지 못했습니다.', e && e.message ? e.message : e);
+                showToast('지하철 노선 정보를 불러오지 못했어요');
+            }
+        }
+
         function updateTargetTag() {
             if (targetMarker) { map.removeLayer(targetMarker); targetMarker = null; }
             if (ringGroup) { map.removeLayer(ringGroup); ringGroup = null; }
             clearPoiLabels();
+            clearSubway();
 
             const active = captureMode && currentZone;      // 캡쳐 모드에서 구역이 선택돼 있음
             const wantTag = active && !targetHidden;        // '대상지' 글자를 보이는 상태
@@ -2279,11 +2555,12 @@
                 setLabelHidden(targetZone, false);
                 targetZone = null;
             }
-            if (!active) { poiReq++; return; }   // 진행 중이던 주변 정보 요청은 무효 처리
+            if (!active) { poiReq++; subwayReq++; return; }   // 진행 중이던 주변 정보 요청은 무효 처리
 
             const center = labelPoint(currentZone.layer);
-            drawRings(center);
-            loadPoi(center);                                // 주변 도로·시설 이름 (캡쳐 모드)                              // 반경은 '대상지' 글자를 꺼도 그대로 표시
+            drawRings(center);                              // 반경은 '대상지' 글자를 꺼도 그대로 표시
+            loadSubway(center);                             // 지하철 노선
+            if (!vectorMode) loadPoi(center);               // 벡터 지도에서는 지도 자체 글씨를 키우므로 이미지 지도일 때만 덧그림
             if (!wantTag) return;
 
             targetMarker = L.marker(center, {
@@ -2306,6 +2583,7 @@
             captureMode = on;
             document.body.classList.toggle('capture-mode', on);
             if (on) targetHidden = false;
+            applyCaptureLabels(on);                  // 벡터 지도: 도로·시설 이름 크기 전환
 
             // 화면 구성이 바뀌었으니 지도 크기를 다시 맞춤
             map.invalidateSize();
