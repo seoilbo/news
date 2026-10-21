@@ -2,18 +2,21 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Leaflet 실제 노선도 구현</title>
-    <!-- 1. Leaflet CSS 및 JS 불러오기 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet 깃허브 페이지 지하철 노선도 테스트</title>
+    
+    <!-- [안전조치 1] Leaflet CSS 및 JS 라이브러리를 HEAD 영역에 먼저 완벽히 로드 -->
     <link rel="stylesheet" href="https://unpkg.com" />
     <script src="https://unpkg.com"></script>
     
-    <!-- 2. CSV 파싱을 위한 PapaParse 라이브러리 로드 -->
+    <!-- [안전조치 2] CSV 파싱 라이브러리 (PapaParse) 로드 -->
     <script src="https://cloudflare.com"></script>
 
     <style>
+        /* [안전조치 3] 화면 전체에 지도가 꽉 차게 나오도록 높이 명시 */
         html, body, #map {
             width: 100%;
-            height: 100%;
+            height: 100vh;
             margin: 0;
             padding: 0;
         }
@@ -21,66 +24,79 @@
 </head>
 <body>
 
+    <!-- 지도가 그려질 영역 -->
     <div id="map"></div>
 
     <script>
-        // 3. Leaflet 지도 초기화 (동탄역 중심으로 설정)
-        var map = L.map('map').setView([37.20034, 127.09569], 12);
+        // [안전조치 4] 라이브러리와 DOM이 완전히 로드된 후(window.onload) 실행하여 'L is not defined' 에러 방지
+        window.onload = function() {
+            
+            // 1. Leaflet 지도 초기화 (초기 중심점: 동탄역 좌표)
+            var map = L.map('map').setView([37.20034, 127.09569], 11);
 
-        // 배경 지도 타일 추가 (OpenStreetMap)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+            // 2. 배경 지도 타일 추가 (OpenStreetMap)
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+            }).addTo(map);
 
-        // 선을 그릴 좌표들을 담을 배열
-        var lineCoordinates = [];
+            // 선 선형(구불구불한 경로)을 그릴 좌표 배열
+            var lineCoordinates = [];
 
-        // 4. 외부 CSV 파일(jae/subway.csv) 비동기 로드
-        Papa.parse("jae/subway.csv", {
-            download: true,
-            header: true, // 첫 줄을 필드명으로 인식
-            skipEmptyLines: true,
-            complete: function(results) {
-                var data = results.data;
+            // 3. 상대 경로를 사용하여 jae/subway.csv 파일 불러오기
+            // (깃허브 페이지 주소 구조에 맞게 앞쪽 슬래시를 뺀 'jae/subway.csv'로 설정)
+            Papa.parse("jae/subway.csv", {
+                download: true,
+                header: true,         // 첫 줄을 필드명("위도", "경도")으로 인식
+                skipEmptyLines: true, // 빈 줄은 건너뛰기
+                complete: function(results) {
+                    var data = results.data;
 
-                // 순번(또는 정렬 기준)대로 데이터 정렬 (안전장치)
-                data.sort((a, b) => parseInt(a.순번) - parseInt(b.순번));
-
-                // 데이터 처리 루프
-                data.forEach(function(row) {
-                    var lat = parseFloat(row.위도);
-                    var lng = parseFloat(row.경도);
-
-                    if (!isNaN(lat) && !isNaN(lng)) {
-                        // 모든 좌표(역 + 곡선점)를 선 경로 배열에 추가
-                        lineCoordinates.push([lat, lng]);
-
-                        // 만약 실제 '역' 데이터라면 마커와 팝업 생성
-                        if (row.타입 === "역") {
-                            L.marker([lat, lng])
-                             .addTo(map)
-                             .bindPopup(`<b>${row.이름}</b><br>${row.호선}`);
-                        }
+                    // 만약 CSV 데이터에 '순번' 필드가 있다면 오름차순 정렬 (꼬임 방지)
+                    if (data[0] && data[0].순번) {
+                        data.sort((a, b) => parseInt(a.순번) - parseInt(b.순번));
                     }
-                });
 
-                // 5. 수집된 모든 좌표 배열로 실제 구불구불한 선 그리기
-                if (lineCoordinates.length > 0) {
-                    var polyline = L.polyline(lineCoordinates, {
-                        color: '#0052A4', // 노선 색상 (예: 1호선/GTX 색상 등)
-                        weight: 6,        // 선 두께
-                        opacity: 0.8,     // 선 투명도
-                        lineJoin: 'round' // 꺾이는 부분 부드럽게 처리
-                    }).addTo(map);
+                    // CSV 행을 하나씩 읽으며 좌표 데이터 추출
+                    data.forEach(function(row) {
+                        var lat = parseFloat(row.위도);
+                        var lng = parseFloat(row.경도);
 
-                    // 선이 전체 다 보이도록 지도 화면 맞춤
-                    map.fitBounds(polyline.getBounds());
+                        if (!isNaN(lat) && !isNaN(lng)) {
+                            // 모든 점(역 좌표 + 실제 구불구불한 구간의 곡선점 좌표)을 배열에 추가
+                            lineCoordinates.push([lat, lng]);
+
+                            // 만약 '타입' 필드가 있고 값이 '역'이거나, '역사명'이 존재하는 데이터만 마커를 표시
+                            if (row.타입 === "역" || (row.역사명 && !row.타입)) {
+                                var stationName = row.역사명 || row.이름 || "지하철역";
+                                var lineName = row.호선 || "";
+                                
+                                L.marker([lat, lng])
+                                 .addTo(map)
+                                 .bindPopup(`<b>${stationName}</b><br>${lineName}`);
+                            }
+                        }
+                    });
+
+                    // 4. 추출된 수많은 좌표들을 순서대로 이어 실제 구불구불한 선형 그리기
+                    if (lineCoordinates.length > 0) {
+                        var polyline = L.polyline(lineCoordinates, {
+                            color: '#FF3377', // 노선 색상 (원하는 색상 코드로 변경 가능)
+                            weight: 6,         // 선 두께
+                            opacity: 0.8,      // 투명도
+                            lineJoin: 'round'  // 꺾이는 모서리를 부드럽게 처리
+                        }).addTo(map);
+
+                        // 생성된 모든 노선 선형이 화면에 한눈에 들어오도록 지도 뷰 맞춤
+                        map.fitBounds(polyline.getBounds());
+                    } else {
+                        console.warn("CSV에서 읽어온 유효한 위경도 좌표 데이터가 없습니다.");
+                    }
+                },
+                error: function(err) {
+                    console.error("CSV 파일을 불러오는 중 오류가 발생했습니다. 경로와 대소문자를 확인하세요:", err);
                 }
-            },
-            error: function(err) {
-                console.error("CSV 파일을 불러오는 중 오류가 발생했습니다:", err);
-            }
-        });
+            });
+        };
     </script>
 </body>
 </html>
