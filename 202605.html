@@ -73,18 +73,7 @@
                         }
                     });
 
-                    // 4. 구불구불한 폴리라인 그리기
-                    if (lineCoordinates.length > 0) {
-                        var polyline = L.polyline(lineCoordinates, {
-                            color: '#FF3377',
-                            weight: 6,
-                            opacity: 0.8,
-                            lineJoin: 'round'
-                        }).addTo(map);
-
-                        // 선형 크기에 맞춰 지도 화면 자동 줌
-                        map.fitBounds(polyline.getBounds());
-                    }
+                
                 },
                 error: function(err) {
                     console.error("CSV 로드 실패:", err);
