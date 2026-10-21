@@ -16,6 +16,10 @@
 
     <style>
         :root {
+            --text-outline: -2px 0 #fff, 2px 0 #fff, 0 -2px #fff, 0 2px #fff,
+                -2px -2px #fff, 2px -2px #fff, -2px 2px #fff, 2px 2px #fff,
+                -1px -2px #fff, 1px -2px #fff, -1px 2px #fff, 1px 2px #fff,
+                -2px -1px #fff, 2px -1px #fff, -2px 1px #fff, 2px 1px #fff, 0 0 4px #fff;
             --hover-bg: #f2f4f6;   /* 헤더를 제외한 모든 hover 반응: 연한 회색 */
             --line: #d1d8dd;
             --px: 20px;            /* 왼쪽 패널 좌우 여백 */
@@ -655,12 +659,7 @@
             font-size: 13px;
             font-weight: 800;
             color: var(--zone-color, #3388ff);
-            text-shadow:
-                -2px 0 #fff, 2px 0 #fff, 0 -2px #fff, 0 2px #fff,
-                -2px -2px #fff, 2px -2px #fff, -2px 2px #fff, 2px 2px #fff,
-                -1px -2px #fff, 1px -2px #fff, -1px 2px #fff, 1px 2px #fff,
-                -2px -1px #fff, 2px -1px #fff, -2px 1px #fff, 2px 1px #fff,
-                0 0 4px #fff;
+            text-shadow: var(--text-outline);
         }
 
         /* 선택한 구역(대상지) 정가운데에 붙는 '대상지' 글자 */
@@ -679,12 +678,7 @@
             letter-spacing: -0.3px;
             line-height: 1.3;
             white-space: nowrap;
-            text-shadow:
-                -2px 0 #fff, 2px 0 #fff, 0 -2px #fff, 0 2px #fff,
-                -2px -2px #fff, 2px -2px #fff, -2px 2px #fff, 2px 2px #fff,
-                -1px -2px #fff, 1px -2px #fff, -1px 2px #fff, 1px 2px #fff,
-                -2px -1px #fff, 2px -1px #fff, -2px 1px #fff, 2px 1px #fff,
-                0 0 4px #fff;
+            text-shadow: var(--text-outline);
         }
 
         /* 지하철 노선 이름 */
@@ -721,17 +715,12 @@
             position: absolute;
             left: 0;
             top: 0;
-            transform: translate(-50%, -115%);
+            transform: translate(-50%, -50%);
             font-size: 13px;
             font-weight: 800;
             color: #111111;
             white-space: nowrap;
-            text-shadow:
-                -2px 0 #fff, 2px 0 #fff, 0 -2px #fff, 0 2px #fff,
-                -2px -2px #fff, 2px -2px #fff, -2px 2px #fff, 2px 2px #fff,
-                -1px -2px #fff, 1px -2px #fff, -1px 2px #fff, 1px 2px #fff,
-                -2px -1px #fff, 2px -1px #fff, -2px 1px #fff, 2px 1px #fff,
-                0 0 4px #fff;
+            text-shadow: var(--text-outline);
         }
 
         /* 캡쳐 모드: 주변 도로·주요 시설 이름 (지도 그림 속 글씨보다 크게 덧그림) */
@@ -748,12 +737,7 @@
             font-weight: 800;
             line-height: 1.2;
             white-space: nowrap;
-            text-shadow:
-                -2px 0 #fff, 2px 0 #fff, 0 -2px #fff, 0 2px #fff,
-                -2px -2px #fff, 2px -2px #fff, -2px 2px #fff, 2px 2px #fff,
-                -1px -2px #fff, 1px -2px #fff, -1px 2px #fff, 1px 2px #fff,
-                -2px -1px #fff, 2px -1px #fff, -2px 1px #fff, 2px 1px #fff,
-                0 0 4px #fff;
+            text-shadow: var(--text-outline);
         }
 
         .poi-label.facility::before {
@@ -766,6 +750,146 @@
             background: currentColor;
             box-shadow: 0 0 0 2px #ffffff;
             vertical-align: middle;
+        }
+
+        /* 글씨 외곽선을 겹겹의 그림자 대신 한 번에 그리는 방식(지원하는 브라우저만): 지도를 움직일 때 훨씬 가벼움 */
+        @supports (paint-order: stroke fill) and (-webkit-text-stroke: 1px #fff) {
+            :root {
+                --text-outline: none;
+            }
+
+            body.capture-mode .leaflet-tooltip.zone-label,
+            .target-tag,
+            .ring-label,
+            .poi-label {
+                -webkit-text-stroke: 4px #ffffff;
+                paint-order: stroke fill;
+            }
+        }
+
+        /* ===== 캡쳐 설정 메뉴 (캡쳐 모드에서 0 + Enter) ===== */
+        .cap-settings {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 2500;
+            width: 320px;
+            padding: 14px 16px 12px;
+            background: #ffffff;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22);
+            font-size: 14px;
+            color: #222222;
+        }
+
+        .cap-settings[hidden] {
+            display: none;
+        }
+
+        .cap-settings-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .cap-settings-head strong {
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .cap-close {
+            padding: 4px 8px;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #555555;
+            cursor: pointer;
+        }
+
+        .cap-close:hover {
+            background: var(--hover-bg);
+        }
+
+        .cap-group {
+            margin: 10px 0 2px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #999999;
+        }
+
+        .cap-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 9px 6px;
+            border-top: 1px solid #eeeeee;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .cap-row:hover {
+            background: var(--hover-bg);
+        }
+
+        .cap-row small {
+            display: block;
+            font-size: 12px;
+            color: #888888;
+        }
+
+        .cap-row input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .cap-switch {
+            position: relative;
+            flex-shrink: 0;
+            width: 38px;
+            height: 22px;
+            border-radius: 11px;
+            background: #c9d0d6;
+            transition: background 0.15s;
+        }
+
+        .cap-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #ffffff;
+            transition: transform 0.15s;
+        }
+
+        .cap-row input:checked + .cap-switch {
+            background: #dc143c;
+        }
+
+        .cap-row input:checked + .cap-switch::after {
+            transform: translateX(16px);
+        }
+
+        .cap-hint {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #888888;
+        }
+
+        @media (max-width: 768px) {
+            .cap-settings {
+                left: 12px;
+                right: 12px;
+                width: auto;
+            }
         }
 
         /* 모드 전환 안내 (잠깐 보였다 사라짐) */
@@ -974,6 +1098,33 @@
         locControl.addTo(map);
         const locEl = locControl.getContainer();
 
+        /* =====================================================
+           캡쳐 설정 (캡쳐 모드에서 0 + Enter 로 여는 메뉴, 이 브라우저에 저장됨)
+        ===================================================== */
+        const SETTINGS_KEY = 'jaeMapSettings';
+        const SETTING_DEFS = [
+            { group: '캡쳐 모드에 표시할 것' },
+            { key: 'showTarget', label: '대상지 글자' },
+            { key: 'showRings',  label: '반경 점선 (500m · 1km)' },
+            { key: 'showRingLabels', label: '반경 거리 글자', hint: '2시 방향, 확대해도 화면 안에 보이게 따라다님' },
+            { key: 'showSubway', label: '지하철 노선 선' },
+            { key: 'showPoi',    label: '주변 시설 이름 (크게)', hint: '끄면 시설·역 글씨를 숨김' },
+            { key: 'showRoad',   label: '도로 이름 (크게)',     hint: '끄면 도로 글씨를 숨김' },
+            { group: '지도 속도' },
+            { key: 'vectorMap',  label: '선명한 벡터 지도',     hint: '끄면 빠른 이미지 지도 (렉이 심할 때)' },
+            { key: 'lowRes',     label: '화질 낮추기',         hint: '벡터 지도가 느릴 때 켜 보세요' }
+        ];
+        const settings = { showTarget: true, showRings: true, showRingLabels: true, showSubway: true, showPoi: true, showRoad: true, vectorMap: true, lowRes: false };
+
+        try {
+            const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+            Object.keys(settings).forEach(function(k) { if (typeof saved[k] === 'boolean') settings[k] = saved[k]; });
+        } catch (e) { /* 저장된 설정이 없거나 읽을 수 없으면 기본값 */ }
+
+        function saveSettings() {
+            try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch (e) { /* 저장 불가 환경이면 이번만 적용 */ }
+        }
+
         /* 지도 배경: 벡터 지도 (OpenFreeMap · 키 불필요)
            MapLibre GL 로 그려서 글씨 크기와 언어를 코드로 조절합니다.
            - 지명은 한글을 우선으로 표시
@@ -996,24 +1147,43 @@
 
         // 캡쳐 모드에서 키우는 글씨: 도로 이름(transportation_name), 시설·역 이름(poi)
         // 크기는 지도 배율에 따라 커지는 값(px)이며, 지도 배율은 Leaflet 배율보다 1 작습니다.
+        // 버스 정류소(poi 의 class=bus)는 이름을 크게 키우지 않고 보통 크기로 둠
+        const IS_BUS = ['any', ['==', ['get', 'class'], 'bus'], ['==', ['get', 'subclass'], 'bus_stop']];
         const CAPTURE_TEXT = {
             transportation_name: { size: ['interpolate', ['linear'], ['zoom'], 12, 12, 14, 17, 16, 21, 20, 24], color: '#111111' },
-            poi:                 { size: ['interpolate', ['linear'], ['zoom'], 13, 12, 14, 15, 16, 19, 20, 22], color: null }
+            poi: {
+                size: ['interpolate', ['linear'], ['zoom'],
+                    13, ['case', IS_BUS, 9, 12], 14, ['case', IS_BUS, 10, 15], 16, ['case', IS_BUS, 12, 19], 20, ['case', IS_BUS, 13, 22]],
+                // 지도 스타일이 정류소 구분 식을 받아들이지 않을 때 쓰는 단순 크기 (모든 시설을 같은 크기로)
+                fallbackSize: ['interpolate', ['linear'], ['zoom'], 13, 12, 14, 15, 16, 19, 20, 22],
+                color: null
+            }
         };
 
         let vectorMode = false;     // true = 벡터 지도 사용 중
+        let vectorLoading = false;
         let vectorLayer = null;
+        let rasterLayer = null;
         let glMap = null;
         let vectorReady = false;
         let captureTextLayers = [];
 
-        function useRasterBasemap() {
+        function removeVectorBasemap() {
             if (vectorLayer) { try { map.removeLayer(vectorLayer); } catch (e) { /* 무시 */ } }
             vectorLayer = null;
             glMap = null;
             vectorMode = false;
             vectorReady = false;
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        }
+
+        function removeRasterBasemap() {
+            if (rasterLayer) { map.removeLayer(rasterLayer); rasterLayer = null; }
+        }
+
+        function useRasterBasemap() {
+            removeVectorBasemap();
+            if (rasterLayer) return;
+            rasterLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
@@ -1025,6 +1195,21 @@
                 return !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl')));
             } catch (e) {
                 return false;
+            }
+        }
+
+        function canUseVector() {
+            return typeof maplibregl !== 'undefined' && typeof L.maplibreGL === 'function' && webglAvailable();
+        }
+
+        // 화질: 낮추기를 켜면 1배(렉 감소), 아니면 화면 배율 그대로
+        function currentPixelRatio() {
+            return settings.lowRes ? 1 : (window.devicePixelRatio || 1);
+        }
+
+        function applyPixelRatio() {
+            if (glMap && typeof glMap.setPixelRatio === 'function') {
+                try { glMap.setPixelRatio(currentPixelRatio()); } catch (e) { /* 지원하지 않는 버전이면 무시 */ }
             }
         }
 
@@ -1042,25 +1227,36 @@
                     const paint = l.paint || {};
                     captureTextLayers.push({
                         id: l.id,
+                        kind: l['source-layer'] === 'transportation_name' ? 'road' : 'poi',
                         rule: rule,
-                        orig: { size: l.layout['text-size'], color: paint['text-color'], haloW: paint['text-halo-width'], haloC: paint['text-halo-color'] }
+                        orig: { field: l.layout['text-field'], size: l.layout['text-size'], color: paint['text-color'], haloW: paint['text-halo-width'], haloC: paint['text-halo-color'] }
                     });
                 }
             });
         }
 
-        // 캡쳐 모드: 도로·시설 이름을 키우고 흰 윤곽을 둘러 읽기 쉽게 / 해제하면 원래대로
+        // 캡쳐 모드: 도로·시설 이름을 키우고 흰 윤곽을 둘러 읽기 쉽게 (설정에서 끄면 글씨를 숨김) / 해제하면 원래대로
         function applyCaptureLabels(on) {
             if (!vectorMode || !glMap || !vectorReady) return;   // 아직 준비 전이면 준비가 끝날 때 현재 상태를 적용
             captureTextLayers.forEach(function(item) {
                 try {
                     if (!glMap.getLayer(item.id)) return;
                     if (on) {
+                        const visible = item.kind === 'road' ? settings.showRoad : settings.showPoi;
+                        if (!visible) {
+                            glMap.setLayoutProperty(item.id, 'text-field', '');
+                            return;
+                        }
+                        glMap.setLayoutProperty(item.id, 'text-field', item.orig.field);
                         glMap.setLayoutProperty(item.id, 'text-size', item.rule.size);
+                        if (item.rule.fallbackSize && JSON.stringify(glMap.getLayoutProperty(item.id, 'text-size')) !== JSON.stringify(item.rule.size)) {
+                            glMap.setLayoutProperty(item.id, 'text-size', item.rule.fallbackSize);   // 적용이 안 됐으면 단순 크기로
+                        }
                         glMap.setPaintProperty(item.id, 'text-halo-color', '#ffffff');
                         glMap.setPaintProperty(item.id, 'text-halo-width', 2.5);
                         if (item.rule.color) glMap.setPaintProperty(item.id, 'text-color', item.rule.color);
                     } else {
+                        glMap.setLayoutProperty(item.id, 'text-field', item.orig.field);
                         glMap.setLayoutProperty(item.id, 'text-size', item.orig.size);
                         glMap.setPaintProperty(item.id, 'text-halo-color', item.orig.haloC);
                         glMap.setPaintProperty(item.id, 'text-halo-width', item.orig.haloW);
@@ -1071,15 +1267,26 @@
         }
 
         async function initVectorBasemap() {
+            if (vectorLoading || vectorMode) return;
+            vectorLoading = true;
             try {
                 const res = await fetch(VECTOR.style);
                 if (!res.ok) throw new Error('지도 스타일을 불러오지 못했습니다 (HTTP ' + res.status + ')');
                 const style = await res.json();
+                if (!settings.vectorMap) { vectorLoading = false; return; }   // 불러오는 사이에 설정에서 껐으면 중단
                 koreanizeStyle(style);
 
-                vectorLayer = L.maplibreGL({ style: style, attribution: VECTOR.attribution }).addTo(map);
+                vectorLayer = L.maplibreGL({
+                    style: style,
+                    attribution: VECTOR.attribution,
+                    pixelRatio: currentPixelRatio(),
+                    fadeDuration: 0              // 글씨가 서서히 나타나는 효과를 없애 움직일 때 가볍게
+                }).addTo(map);
                 glMap = vectorLayer.getMaplibreMap();
                 vectorMode = true;
+                vectorLoading = false;
+                removeRasterBasemap();
+                updateTargetTag();               // 이미지 지도용 덧그림 글씨 정리
 
                 glMap.on('load', function() {
                     vectorReady = true;
@@ -1090,12 +1297,27 @@
                     if (DEBUG) console.warn('[동네개발맵] 벡터 지도 오류:', e && e.error && e.error.message ? e.error.message : e);
                 });
             } catch (e) {
+                vectorLoading = false;
                 console.warn('[동네개발맵] 벡터 지도를 쓸 수 없어 기본 이미지 지도로 전환합니다.', e && e.message ? e.message : e);
                 useRasterBasemap();
+                updateTargetTag();
             }
         }
 
-        if (typeof maplibregl !== 'undefined' && typeof L.maplibreGL === 'function' && webglAvailable()) {
+        // 설정에서 '선명한 벡터 지도'를 바꿨을 때
+        function applyBasemapSetting() {
+            if (settings.vectorMap) {
+                if (!vectorMode && !vectorLoading) {
+                    if (canUseVector()) initVectorBasemap();
+                    else useRasterBasemap();
+                }
+            } else if (vectorMode) {
+                useRasterBasemap();
+                updateTargetTag();               // 이미지 지도에서는 주변 이름을 덧그림
+            }
+        }
+
+        if (settings.vectorMap && canUseVector()) {
             initVectorBasemap();
         } else {
             useRasterBasemap();
@@ -1123,10 +1345,11 @@
 
         // 캡쳐 모드 상태
         let captureMode = false;   // true = 지도만 표시
-        let targetHidden = false;  // true = '대상지' 표시를 끈 상태 (캡쳐 모드에서 0 + Enter)
         let targetMarker = null;   // 지도 위 '대상지' 표시
         let targetZone = null;     // '대상지' 표시가 붙어 있는 구역
         let ringGroup = null;      // 대상지 반경(500m·1km) 표시
+        let ringCenter = null;     // 반경의 중심
+        let ringLabels = [];       // 반경 거리 글자 [{ r, marker }]
         let poiLayer = null;       // 주변 도로·시설 이름 표시 (이미지 지도로 전환됐을 때만 사용)
         let subwayGroup = null;    // 지하철 노선 표시
         let subwayData = null;     // 불러온 지하철 노선 { key, lines }
@@ -1143,9 +1366,10 @@
         const GU_KML_URL = 'jae/seoulgu.kml';
         const ZONE_KML_URLS = ['jae/jae.kml', 'assets/jae.kml', 'jae.kml'];
 
-        const DEBUG = true;       // 문제가 해결되면 false 로 바꾸면 콘솔 안내 로그가 사라짐
+        const DEBUG = false;      // 문제를 찾을 때는 true 로 바꾸면 콘솔에 안내 로그가 나옴
         const ZOOM_ZONES = 14;    // 이 배율보다 더 축소하면 구역 대신 자치구별 개수 원을 표시 (숫자가 클수록 원이 더 빨리 나타남)
         const BOUND_PAD = 0.08;   // 서울 경계 바깥으로 벗어날 수 있는 여유 (경계 크기 대비 비율)
+        const SIMPLIFY_TOL = 0.00004;   // 자치구 경계 점 줄이기 허용 오차(도, 약 4m) - 눈에 안 띄면서 지도가 훨씬 가벼워짐
 
         const BORDER_STYLE = { color: '#56616c', weight: 1.5, opacity: 0.9 };      // 자치구 경계선 (얇지만 또렷하게)
 
@@ -1328,13 +1552,53 @@
         }
 
         /* ---------- 서울 자치구: 경계선 / 서울 밖 흐림 / 이동 제한 ---------- */
+        // 도형의 점을 줄임 (Ramer–Douglas–Peucker). 점이 수만 개인 경계선은 확대·축소할 때마다 다시 그려서 렉의 원인이 됨
+        function simplifyRing(ring, tol) {
+            const n = ring.length;
+            if (n < 30) return ring;
+            const keep = new Uint8Array(n);
+            keep[0] = 1;
+            keep[n - 1] = 1;
+            const t2 = tol * tol;
+            const stack = [[0, n - 1]];
+            while (stack.length) {
+                const seg = stack.pop();
+                const a = seg[0], b = seg[1];
+                const ax = ring[a].lng, ay = ring[a].lat, bx = ring[b].lng, by = ring[b].lat;
+                const dx = bx - ax, dy = by - ay;
+                const len2 = dx * dx + dy * dy;
+                let maxD = 0, idx = -1;
+                for (let i = a + 1; i < b; i++) {
+                    const px = ring[i].lng, py = ring[i].lat;
+                    let t = len2 === 0 ? 0 : ((px - ax) * dx + (py - ay) * dy) / len2;
+                    t = Math.max(0, Math.min(1, t));
+                    const cx = ax + t * dx, cy = ay + t * dy;
+                    const d2 = (px - cx) * (px - cx) + (py - cy) * (py - cy);
+                    if (d2 > maxD) { maxD = d2; idx = i; }
+                }
+                if (maxD > t2 && idx > 0) {
+                    keep[idx] = 1;
+                    stack.push([a, idx], [idx, b]);
+                }
+            }
+            const out = [];
+            for (let i = 0; i < n; i++) if (keep[i]) out.push(ring[i]);
+            return out.length >= 4 ? out : ring;
+        }
+
         function buildSeoul(guLayer) {
+            let pointsBefore = 0;
+            let pointsAfter = 0;
             guLayer.eachLayer(function(l) {
                 const props = (l.feature && l.feature.properties) || {};
                 const name = String(props.name || '').trim();
-                const rings = [];
+                let rings = [];
                 collectRings(l, rings);
                 if (!name || rings.length === 0) return;
+
+                rings.forEach(function(r) { pointsBefore += r.length; });
+                rings = rings.map(function(r) { return simplifyRing(r, SIMPLIFY_TOL); });
+                rings.forEach(function(r) { pointsAfter += r.length; });
 
                 const bounds = L.latLngBounds([]);
                 rings.forEach(function(r) { r.forEach(function(p) { bounds.extend(p); }); });
@@ -1342,6 +1606,7 @@
             });
 
             if (guList.length === 0) return;
+            if (DEBUG) console.log('[동네개발맵] 자치구 경계 점 수 ' + pointsBefore + ' → ' + pointsAfter + ' (지도를 가볍게 하려고 줄임)');
 
             seoulBounds = L.latLngBounds([]);
             const allRings = [];
@@ -1591,17 +1856,25 @@
             dongTimer = setTimeout(function() { fetchDong(center, key, gu); }, 800);   // 지도를 멈춘 뒤에만 조회
         }
 
+        // 지도를 계속 움직이는 동안에는 기다렸다가, 멈추면 한 번만 갱신 (렉 감소)
+        let viewTimer = null;
+        function scheduleUpdateView() {
+            clearTimeout(viewTimer);
+            viewTimer = setTimeout(updateView, 120);
+        }
+
         function updateView() {
             if (zones.length === 0 && !circlesGroup && guList.length === 0) return;
 
             const lowZoom = map.getZoom() < ZOOM_ZONES;
             const zoomedOut = !!circlesGroup && lowZoom;
             // 화면 중심 자치구 (축소 상태에서는 의미가 없으므로 비움)
-            const current = (guList.length > 0 && !lowZoom) ? dominantGu() : '';
+            // 캡쳐 모드에서는 위치 표시가 숨겨져 있으므로 계산을 생략
+            const current = (guList.length > 0 && !lowZoom && !captureMode) ? dominantGu() : '';
 
             if (DEBUG) console.log('[동네개발맵] 화면 갱신 - 배율 ' + map.getZoom() + (zoomedOut ? ' (축소: 원 표시)' : ' (확대: 구역 표시)') + ', 현재 위치 자치구: ' + (guList.length ? (current || '(없음)') : '(자치구 KML 없음)'));
 
-            updateLocation(current, !lowZoom);
+            if (!captureMode) updateLocation(current, !lowZoom);
 
             if (zoomedOut) {
                 if (!map.hasLayer(circlesGroup)) circlesGroup.addTo(map);
@@ -1675,7 +1948,7 @@
                 renderLeft();
                 fitToZones();
                 updateView();
-                map.on('moveend', updateView);
+                map.on('moveend', scheduleUpdateView);
             } catch (e) {
                 initDone = true;
                 console.error('구역 처리 오류:', e);
@@ -1790,7 +2063,6 @@
             if (currentZone && currentZone !== zone && currentZone.layer.setStyle) {
                 currentZone.layer.setStyle(defaultStyle);
             }
-            if (currentZone !== zone) targetHidden = false;   // 다른 구역을 고르면 '대상지' 표시를 다시 켬
             currentZone = zone;
             if (prevZone) applyLabelColor(prevZone);
             applyLabelColor(zone);
@@ -1854,6 +2126,10 @@
 
         document.addEventListener('keydown', function(e) {
             if (e.key !== 'Escape') return;
+            if (settingsOpen) {
+                closeSettings();
+                return;
+            }
             if (captureMode) {
                 stage1Until = 0;
                 setCaptureMode(false);
@@ -2028,14 +2304,14 @@
            2단계: 55 입력 후 Enter        → 알림이 뜨며 '지도만' 표시 (헤더·패널·버튼 모두 숨김)
            캡쳐 모드에서
              · 선택한 구역은 도형 정가운데에 빨간 배경·흰 글씨 '대상지'로 표시
-             · 0 입력 후 Enter : '대상지' 표시 끄기 / 다시 켜기
-             · 55 입력 후 Enter 또는 Esc : 캡쳐 모드 해제
+             · 0 입력 후 Enter : 설정 메뉴 열기 / 닫기 (대상지·반경·지하철·주변 이름 표시, 지도 속도)
+             · 55 입력 후 Enter 또는 Esc : 캡쳐 모드 해제 (설정 메뉴가 열려 있으면 Esc 는 메뉴부터 닫음)
            검색창에 글자를 입력하는 중에는 동작하지 않음. 번호는 아래 상수에서 바꿀 수 있음.
            (지도 저작권 표기는 지도 이용 조건이라 캡쳐 모드에서도 남겨 둠)
         ===================================================== */
         const STAGE1_CODE = '12341234';
         const STAGE2_CODE = '55';
-        const TARGET_TOGGLE_CODE = '0';
+        const SETTINGS_CODE = '0';
         const STAGE1_TTL_MS = 60000;
 
         let stage1Until = 0;
@@ -2153,17 +2429,51 @@
 
         /* ---------- 대상지 반경: 흰 점선 500m · 1km ---------- */
         const RING_RADII = [500, 1000];
-        const SHOW_RING_LABELS = true;   // 점선 위 '500m', '1km' 글자 (끄려면 false)
+        const RING_LABEL_BEARING = 60;   // 거리 글자 기본 위치: 2시 방향 (12시 = 0°, 3시 = 90°)
+
+        // 중심에서 r(m) 떨어진 원 위의 점 (bearing: 12시 방향 기준 시계 방향 각도)
+        function ringPointAt(center, r, bearing) {
+            const rad = bearing * Math.PI / 180;
+            return L.latLng(
+                center.lat + (r * Math.cos(rad)) / 111320,
+                center.lng + (r * Math.sin(rad)) / (111320 * Math.cos(center.lat * Math.PI / 180))
+            );
+        }
+
+        // 거리 글자를 2시 방향에 두되, 그 자리가 화면 밖이면 원을 따라 화면 안쪽의 가장 가까운 자리로 옮김
+        // (확대했을 때 1km 글자가 사라지던 문제 방지). 원 자체가 화면에 안 보이면 글자도 숨김
+        function positionRingLabels() {
+            if (!ringCenter || ringLabels.length === 0) return;
+            const size = map.getSize();
+            ringLabels.forEach(function(item) {
+                let chosen = null;
+                for (let k = 0; k <= 60 && !chosen; k++) {
+                    const offsets = k === 0 ? [0] : [k * 6, -k * 6];
+                    for (let i = 0; i < offsets.length && !chosen; i++) {
+                        const ll = ringPointAt(ringCenter, item.r, RING_LABEL_BEARING + offsets[i]);
+                        const p = map.latLngToContainerPoint(ll);
+                        if (p.x > 40 && p.x < size.x - 40 && p.y > 18 && p.y < size.y - 18) chosen = ll;
+                    }
+                }
+                if (chosen) {
+                    item.marker.setLatLng(chosen);
+                    item.marker.setOpacity(1);
+                } else {
+                    item.marker.setOpacity(0);
+                }
+            });
+        }
 
         function drawRings(center) {
             const parts = [];
+            ringCenter = center;
+            ringLabels = [];
             RING_RADII.forEach(function(r) {
                 // 밝은 지도에서도 흰 점선이 보이도록 아주 옅은 그림자 선을 아래에 깔아 둠
                 parts.push(L.circle(center, { pane: 'ringPane', radius: r, interactive: false, fill: false, color: '#000000', opacity: 0.25, weight: 4 }));
                 parts.push(L.circle(center, { pane: 'ringPane', radius: r, interactive: false, fill: false, color: '#ffffff', opacity: 1, weight: 2.5, dashArray: '9 9' }));
-                if (SHOW_RING_LABELS) {
-                    const top = L.latLng(center.lat + r / 111320, center.lng);
-                    parts.push(L.marker(top, {
+                if (settings.showRingLabels) {
+                    const labelMarker = L.marker(ringPointAt(center, r, RING_LABEL_BEARING), {
                         pane: 'ringPane',
                         interactive: false,
                         keyboard: false,
@@ -2172,10 +2482,13 @@
                             html: '<div class="ring-label">' + (r >= 1000 ? (r / 1000) + 'km' : r + 'm') + '</div>',
                             iconSize: [0, 0]
                         })
-                    }));
+                    });
+                    parts.push(labelMarker);
+                    ringLabels.push({ r: r, marker: labelMarker });
                 }
             });
             ringGroup = L.layerGroup(parts).addTo(map);
+            positionRingLabels();
         }
 
         /* ---------- 주변 도로·주요 시설 이름 (캡쳐 모드) ----------
@@ -2308,9 +2621,9 @@
             // '대상지' 글자와 반경 글자 자리를 먼저 비워 둠
             const cp = map.latLngToContainerPoint(poiData.center);
             reserve(cp.x, cp.y, 96, 38);          // '대상지' 글자 (22px, 3글자)
-            RING_RADII.forEach(function(r) {
-                const tp = map.latLngToContainerPoint(L.latLng(poiData.center.lat + r / 111320, poiData.center.lng));
-                reserve(tp.x, tp.y - 10, 58, 20);     // '500m' · '1km' 글자
+            ringLabels.forEach(function(item) {
+                const tp = map.latLngToContainerPoint(item.marker.getLatLng());
+                reserve(tp.x, tp.y, 58, 20);          // '500m' · '1km' 글자 (지금 놓인 자리)
             });
 
             const counts = {};
@@ -2320,6 +2633,7 @@
             });
 
             sorted.forEach(function(it) {
+                if (it.kind === 'road' ? !settings.showRoad : !settings.showPoi) return;   // 설정에서 끈 종류
                 if ((counts[it.kind] || 0) >= POI_LIMIT[it.kind]) return;
 
                 const p = map.latLngToContainerPoint(it.latlng);
@@ -2385,7 +2699,11 @@
             }
         }
 
-        map.on('moveend', function() { if (captureMode) renderPoiLabels(); });
+        map.on('moveend', function() {
+            if (!captureMode) return;
+            positionRingLabels();    // 거리 글자를 화면 안쪽 자리로
+            renderPoiLabels();
+        });
 
         /* ---------- 지하철 노선 ----------
            OpenStreetMap 데이터(Overpass)에서 대상지 주변의 지하철·경전철 선로를 받아
@@ -2469,7 +2787,7 @@
 
         function drawSubway() {
             clearSubway();
-            if (!captureMode || !currentZone || !subwayData || !subwayData.lines.length) return;
+            if (!captureMode || !currentZone || !settings.showSubway || !subwayData || !subwayData.lines.length) return;
 
             const parts = [];
             subwayData.lines.forEach(function(ln) {
@@ -2544,11 +2862,12 @@
         function updateTargetTag() {
             if (targetMarker) { map.removeLayer(targetMarker); targetMarker = null; }
             if (ringGroup) { map.removeLayer(ringGroup); ringGroup = null; }
+            ringLabels = [];
             clearPoiLabels();
             clearSubway();
 
             const active = captureMode && currentZone;      // 캡쳐 모드에서 구역이 선택돼 있음
-            const wantTag = active && !targetHidden;        // '대상지' 글자를 보이는 상태
+            const wantTag = active && settings.showTarget;  // '대상지' 글자를 보이는 상태
 
             // 이전 구역의 이름표 복구
             if (targetZone && (!wantTag || targetZone !== currentZone)) {
@@ -2558,9 +2877,10 @@
             if (!active) { poiReq++; subwayReq++; return; }   // 진행 중이던 주변 정보 요청은 무효 처리
 
             const center = labelPoint(currentZone.layer);
-            drawRings(center);                              // 반경은 '대상지' 글자를 꺼도 그대로 표시
-            loadSubway(center);                             // 지하철 노선
-            if (!vectorMode) loadPoi(center);               // 벡터 지도에서는 지도 자체 글씨를 키우므로 이미지 지도일 때만 덧그림
+            if (settings.showRings) drawRings(center);      // 반경 (설정에서 켜고 끌 수 있음)
+            if (settings.showSubway) loadSubway(center); else subwayReq++;   // 지하철 노선
+            // 벡터 지도에서는 지도 자체 글씨를 키우므로 이미지 지도일 때만 주변 이름을 덧그림
+            if (!vectorMode && (settings.showPoi || settings.showRoad)) loadPoi(center); else poiReq++;
             if (!wantTag) return;
 
             targetMarker = L.marker(center, {
@@ -2579,10 +2899,106 @@
             setLabelHidden(currentZone, true);
         }
 
+        /* ---------- 설정 메뉴 ---------- */
+        let settingsOpen = false;
+        let settingsPanel = null;
+        const settingsInputs = {};
+
+        function applySetting(key) {
+            if (key === 'vectorMap') { applyBasemapSetting(); return; }
+            if (key === 'lowRes') { applyPixelRatio(); return; }
+            if (key === 'showPoi' || key === 'showRoad') applyCaptureLabels(captureMode);   // 벡터 지도 글씨
+            updateTargetTag();                                                              // 대상지·반경·지하철·이미지 지도 글씨
+        }
+
+        function buildSettingsPanel() {
+            settingsPanel = document.createElement('div');
+            settingsPanel.className = 'cap-settings';
+            settingsPanel.hidden = true;
+            settingsPanel.setAttribute('role', 'dialog');
+            settingsPanel.setAttribute('aria-label', '캡쳐 설정');
+
+            const head = document.createElement('div');
+            head.className = 'cap-settings-head';
+            const title = document.createElement('strong');
+            title.textContent = '캡쳐 설정';
+            const closeBtn = document.createElement('button');
+            closeBtn.type = 'button';
+            closeBtn.className = 'cap-close';
+            closeBtn.textContent = '닫기 (Esc)';
+            closeBtn.addEventListener('click', closeSettings);
+            head.appendChild(title);
+            head.appendChild(closeBtn);
+            settingsPanel.appendChild(head);
+
+            SETTING_DEFS.forEach(function(def) {
+                if (def.group) {
+                    const g = document.createElement('div');
+                    g.className = 'cap-group';
+                    g.textContent = def.group;
+                    settingsPanel.appendChild(g);
+                    return;
+                }
+
+                const row = document.createElement('label');
+                row.className = 'cap-row';
+
+                const text = document.createElement('span');
+                text.textContent = def.label;
+                if (def.hint) {
+                    const small = document.createElement('small');
+                    small.textContent = def.hint;
+                    text.appendChild(small);
+                }
+
+                const input = document.createElement('input');
+                input.type = 'checkbox';
+                input.checked = !!settings[def.key];
+                input.addEventListener('change', function() {
+                    settings[def.key] = input.checked;
+                    saveSettings();
+                    applySetting(def.key);
+                    input.blur();   // 포커스를 풀어 55 + Enter 등 숫자 입력이 계속 동작하게
+                });
+                settingsInputs[def.key] = input;
+
+                const sw = document.createElement('span');
+                sw.className = 'cap-switch';
+
+                row.appendChild(text);
+                row.appendChild(input);
+                row.appendChild(sw);
+                settingsPanel.appendChild(row);
+            });
+
+            const hint = document.createElement('div');
+            hint.className = 'cap-hint';
+            hint.textContent = '0 + Enter 또는 Esc 로 닫기 · 설정은 이 브라우저에 저장돼요';
+            settingsPanel.appendChild(hint);
+
+            document.body.appendChild(settingsPanel);
+        }
+
+        function openSettings() {
+            if (!settingsPanel) buildSettingsPanel();
+            Object.keys(settingsInputs).forEach(function(k) { settingsInputs[k].checked = !!settings[k]; });
+            settingsPanel.hidden = false;
+            settingsOpen = true;
+        }
+
+        function closeSettings() {
+            if (settingsPanel) settingsPanel.hidden = true;
+            settingsOpen = false;
+        }
+
+        function toggleSettings() {
+            if (settingsOpen) closeSettings(); else openSettings();
+        }
+
         function setCaptureMode(on) {
             captureMode = on;
             document.body.classList.toggle('capture-mode', on);
-            if (on) targetHidden = false;
+            if (!on) closeSettings();
             applyCaptureLabels(on);                  // 벡터 지도: 도로·시설 이름 크기 전환
 
             // 화면 구성이 바뀌었으니 지도 크기를 다시 맞춤
@@ -2592,7 +3008,7 @@
 
             updateTargetTag();
 
-            showToast(on ? '캡쳐 모드 켜짐  (0 + Enter: 대상지 표시 끄기/켜기 · 55 + Enter 또는 Esc: 해제)' : '캡쳐 모드 해제');
+            showToast(on ? '캡쳐 모드 켜짐  (0 + Enter: 설정 · 55 + Enter 또는 Esc: 해제)' : '캡쳐 모드 해제');
             if (DEBUG) console.log('[동네개발맵] 캡쳐 모드:', on ? '켜짐' : '해제');
         }
 
@@ -2618,9 +3034,8 @@
 
                 let handled = false;
                 if (captureMode) {
-                    if (code === TARGET_TOGGLE_CODE) {
-                        targetHidden = !targetHidden;       // 알림 없이 '대상지' 표시만 껐다 켰다
-                        updateTargetTag();
+                    if (code === SETTINGS_CODE) {
+                        toggleSettings();                   // 설정 메뉴 열기/닫기 (알림 없음)
                         handled = true;
                     } else if (code === STAGE2_CODE) {
                         setCaptureMode(false);
