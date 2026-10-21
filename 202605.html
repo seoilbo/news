@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaflet 노선도 최종 수정 테스트</title>
+    <title>Leaflet 노선도 교정 테스트</title>
     
-    <!-- [수정] 공급처를 unpkg에서 가장 안정적인 cdnjs 인프라로 전면 교체 -->
+    <!-- 다시 원래대로 가장 깔끔한 외부 주소로 적용합니다 -->
     <link rel="stylesheet" href="https://cloudflare.com" />
     <script src="https://cloudflare.com"></script>
-    
-    <!-- CSV 파싱 라이브러리 -->
     <script src="https://cloudflare.com"></script>
 
     <style>
@@ -26,25 +24,18 @@
     <div id="map"></div>
 
     <script>
-        // Leaflet 라이브러리가 완전히 로드되었는지 확인하는 안전 함수
-        function initMap() {
-            if (typeof L === 'undefined') {
-                console.error("Leaflet 라이브러리가 로드되지 못했습니다. 주소를 다시 확인하거나 인터넷 연결을 확인하세요.");
-                alert("지도 라이브러리를 불러오지 못했습니다. 잠시 후 새로고침(Ctrl+F5) 해주세요.");
-                return;
-            }
-
+        window.addEventListener('load', function() {
             // 1. 지도 초기화
             var map = L.map('map').setView([37.20034, 127.09569], 11);
 
-            // 2. 배경 지도 타일 추가 (OpenStreetMap)
+            // 2. 배경 지도 타일 추가
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(map);
 
             var lineCoordinates = [];
 
-            // 3. CSV 불러오기
+            // 3. CSV 비동기 불러오기
             Papa.parse("jae/subway.csv", {
                 download: true,
                 header: true,
@@ -52,10 +43,17 @@
                 complete: function(results) {
                     var data = results.data;
 
-                    if (data && data.length > 0 && data[0].순번) {
+                    if (!data || data.length === 0) {
+                        console.warn("CSV 데이터가 비어있습니다.");
+                        return;
+                    }
+
+                    // [교정] 배열 내부 첫 번째 원소에 '순번' 필드가 있는지 안전하게 체크 후 정렬
+                    if (data[0] && data[0].순번 !== undefined) {
                         data.sort((a, b) => parseInt(a.순번) - parseInt(b.순번));
                     }
 
+                    // 데이터 순회하며 마커 및 좌표 수집
                     data.forEach(function(row) {
                         var lat = parseFloat(row.위도);
                         var lng = parseFloat(row.경도);
@@ -63,6 +61,7 @@
                         if (!isNaN(lat) && !isNaN(lng)) {
                             lineCoordinates.push([lat, lng]);
 
+                            // 타입이 '역'이거나 역사명 필드가 있는 경우 마커 표시
                             if (row.타입 === "역" || (row.역사명 && !row.타입)) {
                                 var stationName = row.역사명 || row.이름 || "지하철역";
                                 var lineName = row.호선 || "";
@@ -74,7 +73,7 @@
                         }
                     });
 
-                    // 4. 실제 구불구불한 선형 그리기
+                    // 4. 구불구불한 폴리라인 그리기
                     if (lineCoordinates.length > 0) {
                         var polyline = L.polyline(lineCoordinates, {
                             color: '#FF3377',
@@ -83,6 +82,7 @@
                             lineJoin: 'round'
                         }).addTo(map);
 
+                        // 선형 크기에 맞춰 지도 화면 자동 줌
                         map.fitBounds(polyline.getBounds());
                     }
                 },
@@ -90,10 +90,7 @@
                     console.error("CSV 로드 실패:", err);
                 }
             });
-        }
-
-        // 페이지와 외부 스크립트가 모두 완료되면 지도 초기화 함수 실행
-        window.addEventListener('load', initMap);
+        });
     </script>
 </body>
 </html>
