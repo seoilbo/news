@@ -220,22 +220,26 @@
             gap: 10px;
         }
 
+        /* 썸네일은 항상 16:9 비율 유지 (가로폭만 정하면 세로는 자동 계산, 원본 사진은 비율에 맞게 잘라서 채움) */
         .article-card-thumb {
-            width: 160px;
-            height: 110px;
+            position: relative;
+            width: 200px;
+            aspect-ratio: 16 / 9;
+            align-self: flex-start; /* 글이 길어도 사진이 세로로 늘어나지 않게 */
             background-color: #f8f9fa;
             border: 1px solid #e1e4e8;
             flex-shrink: 0;
             overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .article-card-thumb img {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
         }
 
         /* 최상단 대표 기사: 왼쪽 제목+내용, 오른쪽 큰 사진 */
@@ -265,8 +269,7 @@
 
         .article-card-featured .article-card-thumb {
             width: 52%;
-            height: auto;
-            aspect-ratio: 3 / 2;
+            aspect-ratio: 16 / 9;
         }
 
         .no-article-box {
@@ -349,8 +352,7 @@
             .main-container { margin: 20px auto 40px auto; padding: 0 15px; }
             
             .article-card-thumb {
-                width: 110px;
-                height: 80px;
+                width: 120px; /* 세로는 16:9로 자동 계산 */
             }
             .article-card-title {
                 font-size: 15px;
