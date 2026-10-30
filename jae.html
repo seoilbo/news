@@ -6,7 +6,7 @@
     <meta property="og:title" content="동네개발맵 - 서오일보">
     <meta property="og:type" content="website">
     <meta property="og:image" content="assets/thum_OG.jpg">
-    <title>동네개발맵 | 서오일보</title>
+    <title>동네개발맵 - 서오일보</title>
     <link rel="icon" href="assets/favi.png" type="image/png">
 
     <!-- Leaflet CSS -->
@@ -498,37 +498,37 @@
             color: #a61c1c;
         }
 
-        /* KML 설명 안의 표 */
+        /* KML 설명 안의 표: 구글 어스에서 직접 꾸민 표(인라인 스타일)는 그대로 두고, 패널 폭만 넘지 않게 */
         .detail-desc table {
-            width: 100% !important;
             max-width: 100%;
-            border-collapse: collapse;
-            table-layout: auto;
-            margin: 6px 0 10px;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .detail-desc th,
-        .detail-desc td {
-            border: 1px solid var(--line);
-            padding: 6px 8px;
-            text-align: left;
-            vertical-align: top;
-            word-break: keep-all;
-            overflow-wrap: anywhere;
-        }
-
-        .detail-desc th {
-            background: #f2f4f6;
-            font-weight: 700;
-            color: #111111;
-            white-space: nowrap;
         }
 
         .detail-desc img {
             max-width: 100%;
             height: auto;
+        }
+
+        /* ExtendedData 값을 자동으로 만든 표 */
+        .detail-desc table.kml-data {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 6px 0 10px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .detail-desc table.kml-data th,
+        .detail-desc table.kml-data td {
+            border: 1px solid var(--line);
+            padding: 6px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .detail-desc table.kml-data th {
+            background: #f2f4f6;
+            font-weight: 700;
+            white-space: nowrap;
         }
 
         /* 기사 목록 (관련 뉴스 / 검색 결과 공통) */
@@ -1446,7 +1446,7 @@
                     return x;
                 });
                 if (!rows.length) return pm;
-                const html = '<table><tbody>' + rows.map(function(r) {
+                const html = '<table class="kml-data"><tbody>' + rows.map(function(r) {
                     return '<tr><th>' + r[0] + '</th><td>' + r[1] + '</td></tr>';
                 }).join('') + '</tbody></table>';
                 return pm.replace(/<\/Placemark>\s*$/, '<description><![CDATA[' + html.replace(/\]\]>/g, ']]]]><![CDATA[>') + ']]></description></Placemark>');
@@ -1463,6 +1463,63 @@
             const doc = new DOMParser().parseFromString(text, 'text/xml');
             const errEl = doc.getElementsByTagName('parsererror')[0];
             return { doc: doc, error: errEl ? errEl.textContent.trim().replace(/\s+/g, ' ').slice(0, 220) : '' };
+        }
+
+        /* 구글 어스(신버전)는 구역 정보 카드(표)를 <description>이 아니라
+           스타일의 <BalloonStyle><text> 안에 저장합니다.
+           구역 → styleUrl → StyleMap(normal) → 스타일 → BalloonStyle 순서로 찾아
+           설명(description)이 비어 있는 구역의 설명으로 옮겨 줍니다. 옮긴 개수를 돌려줍니다. */
+        function injectBalloonDescriptions(doc) {
+            const byId = {};
+            const all = doc.getElementsByTagName('*');
+            for (let i = 0; i < all.length; i++) {
+                const id = all[i].getAttribute('id') || all[i].getAttribute('kml:id');
+                if (id) byId[id] = all[i];
+            }
+            function childText(el, tag) {
+                for (let c = el.firstElementChild; c; c = c.nextElementSibling) {
+                    if (c.localName === tag) return c.textContent;
+                }
+                return null;
+            }
+            function balloonOf(id, depth) {
+                const el = byId[id];
+                if (!el || depth > 4) return '';
+                if (el.localName === 'StyleMap') {
+                    const pairs = el.getElementsByTagName('Pair');
+                    for (let i = 0; i < pairs.length; i++) {
+                        if ((childText(pairs[i], 'key') || '').trim() === 'normal') {
+                            return balloonOf((childText(pairs[i], 'styleUrl') || '').trim().replace(/^#/, ''), depth + 1);
+                        }
+                    }
+                    return '';
+                }
+                const bs = el.getElementsByTagName('BalloonStyle')[0];
+                return bs ? (childText(bs, 'text') || '') : '';
+            }
+
+            let injected = 0;
+            const pms = doc.getElementsByTagName('Placemark');
+            for (let i = 0; i < pms.length; i++) {
+                const pm = pms[i];
+                const hasDesc = !!(childText(pm, 'description') || '').trim();
+                if (hasDesc) continue;
+                const styleUrl = (childText(pm, 'styleUrl') || '').trim().replace(/^#/, '');
+                if (!styleUrl) continue;
+                let html = balloonOf(styleUrl, 0).trim();
+                if (!html) continue;
+                html = html.replace(/\$\[name\]/g, childText(pm, 'name') || '').replace(/\$\[description\]/g, '');
+                const old = pm.getElementsByTagName('description')[0];
+                const d = old || doc.createElementNS(pm.namespaceURI, 'description');
+                d.textContent = html;
+                if (!old) {
+                    const nameEl = pm.getElementsByTagName('name')[0];
+                    if (nameEl && nameEl.parentNode === pm) pm.insertBefore(d, nameEl.nextSibling);
+                    else pm.insertBefore(d, pm.firstChild);
+                }
+                injected++;
+            }
+            return injected;
         }
 
         function loadKmlLegacy(url) {
@@ -1502,7 +1559,10 @@
             if (parsed.error) {
                 throw new Error(url + ' 의 XML 형식이 올바르지 않습니다: ' + parsed.error);
             }
-            return omnivore.kml.parse(text);
+            const moved = injectBalloonDescriptions(parsed.doc);
+            kmlInfo[url].balloons = moved;
+            if (DEBUG && moved) console.log('[동네개발맵] ' + url + ' → 정보 카드(BalloonStyle) ' + moved + '개를 설명으로 옮김');
+            return omnivore.kml.parse(moved ? new XMLSerializer().serializeToString(parsed.doc) : text);
         }
 
         // 주소 목록을 앞에서부터 시도 (파일이 없을 때만 다음 주소로. 형식 오류는 바로 알림)
@@ -2140,7 +2200,10 @@
             const imgTagMatch = description.match(/<img[^>]+src="([^">]+)"/i) || description.match(/<img[^>]+src='([^'>]+)'/i);
             const urlMatch = description.match(/(https?:\/\/[^\s"'<>]+\.(png|jpg|jpeg|gif|webp))/i);
 
-            if (imgTagMatch && imgTagMatch[1]) {
+            const hasTable = /<table[\s>]/i.test(description);   // 표 안의 이미지는 표 모양 그대로 둠
+            if (hasTable) {
+                // 표 그대로 표시
+            } else if (imgTagMatch && imgTagMatch[1]) {
                 imageUrl = imgTagMatch[1];
                 description = description.replace(/<img[^>]*>/gi, '');
             } else if (urlMatch && urlMatch[1]) {
