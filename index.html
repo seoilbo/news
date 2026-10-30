@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:url" content="https://sin13248920.github.io/seo-weekly-test">
+    <meta property="og:url" content="https://seoilbo.github.io/news">
     <meta property="og:title" content="서오일보">
     <meta property="og:type" content="website">
     <meta property="og:image" content="assets/thum_OG.jpg">
@@ -994,7 +994,7 @@
                     <a href="category.html?type=culture">문화</a>
                     <a href="category.html?type=opinion">오피니언</a>
                     <a href="jae.html">동네개발맵</a>
-                    <a href="https://sin13248920.github.io/weekly-seo-e-viewer/">월간서오</a>
+                    <a href="https://seoilbo.github.io/monthly/">월간서오</a>
                 </nav>
             </div>
         </div>
@@ -1106,7 +1106,7 @@
                     </div>
                 </div>
                 <div class="service-card">
-                    <a href="https://sin13248920.github.io/weekly-seo-e-viewer/" class="service-card-title">
+                    <a href="https://seoilbo.github.io/monthly/" class="service-card-title">
                         <span>월간서오</span>
                         <span class="service-card-arrow"><img src="assets/rarrow.png" alt="바로가기"></span>
                     </a>
@@ -1229,7 +1229,7 @@
         async function fetchArticles() {
             const articles = [];
             try {
-                const response = await fetch("https://api.github.com/repos/sin13248920/seo-weekly-test/contents/articles");
+                const response = await fetch("https://api.github.com/repos/seoilbo/news/contents/articles");
                 if (!response.ok) throw new Error(`GitHub API 오류: ${response.status}`);
                 const files = await response.json();
 
