@@ -6,7 +6,7 @@
     <meta property="og:title" content="동네개발맵 - 서오일보">
     <meta property="og:type" content="website">
     <meta property="og:image" content="assets/thum_OG.jpg">
-    <title>동네개발맵 - 서오일보</title>
+    <title>동네개발맵 | 서오일보</title>
     <link rel="icon" href="assets/favi.png" type="image/png">
 
     <!-- Leaflet CSS -->
@@ -496,6 +496,39 @@
 
         .detail-desc a {
             color: #a61c1c;
+        }
+
+        /* KML 설명 안의 표 */
+        .detail-desc table {
+            width: 100% !important;
+            max-width: 100%;
+            border-collapse: collapse;
+            table-layout: auto;
+            margin: 6px 0 10px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .detail-desc th,
+        .detail-desc td {
+            border: 1px solid var(--line);
+            padding: 6px 8px;
+            text-align: left;
+            vertical-align: top;
+            word-break: keep-all;
+            overflow-wrap: anywhere;
+        }
+
+        .detail-desc th {
+            background: #f2f4f6;
+            font-weight: 700;
+            color: #111111;
+            white-space: nowrap;
+        }
+
+        .detail-desc img {
+            max-width: 100%;
+            height: auto;
         }
 
         /* 기사 목록 (관련 뉴스 / 검색 결과 공통) */
@@ -1387,14 +1420,43 @@
         let zoneKmlUrl = '';
 
         function sanitizeKml(text) {
-            return String(text)
-                .replace(/^\uFEFF/, '')                                              // BOM
-                .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '')            // XML에서 쓸 수 없는 제어문자
-                .replace(/<description>([\s\S]*?)<\/description>/g, function(m, inner) {   // CDATA 없이 적힌 HTML(<img> 등) 설명을 CDATA로 감쌈
-                    if (inner.indexOf('<') === -1 || inner.indexOf('<![CDATA[') !== -1) return m;
-                    return '<description><![CDATA[' + inner.replace(/\]\]>/g, ']]]]><![CDATA[>') + ']]></description>';
-                })
-                .replace(/&(?!(?:amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+);)/g, '&amp;'); // 엔티티가 아닌 '&'
+            let s = String(text)
+                .replace(/^\uFEFF/, '')                                      // BOM
+                .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '');   // XML에서 쓸 수 없는 제어문자
+
+            // (1) 설명 안에 CDATA 없이 바로 적힌 HTML(<table> 등)을 CDATA로 감싸 표가 그대로 살아남게 함
+            //     (감싸지 않으면 KML 로더가 태그를 모두 버리고 글자만 남김)
+            s = s.replace(/<description(?:\s[^>\/]*)?>([\s\S]*?)<\/description>/g, function(m, inner) {
+                if (inner.indexOf('<') === -1 || inner.indexOf('<![CDATA[') !== -1) return m;
+                return '<description><![CDATA[' + inner.replace(/\]\]>/g, ']]]]><![CDATA[>') + ']]></description>';
+            });
+
+            // (2) 설명이 없고 ExtendedData(Data / SimpleData)만 있는 구역은 값들을 표로 만들어 설명으로 사용
+            s = s.replace(/<Placemark\b[\s\S]*?<\/Placemark>/g, function(pm) {
+                if (/<description[\s>]/.test(pm)) return pm;
+                const rows = [];
+                const clean = function(v) { return String(v).replace(/^\s*<!\[CDATA\[/, '').replace(/\]\]>\s*$/, '').trim(); };
+                pm.replace(/<Data\b[^>]*\bname="([^"]*)"[^>]*>([\s\S]*?)<\/Data>/g, function(x, k, body) {
+                    const v = /<value>([\s\S]*?)<\/value>/.exec(body);
+                    if (k !== 'name') rows.push([k, v ? clean(v[1]) : '']);
+                    return x;
+                });
+                pm.replace(/<SimpleData\b[^>]*\bname="([^"]*)"[^>]*>([\s\S]*?)<\/SimpleData>/g, function(x, k, v) {
+                    if (k !== 'name') rows.push([k, clean(v)]);
+                    return x;
+                });
+                if (!rows.length) return pm;
+                const html = '<table><tbody>' + rows.map(function(r) {
+                    return '<tr><th>' + r[0] + '</th><td>' + r[1] + '</td></tr>';
+                }).join('') + '</tbody></table>';
+                return pm.replace(/<\/Placemark>\s*$/, '<description><![CDATA[' + html.replace(/\]\]>/g, ']]]]><![CDATA[>') + ']]></description></Placemark>');
+            });
+
+            // (3) 엔티티가 아닌 '&' 보정 (CDATA 안의 내용은 건드리지 않음 - 표 안의 &nbsp; 등이 글자 그대로 보이던 문제 방지)
+            s = s.replace(/<!\[CDATA\[[\s\S]*?\]\]>|&(?!(?:amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+);)/g, function(m) {
+                return m === '&' ? '&amp;' : m;
+            });
+            return s;
         }
 
         function parseXml(text) {
@@ -1936,6 +1998,7 @@
                 initDone = true;
                 if (DEBUG && virtualSkipped) console.log('[동네개발맵] \'(가상)\' 구역 ' + virtualSkipped + '개 제외');
                 if (DEBUG) console.log('[동네개발맵] ' + zoneKmlUrl + ' → Placemark ' + ((kmlInfo[zoneKmlUrl] || {}).placemarks) + '개' + ((kmlInfo[zoneKmlUrl] || {}).fixed ? ', 특수문자 자동 보정함' : ''));
+                if (DEBUG && zones[0]) console.log('[동네개발맵] 첫 구역 설명 원문:', zones[0].name, zones[0].description);
                 if (DEBUG) console.log('[동네개발맵] 구역 ' + zones.length + '개, 자치구 ' + guList.length + '개 인식, 구역이 속한 자치구:', zones.map(function(z) { return z.name + ' → ' + (z.district || '(없음)'); }));
                 if (zones.length === 0) {
                     const info = kmlInfo[zoneKmlUrl] || {};
