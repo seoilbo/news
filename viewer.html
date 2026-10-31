@@ -2193,7 +2193,7 @@
         function getShareUrl() {
             const articleId = new URLSearchParams(window.location.search).get('id');
             if (!articleId) return null;
-            return `${window.location.origin}/seoilbo/post/${articleId}`;
+            return `${window.location.origin}/news/post/${articleId}`;
         }
 
         function toggleSharePopup(btn, e) {
