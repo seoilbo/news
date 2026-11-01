@@ -1050,6 +1050,43 @@
             return String(s == null ? '' : s).replace(/<[^>]*>/g, ' ');
         }
 
+        /* ---------- 구역 카드(zp-) 도우미 ----------
+           KML 설명 안의 카드에서
+           1) 진행 단계 막대를 '현재 단계' 이름에 맞춰 자동으로 칠하고
+           2) 이미지 주소가 비었거나 불러오지 못한 이미지 칸은 숨깁니다. */
+        const ZP_STAGES = ['추진위원회 승인', '조합설립인가', '사업시행인가', '관리처분인가', '이주·철거', '착공·분양', '준공·입주'];
+
+        function zpApplyStage(root) {
+            root.querySelectorAll('.zp-stage').forEach(function(box) {
+                const nameEl = box.querySelector('.zp-stage-name');
+                if (!nameEl) return;
+                const idx = ZP_STAGES.indexOf(nameEl.textContent.trim());
+                if (idx < 0) return;   // 목록에 없는 이름이면 KML에 적힌 그대로 둠
+                box.querySelectorAll('.zp-step').forEach(function(td, i) {
+                    td.style.background = i < idx ? '#000000' : i === idx ? '#a61c1c' : '#e3e7eb';
+                });
+                const countEl = box.querySelector('.zp-stage-count');
+                if (countEl) countEl.textContent = '7단계 중 ' + (idx + 1) + '단계';
+            });
+        }
+
+        function zpHideEmptyImages(root) {
+            root.querySelectorAll('.zp-img').forEach(function(box) {
+                const img = box.querySelector('img');
+                if (!img) return;
+                const hide = function() { box.style.display = 'none'; };
+                const src = (img.getAttribute('src') || '').trim();
+                if (!src || src.charAt(0) === '[') { hide(); return; }
+                img.addEventListener('error', hide);
+                if (img.complete && img.naturalWidth === 0) hide();
+            });
+        }
+
+        function zpApplyAll(root) {
+            zpApplyStage(root);
+            zpHideEmptyImages(root);
+        }
+
         function getImageUrl(imageField) {
             if (!imageField) return null;
             if (typeof imageField === 'string') return imageField;
@@ -2212,6 +2249,8 @@
                 (zone.district ? '<div class="detail-district">' + esc(zone.district) + '</div>' : '') +
                 '<h4 class="detail-title">' + esc(zone.name) + '</h4>' +
                 '<div class="detail-desc">' + (description.trim() ? description : '상세 정보가 없습니다.') + '</div>';
+
+            zpApplyAll(detailContentEl);   // 진행 막대 색 · 빈 이미지 칸 숨기기
 
             renderNews();
             updateTargetTag();
