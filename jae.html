@@ -1215,15 +1215,18 @@
                         (logos.length ? '<td style="width:36%; padding:18px 16px 18px 0; text-align:right; vertical-align:middle;">' + logoImg(logos[0]) + '</td>' : '') +
                         '</tr></table>';
                 } else if (logos.length >= 2) {
-                    // 로고 2개 이상: 글씨는 위, 로고는 아래에 좌우로 나란히
-                    brandRow =
-                        (left ? '<div style="padding:18px 16px 0;">' + left + '</div>' : '') +
-                        '<div style="padding:' + (left ? '14px' : '18px') + ' 16px 18px;">' +
-                        '<table style="width:100%; border-collapse:collapse; table-layout:fixed;"><tr>' +
+                    // 로고 2개 이상: 글씨는 왼쪽, 로고는 오른쪽에 같은 크기 칸으로 나란히 (칸 안에서 줄어들어 겹치지 않음)
+                    const logoTable = '<table style="width:100%; border-collapse:collapse; table-layout:fixed;"><tr>' +
                         logos.map(function(u, i) {
-                            return '<td style="padding:0 ' + (i < logos.length - 1 ? '12px' : '0') + ' 0 0; text-align:left; vertical-align:middle;">' + logoImg(u) + '</td>';
-                        }).join('') +
-                        '</tr></table></div>';
+                            return '<td style="padding:0 0 0 ' + (i ? '12px' : '0') + '; text-align:center; vertical-align:middle;">' + logoImg(u) + '</td>';
+                        }).join('') + '</tr></table>';
+                    const rightW = [0, 0, 52, 62, 70][logos.length];   // 로고 개수별 오른쪽 칸 너비(%)
+                    brandRow = left
+                        ? '<table style="width:100%; border-collapse:collapse;"><tr>' +
+                          '<td style="padding:18px 8px 18px 16px; vertical-align:middle;">' + left + '</td>' +
+                          '<td style="width:' + rightW + '%; padding:18px 16px 18px 0; vertical-align:middle;">' + logoTable + '</td>' +
+                          '</tr></table>'
+                        : '<div style="padding:18px 16px;">' + logoTable + '</div>';
                 }
                 afterHtml =
                     '<div style="margin:' + (infoHtml ? '26px' : '0') + ' 0 10px; ' + HEAD + '">재개발/재건축 이후</div>' +
