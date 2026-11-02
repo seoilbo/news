@@ -3,211 +3,16 @@
 <Document id="1yjD9tgG5Uk_S4gFfMmjZiFbcj23ad4o4">
 	<ex:extension>base64;Co4BCoEBCn8KAggBEnkKdwokCiAKAwjQDxoHCNLtZRD_ASEAAAAAAADwPykAAAAAAAAAABgAEg8KCAitgO8HEP8BEKAfGAAaGgoHCP___wcQQBIICK2A7wcQ_wEYoB8gACgAIgkIARIFCP___wcqFwgBEggI____BxD_ARkAAAAAAADwPyAAEgQIARAAGgIIAA</ex:extension>
 	<name>jae</name>
-	<gx:CascadingStyle kml:id="__managed_style_0D991C237C42CF1840D8_highlight">
-		<ex:extension>base64;EgIYAQ</ex:extension>
-		<Style>
-			<IconStyle>
-				<scale>1.2</scale>
-				<Icon>
-					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
-				</Icon>
-				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
-			</IconStyle>
-			<LabelStyle>
-			</LabelStyle>
-			<LineStyle>
-				<color>ff2dc0fb</color>
-				<width>2.667</width>
-			</LineStyle>
-			<PolyStyle>
-				<color>402dc0fb</color>
-			</PolyStyle>
-			<BalloonStyle>
-				<text><![CDATA[<!-- 구글 어스 설명(description)용 빈칸 템플릿 · 모든 스타일 인라인 -->
-<!-- 이미지 칸(zp-img)은 이미지 주소가 비어 있거나 [대괄호] 그대로면 사이트에서 자동으로 숨겨져요. -->
-<!-- [대괄호] 부분만 구역에 맞게 바꿔서 쓰세요. zp- 로 시작하는 class는 지우지 마세요(사이트에서 진행 막대를 자동으로 바꿀 때 사용). -->
-<!-- 현재 단계에 쓸 수 있는 이름(정확히 이 글자여야 막대가 자동으로 바뀜):
-     추진위원회 승인 / 조합설립인가 / 사업시행인가 / 관리처분인가 / 이주·철거 / 착공·분양 / 준공·입주 -->
-<div style="font-size:15px; line-height:1.5; color:#222; word-break:keep-all;">
-
-  <!-- 현재 구역 정보 (조감도 + 표) -->
-  <div style="margin:0 0 10px; padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;">구역 정보</div>
-  <div style="overflow:hidden; border:1px solid #cfd4d9; background:#fff;">
-    <div class="zp-img" style="background:#e9ecef; font-size:0; line-height:0;">
-      <!-- src 안에 설계사 조감도 이미지 주소를 넣으세요 -->
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf3149KAiHFDi1WPKAGR0lZv_cMhhKa-jD5dFblrWtUccnQIQjjronMHk&s=10" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
-    </div>
-    <table style="width:100%; border-collapse:collapse; border-top:1px solid #cfd4d9;">
-      <tr>
-        <td style="width:28%; padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">사업 명칭</td>
-        <td style="padding:14px 16px; font-weight:bold; border-bottom:1px solid #dfe3e7;">성수전략정비구역 제4 주택정비형 재개발정비사업</td>
-      </tr>
-      <tr>
-        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">위치</td>
-        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">서울특별시 성동구 성수동2가 219-4일대</td>
-      </tr>
-      <tr>
-        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">건립 규모</td>
-        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">최고 64층, 1447세대(예정)</td>
-      </tr>
-      <tr>
-        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-right:1px solid #dfe3e7; vertical-align:top;">현재 단계</td>
-        <td class="zp-stage" style="padding:14px 16px;">
-          <table style="width:100%; border-collapse:collapse; margin-bottom:8px;">
-            <tr>
-              <td class="zp-stage-name" style="padding:0; font-weight:bold; color:#a61c1c;">조합설립인가</td>
-              <td class="zp-stage-count" style="padding:0; text-align:right; font-size:13px; color:#000;">7단계 중 [N]단계</td>
-            </tr>
-          </table>
-          <table style="width:100%; border-collapse:separate; border-spacing:3px 0; margin:0 -3px; table-layout:fixed;">
-            <tr>
-              <td class="zp-step" title="추진위원회 승인" style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
-              <td class="zp-step" title="조합설립인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
-              <td class="zp-step" title="사업시행인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
-              <td class="zp-step" title="관리처분인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
-              <td class="zp-step" title="이주·철거"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
-              <td class="zp-step" title="착공·분양"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
-              <td class="zp-step" title="준공·입주"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-  </div>
-
-  <!-- 재개발/재건축 이후 (시공사 카드 + 조감도) -->
-  <div style="margin:26px 0 10px; padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;">재개발/재건축 이후</div>
-  <div style="overflow:hidden; background:#8B6F4E;">
-    <table style="width:100%; border-collapse:collapse;">
-      <tr>
-        <td style="width:64%; padding:18px 16px; vertical-align:middle;">
-          <div style="font-size:12px; font-weight:bold; color:rgba(255,255,255,.65); margin-bottom:3px;">롯데건설</div>
-          <div style="font-size:21px; font-weight:bold; letter-spacing:-0.5px; color:#fff;">성수 르엘 S70</div>
-        </td>
-        <td style="width:36%; padding:18px 16px 18px 0; text-align:right; vertical-align:middle;">
-
-               <img src="https://i.namu.wiki/i/LaEA3niqWKYUQaNEHvJsBv6ClrdLMuSQQ8O1i6myx3DtiGJhn41DfPVMkA5ruNxzfP2TQlb7-dEMwyexU6pQsfJag5ZkGTtdtLUWizTCGMra6g7G-pP-wa2sq8FRcIBgaCfpNyF1k5Nyckln8jkbuw.svg" alt="로고" style="max-width:100%; max-height:40px; object-fit:contain;"> 
-          
-        </td>
-      </tr>
-    </table>
-    <div class="zp-img" style="background:#e3e7eb; font-size:0; line-height:0;">
-      <!-- src 안에 시공사 조감도 이미지 주소를 넣으세요 -->
-      <img src=https://img9.yna.co.kr/etc/inner/KR/2026/07/05/AKR20260705041200003_02_i_P4.jpg" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
-    </div>
-  </div>
-
-</div>]]></text>
-			</BalloonStyle>
-		</Style>
-	</gx:CascadingStyle>
-	<StyleMap id="__managed_style_0D991C237C42CF1840D8">
+	<StyleMap id="__managed_style_0659AF4DD442CF3BEAA4">
 		<Pair>
 			<key>normal</key>
-			<styleUrl>#__managed_style_0D991C237C42CF1840D8_normal</styleUrl>
+			<styleUrl>#__managed_style_0659AF4DD442CF3BEAA4_normal</styleUrl>
 		</Pair>
 		<Pair>
 			<key>highlight</key>
-			<styleUrl>#__managed_style_0D991C237C42CF1840D8_highlight</styleUrl>
+			<styleUrl>#__managed_style_0659AF4DD442CF3BEAA4_highlight</styleUrl>
 		</Pair>
 	</StyleMap>
-	<gx:CascadingStyle kml:id="__managed_style_0D991C237C42CF1840D8_normal">
-		<ex:extension>base64;EgIYAQ</ex:extension>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
-				</Icon>
-				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
-			</IconStyle>
-			<LabelStyle>
-			</LabelStyle>
-			<LineStyle>
-				<color>ff2dc0fb</color>
-				<width>1.778</width>
-			</LineStyle>
-			<PolyStyle>
-				<color>402dc0fb</color>
-			</PolyStyle>
-			<BalloonStyle>
-				<text><![CDATA[<!-- 구글 어스 설명(description)용 빈칸 템플릿 · 모든 스타일 인라인 -->
-<!-- 이미지 칸(zp-img)은 이미지 주소가 비어 있거나 [대괄호] 그대로면 사이트에서 자동으로 숨겨져요. -->
-<!-- [대괄호] 부분만 구역에 맞게 바꿔서 쓰세요. zp- 로 시작하는 class는 지우지 마세요(사이트에서 진행 막대를 자동으로 바꿀 때 사용). -->
-<!-- 현재 단계에 쓸 수 있는 이름(정확히 이 글자여야 막대가 자동으로 바뀜):
-     추진위원회 승인 / 조합설립인가 / 사업시행인가 / 관리처분인가 / 이주·철거 / 착공·분양 / 준공·입주 -->
-<div style="font-size:15px; line-height:1.5; color:#222; word-break:keep-all;">
-
-  <!-- 현재 구역 정보 (조감도 + 표) -->
-  <div style="margin:0 0 10px; padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;">구역 정보</div>
-  <div style="overflow:hidden; border:1px solid #cfd4d9; background:#fff;">
-    <div class="zp-img" style="background:#e9ecef; font-size:0; line-height:0;">
-      <!-- src 안에 설계사 조감도 이미지 주소를 넣으세요 -->
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf3149KAiHFDi1WPKAGR0lZv_cMhhKa-jD5dFblrWtUccnQIQjjronMHk&s=10" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
-    </div>
-    <table style="width:100%; border-collapse:collapse; border-top:1px solid #cfd4d9;">
-      <tr>
-        <td style="width:28%; padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">사업 명칭</td>
-        <td style="padding:14px 16px; font-weight:bold; border-bottom:1px solid #dfe3e7;">성수전략정비구역 제4 주택정비형 재개발정비사업</td>
-      </tr>
-      <tr>
-        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">위치</td>
-        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">서울특별시 성동구 성수동2가 219-4일대</td>
-      </tr>
-      <tr>
-        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">건립 규모</td>
-        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">최고 64층, 1447세대(예정)</td>
-      </tr>
-      <tr>
-        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-right:1px solid #dfe3e7; vertical-align:top;">현재 단계</td>
-        <td class="zp-stage" style="padding:14px 16px;">
-          <table style="width:100%; border-collapse:collapse; margin-bottom:8px;">
-            <tr>
-              <td class="zp-stage-name" style="padding:0; font-weight:bold; color:#a61c1c;">조합설립인가</td>
-              <td class="zp-stage-count" style="padding:0; text-align:right; font-size:13px; color:#000;">7단계 중 [N]단계</td>
-            </tr>
-          </table>
-          <table style="width:100%; border-collapse:separate; border-spacing:3px 0; margin:0 -3px; table-layout:fixed;">
-            <tr>
-              <td class="zp-step" title="추진위원회 승인" style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
-              <td class="zp-step" title="조합설립인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
-              <td class="zp-step" title="사업시행인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
-              <td class="zp-step" title="관리처분인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
-              <td class="zp-step" title="이주·철거"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
-              <td class="zp-step" title="착공·분양"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
-              <td class="zp-step" title="준공·입주"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-  </div>
-
-  <!-- 재개발/재건축 이후 (시공사 카드 + 조감도) -->
-  <div style="margin:26px 0 10px; padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;">재개발/재건축 이후</div>
-  <div style="overflow:hidden; background:#8B6F4E;">
-    <table style="width:100%; border-collapse:collapse;">
-      <tr>
-        <td style="width:64%; padding:18px 16px; vertical-align:middle;">
-          <div style="font-size:12px; font-weight:bold; color:rgba(255,255,255,.65); margin-bottom:3px;">롯데건설</div>
-          <div style="font-size:21px; font-weight:bold; letter-spacing:-0.5px; color:#fff;">성수 르엘 S70</div>
-        </td>
-        <td style="width:36%; padding:18px 16px 18px 0; text-align:right; vertical-align:middle;">
-
-               <img src="https://i.namu.wiki/i/LaEA3niqWKYUQaNEHvJsBv6ClrdLMuSQQ8O1i6myx3DtiGJhn41DfPVMkA5ruNxzfP2TQlb7-dEMwyexU6pQsfJag5ZkGTtdtLUWizTCGMra6g7G-pP-wa2sq8FRcIBgaCfpNyF1k5Nyckln8jkbuw.svg" alt="로고" style="max-width:100%; max-height:40px; object-fit:contain;"> 
-          
-        </td>
-      </tr>
-    </table>
-    <div class="zp-img" style="background:#e3e7eb; font-size:0; line-height:0;">
-      <!-- src 안에 시공사 조감도 이미지 주소를 넣으세요 -->
-      <img src=https://img9.yna.co.kr/etc/inner/KR/2026/07/05/AKR20260705041200003_02_i_P4.jpg" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
-    </div>
-  </div>
-
-</div>]]></text>
-			</BalloonStyle>
-		</Style>
-	</gx:CascadingStyle>
 	<gx:CascadingStyle kml:id="__managed_style_094BF4F17242CF054013_highlight">
 		<ex:extension>base64;EgIYAQ</ex:extension>
 		<Style>
@@ -511,9 +316,8 @@
 			</BalloonStyle>
 		</Style>
 	</gx:CascadingStyle>
-	<gx:CascadingStyle kml:id="__managed_style_01D59F40E942CEE4B520_highlight">
-		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
-		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
+	<gx:CascadingStyle kml:id="__managed_style_0659AF4DD442CF3BEAA4_highlight">
+		<ex:extension>base64;EgIYAQ</ex:extension>
 		<Style>
 			<IconStyle>
 				<scale>1.2</scale>
@@ -525,17 +329,92 @@
 			<LabelStyle>
 			</LabelStyle>
 			<LineStyle>
-				<color>ff3c8e38</color>
+				<color>ff2dc0fb</color>
 				<width>2.667</width>
 			</LineStyle>
 			<PolyStyle>
-				<color>403c8e38</color>
+				<color>402dc0fb</color>
 			</PolyStyle>
 			<BalloonStyle>
+				<text><![CDATA[<!-- 구글 어스 설명(description)용 빈칸 템플릿 · 모든 스타일 인라인 -->
+<!-- 이미지 칸(zp-img)은 이미지 주소가 비어 있거나 [대괄호] 그대로면 사이트에서 자동으로 숨겨져요. -->
+<!-- [대괄호] 부분만 구역에 맞게 바꿔서 쓰세요. zp- 로 시작하는 class는 지우지 마세요(사이트에서 진행 막대를 자동으로 바꿀 때 사용). -->
+<!-- 현재 단계에 쓸 수 있는 이름(정확히 이 글자여야 막대가 자동으로 바뀜):
+     추진위원회 승인 / 조합설립인가 / 사업시행인가 / 관리처분인가 / 이주·철거 / 착공·분양 / 준공·입주 -->
+<div style="font-size:15px; line-height:1.5; color:#222; word-break:keep-all;">
+
+  <!-- 현재 구역 정보 (조감도 + 표) -->
+  <div style="margin:0 0 10px; padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;">구역 정보</div>
+  <div style="overflow:hidden; border:1px solid #cfd4d9; background:#fff;">
+    <div class="zp-img" style="background:#e9ecef; font-size:0; line-height:0;">
+      <!-- src 안에 설계사 조감도 이미지 주소를 넣으세요 -->
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf3149KAiHFDi1WPKAGR0lZv_cMhhKa-jD5dFblrWtUccnQIQjjronMHk&s=10" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
+    </div>
+    <table style="width:100%; border-collapse:collapse; border-top:1px solid #cfd4d9;">
+      <tr>
+        <td style="width:28%; padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">사업 명칭</td>
+        <td style="padding:14px 16px; font-weight:bold; border-bottom:1px solid #dfe3e7;">성수전략정비구역 제4 주택정비형 재개발정비사업</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">위치</td>
+        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">서울특별시 성동구 성수동2가 219-4일대</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">건립 규모</td>
+        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">최고 64층, 1447세대(예정)</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-right:1px solid #dfe3e7; vertical-align:top;">현재 단계</td>
+        <td class="zp-stage" style="padding:14px 16px;">
+          <table style="width:100%; border-collapse:collapse; margin-bottom:8px;">
+            <tr>
+              <td class="zp-stage-name" style="padding:0; font-weight:bold; color:#a61c1c;">조합설립인가</td>
+              <td class="zp-stage-count" style="padding:0; text-align:right; font-size:13px; color:#000;">7단계 중 [N]단계</td>
+            </tr>
+          </table>
+          <table style="width:100%; border-collapse:separate; border-spacing:3px 0; margin:0 -3px; table-layout:fixed;">
+            <tr>
+              <td class="zp-step" title="추진위원회 승인" style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="조합설립인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="사업시행인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="관리처분인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="이주·철거"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="착공·분양"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="준공·입주"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 재개발/재건축 이후 (시공사 카드 + 조감도) -->
+  <div style="margin:26px 0 10px; padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;">재개발/재건축 이후</div>
+  <div style="overflow:hidden; background:#8B6F4E;">
+    <table style="width:100%; border-collapse:collapse;">
+      <tr>
+        <td style="width:64%; padding:18px 16px; vertical-align:middle;">
+          <div style="font-size:12px; font-weight:bold; color:rgba(255,255,255,.65); margin-bottom:3px;">롯데건설</div>
+          <div style="font-size:21px; font-weight:bold; letter-spacing:-0.5px; color:#fff;">성수 르엘 S70</div>
+        </td>
+        <td style="width:36%; padding:18px 16px 18px 0; text-align:right; vertical-align:middle;">
+
+               <img src="https://i.namu.wiki/i/LaEA3niqWKYUQaNEHvJsBv6ClrdLMuSQQ8O1i6myx3DtiGJhn41DfPVMkA5ruNxzfP2TQlb7-dEMwyexU6pQsfJag5ZkGTtdtLUWizTCGMra6g7G-pP-wa2sq8FRcIBgaCfpNyF1k5Nyckln8jkbuw.svg" alt="로고" style="max-width:100%; max-height:40px; object-fit:contain;"> 
+          
+        </td>
+      </tr>
+    </table>
+    <div class="zp-img" style="background:#e3e7eb; font-size:0; line-height:0;">
+      <!-- src 안에 시공사 조감도 이미지 주소를 넣으세요 -->
+      <img src="https://img9.yna.co.kr/etc/inner/KR/2026/07/05/AKR20260705041200003_02_i_P4.jpg" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
+    </div>
+  </div>
+
+</div>]]></text>
 			</BalloonStyle>
 		</Style>
 	</gx:CascadingStyle>
-	<gx:CascadingStyle kml:id="__managed_style_0C1D61D2DE42CEF90FBC_normal">
+	<gx:CascadingStyle kml:id="__managed_style_01516F998D42CEFED0E4_normal">
 		<ex:extension>base64;EgIYAQ</ex:extension>
 		<Style>
 			<IconStyle>
@@ -554,10 +433,128 @@
 				<color>402dc0fb</color>
 			</PolyStyle>
 			<BalloonStyle>
+				<text><![CDATA[<!-- 구글 어스 설명(description)용 빈칸 템플릿 · 모든 스타일 인라인 -->
+<!-- 이미지 칸(zp-img)은 이미지 주소가 비어 있거나 [대괄호] 그대로면 사이트에서 자동으로 숨겨져요. -->
+<!-- [대괄호] 부분만 구역에 맞게 바꿔서 쓰세요. zp- 로 시작하는 class는 지우지 마세요(사이트에서 진행 막대를 자동으로 바꿀 때 사용). -->
+<!-- 현재 단계에 쓸 수 있는 이름(정확히 이 글자여야 막대가 자동으로 바뀜):
+     추진위원회 승인 / 조합설립인가 / 사업시행인가 / 관리처분인가 / 이주·철거 / 착공·분양 / 준공·입주 -->
+<div style="font-size:15px; line-height:1.5; color:#222; word-break:keep-all;">
+
+  <!-- 현재 구역 정보 (조감도 + 표) -->
+  <div style="margin:0 0 10px; padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;">구역 정보</div>
+  <div style="overflow:hidden; border:1px solid #cfd4d9; background:#fff;">
+    <div class="zp-img" style="background:#e9ecef; font-size:0; line-height:0;">
+      <!-- src 안에 설계사 조감도 이미지 주소를 넣으세요 -->
+      <img src="https://www.kunwon.com/board/perform.fileDown.php?BBS_GUBUN=1&SC_LP=&SC_YEAR=&SC_SUPPLY=&SC_LOCAL=&SC_word=&page=8&code=16093&mode=tn2" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
+    </div>
+    <table style="width:100%; border-collapse:collapse; border-top:1px solid #cfd4d9;">
+      <tr>
+        <td style="width:28%; padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">사업 명칭</td>
+        <td style="padding:14px 16px; font-weight:bold; border-bottom:1px solid #dfe3e7;">성수전략정비구역 제1 주택정비형 재개발정비사업</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">위치</td>
+        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">서울특별시 성동구 성수동1가 72-10일대</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">건립 규모</td>
+        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">최고 69층, 3014세대(예정)</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-right:1px solid #dfe3e7; vertical-align:top;">현재 단계</td>
+        <td class="zp-stage" style="padding:14px 16px;">
+          <table style="width:100%; border-collapse:collapse; margin-bottom:8px;">
+            <tr>
+              <td class="zp-stage-name" style="padding:0; font-weight:bold; color:#a61c1c;">조합설립인가</td>
+              <td class="zp-stage-count" style="padding:0; text-align:right; font-size:13px; color:#000;">7단계 중 [N]단계</td>
+            </tr>
+          </table>
+          <table style="width:100%; border-collapse:separate; border-spacing:3px 0; margin:0 -3px; table-layout:fixed;">
+            <tr>
+              <td class="zp-step" title="추진위원회 승인" style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="조합설립인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="사업시행인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="관리처분인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="이주·철거"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="착공·분양"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="준공·입주"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 재개발/재건축 이후 (시공사 카드 + 조감도) -->
+  <div style="margin:26px 0 10px; padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;">재개발/재건축 이후</div>
+  <div style="overflow:hidden; background:#122d43;">
+    <table style="width:100%; border-collapse:collapse;">
+      <tr>
+        <td style="width:64%; padding:18px 16px; vertical-align:middle;">
+          <div style="font-size:12px; font-weight:bold; color:rgba(255,255,255,.65); margin-bottom:3px;">GS건설</div>
+          <div style="font-size:21px; font-weight:bold; letter-spacing:-0.5px; color:#fff;">리베니크 자이</div>
+        </td>
+        <td style="width:36%; padding:18px 16px 18px 0; text-align:right; vertical-align:middle;">
+
+               <img src="https://i.namu.wiki/i/5tCnduXduo1joJr-H9jTkCW0FpIrSwUPL0P0NeWb6FHWg5Np9kEoqDgboWbCs5TQKIlhpvb0EpX86P-yo2se18snxCYB20QngmhVKgy-z_PsN2CXRSwllg_64wQE0mddYTB0FHzW3GyOHd5PHDpndg.svg" alt="로고" style="max-width:100%; max-height:40px; object-fit:contain;"> 
+          
+        </td>
+      </tr>
+    </table>
+    <div class="zp-img" style="background:#e3e7eb; font-size:0; line-height:0;">
+      <!-- src 안에 시공사 조감도 이미지 주소를 넣으세요 -->
+      <img src="https://i.namu.wiki/i/bufEc0HYGXm_0HAlK0Kp4fonvfWtnjlpfvIxqU1kFwLgOlasrvjbb2wMHW8iIxUXHgeUxk6ZXz_dLgWz16sAZsmK2TFH0Chp8mjaBlCBSMlRpqKVwhO8-oxxZ5MzeWXLVtx1zeUoK-NLG81gSPm3nw.webp" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
+    </div>
+  </div>
+
+</div>]]></text>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<StyleMap id="__managed_style_01516F998D42CEFED0E4">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_01516F998D42CEFED0E4_normal</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_01516F998D42CEFED0E4_highlight</styleUrl>
+		</Pair>
+	</StyleMap>
+	<gx:CascadingStyle kml:id="__managed_style_0C1D61D2DE42CEF90FBC_highlight">
+		<ex:extension>base64;EgIYAQ</ex:extension>
+		<Style>
+			<IconStyle>
+				<scale>1.2</scale>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>2.667</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>402dc0fb</color>
+			</PolyStyle>
+			<BalloonStyle>
 				<text></text>
 			</BalloonStyle>
 		</Style>
 	</gx:CascadingStyle>
+	<StyleMap id="__managed_style_0C1D61D2DE42CEF90FBC">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_0C1D61D2DE42CEF90FBC_normal</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_0C1D61D2DE42CEF90FBC_highlight</styleUrl>
+		</Pair>
+	</StyleMap>
 	<gx:CascadingStyle kml:id="__managed_style_00158CE40842CEE4B4EF_highlight">
 		<ex:extension>base64;EgIYAQ</ex:extension>
 		<Style>
@@ -753,27 +750,7 @@
 			</BalloonStyle>
 		</Style>
 	</gx:CascadingStyle>
-	<StyleMap id="__managed_style_01D59F40E942CEE4B520">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#__managed_style_01D59F40E942CEE4B520_normal</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#__managed_style_01D59F40E942CEE4B520_highlight</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="__managed_style_00158CE40842CEE4B4EF">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#__managed_style_00158CE40842CEE4B4EF_normal</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#__managed_style_00158CE40842CEE4B4EF_highlight</styleUrl>
-		</Pair>
-	</StyleMap>
-	<gx:CascadingStyle kml:id="__managed_style_01516F998D42CEFED0E4_normal">
+	<gx:CascadingStyle kml:id="__managed_style_0659AF4DD442CF3BEAA4_normal">
 		<ex:extension>base64;EgIYAQ</ex:extension>
 		<Style>
 			<IconStyle>
@@ -804,20 +781,20 @@
   <div style="overflow:hidden; border:1px solid #cfd4d9; background:#fff;">
     <div class="zp-img" style="background:#e9ecef; font-size:0; line-height:0;">
       <!-- src 안에 설계사 조감도 이미지 주소를 넣으세요 -->
-      <img src="https://www.kunwon.com/board/perform.fileDown.php?BBS_GUBUN=1&SC_LP=&SC_YEAR=&SC_SUPPLY=&SC_LOCAL=&SC_word=&page=8&code=16093&mode=tn2" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf3149KAiHFDi1WPKAGR0lZv_cMhhKa-jD5dFblrWtUccnQIQjjronMHk&s=10" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
     </div>
     <table style="width:100%; border-collapse:collapse; border-top:1px solid #cfd4d9;">
       <tr>
         <td style="width:28%; padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">사업 명칭</td>
-        <td style="padding:14px 16px; font-weight:bold; border-bottom:1px solid #dfe3e7;">성수전략정비구역 제1 주택정비형 재개발정비사업</td>
+        <td style="padding:14px 16px; font-weight:bold; border-bottom:1px solid #dfe3e7;">성수전략정비구역 제4 주택정비형 재개발정비사업</td>
       </tr>
       <tr>
         <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">위치</td>
-        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">서울특별시 성동구 성수동1가 72-10일대</td>
+        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">서울특별시 성동구 성수동2가 219-4일대</td>
       </tr>
       <tr>
         <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">건립 규모</td>
-        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">최고 69층, 3014세대(예정)</td>
+        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">최고 64층, 1447세대(예정)</td>
       </tr>
       <tr>
         <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-right:1px solid #dfe3e7; vertical-align:top;">현재 단계</td>
@@ -846,23 +823,23 @@
 
   <!-- 재개발/재건축 이후 (시공사 카드 + 조감도) -->
   <div style="margin:26px 0 10px; padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;">재개발/재건축 이후</div>
-  <div style="overflow:hidden; background:#122d43;">
+  <div style="overflow:hidden; background:#8B6F4E;">
     <table style="width:100%; border-collapse:collapse;">
       <tr>
         <td style="width:64%; padding:18px 16px; vertical-align:middle;">
-          <div style="font-size:12px; font-weight:bold; color:rgba(255,255,255,.65); margin-bottom:3px;">GS건설</div>
-          <div style="font-size:21px; font-weight:bold; letter-spacing:-0.5px; color:#fff;">리베니크 자이</div>
+          <div style="font-size:12px; font-weight:bold; color:rgba(255,255,255,.65); margin-bottom:3px;">롯데건설</div>
+          <div style="font-size:21px; font-weight:bold; letter-spacing:-0.5px; color:#fff;">성수 르엘 S70</div>
         </td>
         <td style="width:36%; padding:18px 16px 18px 0; text-align:right; vertical-align:middle;">
 
-               <img src="https://i.namu.wiki/i/5tCnduXduo1joJr-H9jTkCW0FpIrSwUPL0P0NeWb6FHWg5Np9kEoqDgboWbCs5TQKIlhpvb0EpX86P-yo2se18snxCYB20QngmhVKgy-z_PsN2CXRSwllg_64wQE0mddYTB0FHzW3GyOHd5PHDpndg.svg" alt="로고" style="max-width:100%; max-height:40px; object-fit:contain;"> 
+               <img src="https://i.namu.wiki/i/LaEA3niqWKYUQaNEHvJsBv6ClrdLMuSQQ8O1i6myx3DtiGJhn41DfPVMkA5ruNxzfP2TQlb7-dEMwyexU6pQsfJag5ZkGTtdtLUWizTCGMra6g7G-pP-wa2sq8FRcIBgaCfpNyF1k5Nyckln8jkbuw.svg" alt="로고" style="max-width:100%; max-height:40px; object-fit:contain;"> 
           
         </td>
       </tr>
     </table>
     <div class="zp-img" style="background:#e3e7eb; font-size:0; line-height:0;">
       <!-- src 안에 시공사 조감도 이미지 주소를 넣으세요 -->
-      <img src="https://i.namu.wiki/i/bufEc0HYGXm_0HAlK0Kp4fonvfWtnjlpfvIxqU1kFwLgOlasrvjbb2wMHW8iIxUXHgeUxk6ZXz_dLgWz16sAZsmK2TFH0Chp8mjaBlCBSMlRpqKVwhO8-oxxZ5MzeWXLVtx1zeUoK-NLG81gSPm3nw.webp" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
+      <img src="https://img9.yna.co.kr/etc/inner/KR/2026/07/05/AKR20260705041200003_02_i_P4.jpg" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
     </div>
   </div>
 
@@ -870,6 +847,36 @@
 			</BalloonStyle>
 		</Style>
 	</gx:CascadingStyle>
+	<StyleMap id="__managed_style_01D59F40E942CEE4B520">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_01D59F40E942CEE4B520_normal</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_01D59F40E942CEE4B520_highlight</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="__managed_style_00158CE40842CEE4B4EF">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_00158CE40842CEE4B4EF_normal</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_00158CE40842CEE4B4EF_highlight</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="__managed_style_0F35DF656542CF4F3B58">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_0F35DF656542CF4F3B58_normal</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_0F35DF656542CF4F3B58_highlight</styleUrl>
+		</Pair>
+	</StyleMap>
 	<StyleMap id="__managed_style_0DAC924E5242CEE4B4F8">
 		<Pair>
 			<key>normal</key>
@@ -1073,16 +1080,6 @@
 			</BalloonStyle>
 		</Style>
 	</gx:CascadingStyle>
-	<StyleMap id="__managed_style_01C79EA55942CEE4B4E8">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#__managed_style_01C79EA55942CEE4B4E8_normal</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#__managed_style_01C79EA55942CEE4B4E8_highlight</styleUrl>
-		</Pair>
-	</StyleMap>
 	<gx:CascadingStyle kml:id="__managed_style_0F4F7A252442CEE4B50C_highlight">
 		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
 		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
@@ -1549,6 +1546,124 @@
 			<styleUrl>#__managed_style_0F4F7A252442CEE4B50C_highlight</styleUrl>
 		</Pair>
 	</StyleMap>
+	<StyleMap id="__managed_style_01C79EA55942CEE4B4E8">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_01C79EA55942CEE4B4E8_normal</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_01C79EA55942CEE4B4E8_highlight</styleUrl>
+		</Pair>
+	</StyleMap>
+	<gx:CascadingStyle kml:id="__managed_style_0E92C5669B42CF5E4849_highlight">
+		<ex:extension>base64;EgIYAQ</ex:extension>
+		<Style>
+			<IconStyle>
+				<scale>1.2</scale>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>2.667</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>402dc0fb</color>
+			</PolyStyle>
+			<BalloonStyle>
+				<text><![CDATA[<!-- 구글 어스 설명(description)용 빈칸 템플릿 · 모든 스타일 인라인 -->
+<!-- 이미지 칸(zp-img)은 이미지 주소가 비어 있거나 [대괄호] 그대로면 사이트에서 자동으로 숨겨져요. -->
+<!-- [대괄호] 부분만 구역에 맞게 바꿔서 쓰세요. zp- 로 시작하는 class는 지우지 마세요(사이트에서 진행 막대를 자동으로 바꿀 때 사용). -->
+<!-- 현재 단계에 쓸 수 있는 이름(정확히 이 글자여야 막대가 자동으로 바뀜):
+     추진위원회 승인 / 조합설립인가 / 사업시행인가 / 관리처분인가 / 이주·철거 / 착공·분양 / 준공·입주 -->
+<div style="font-size:15px; line-height:1.5; color:#222; word-break:keep-all;">
+
+  <!-- 현재 구역 정보 (조감도 + 표) -->
+  <div style="margin:0 0 10px; padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;">구역 정보</div>
+  <div style="overflow:hidden; border:1px solid #cfd4d9; background:#fff;">
+    <div class="zp-img" style="background:#e9ecef; font-size:0; line-height:0;">
+      <!-- src 안에 설계사 조감도 이미지 주소를 넣으세요 -->
+      <img src="https://cdn.arunews.com/news/photo/202607/64547_65915_1959.jpg" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
+    </div>
+    <table style="width:100%; border-collapse:collapse; border-top:1px solid #cfd4d9;">
+      <tr>
+        <td style="width:28%; padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">사업 명칭</td>
+        <td style="padding:14px 16px; font-weight:bold; border-bottom:1px solid #dfe3e7;">청량리제8구역주택재개발정비사업</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">위치</td>
+        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">서울특별시 동대문구 청량리동 435일대</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">건립 규모</td>
+        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">최고 29층, 730세대(예정)</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-right:1px solid #dfe3e7; vertical-align:top;">현재 단계</td>
+        <td class="zp-stage" style="padding:14px 16px;">
+          <table style="width:100%; border-collapse:collapse; margin-bottom:8px;">
+            <tr>
+              <td class="zp-stage-name" style="padding:0; font-weight:bold; color:#a61c1c;">이주·철거</td>
+              <td class="zp-stage-count" style="padding:0; text-align:right; font-size:13px; color:#000;">7단계 중 [N]단계</td>
+            </tr>
+          </table>
+          <table style="width:100%; border-collapse:separate; border-spacing:3px 0; margin:0 -3px; table-layout:fixed;">
+            <tr>
+              <td class="zp-step" title="추진위원회 승인" style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="조합설립인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="사업시행인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="관리처분인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="이주·철거"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="착공·분양"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="준공·입주"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 재개발/재건축 이후 (시공사 카드 + 조감도) -->
+  <div style="margin:26px 0 10px; padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;">재개발/재건축 이후</div>
+  <div style="overflow:hidden; background:#8a2432;">
+    <table style="width:100%; border-collapse:collapse;">
+      <tr>
+        <td style="width:64%; padding:18px 16px; vertical-align:middle;">
+          <div style="font-size:12px; font-weight:bold; color:rgba(255,255,255,.65); margin-bottom:3px;">롯데건설</div>
+          <div style="font-size:21px; font-weight:bold; letter-spacing:-0.5px; color:#fff;">청량리8구역 롯데캐슬</div>
+        </td>
+        <td style="width:36%; padding:18px 16px 18px 0; text-align:right; vertical-align:middle;">
+
+               <img src="https://i.namu.wiki/i/UUDGAZGR21SfAv5VSyXy5U8VorpqYSymprEz5c3Jf5Yn3HinHNd9tnksTYKJM7BGDN06EQ6kWncBeSxH5etx0ZtT4IsvIqmLpqUG2YLvlQ0fahqoMdrthW0LZrQqZgLu3X92t81rwza65L81KVR25w.svg" alt="로고" style="max-width:100%; max-height:40px; object-fit:contain;"> 
+          
+        </td>
+      </tr>
+    </table>
+    <div class="zp-img" style="background:#e3e7eb; font-size:0; line-height:0;">
+      <!-- src 안에 시공사 조감도 이미지 주소를 넣으세요 -->
+      <img src="https://www.news-report.co.kr/news/photo/202512/3954_5776_3647.jpg" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
+    </div>
+  </div>
+
+</div>]]></text>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<StyleMap id="__managed_style_0E92C5669B42CF5E4849">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_0E92C5669B42CF5E4849_normal</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_0E92C5669B42CF5E4849_highlight</styleUrl>
+		</Pair>
+	</StyleMap>
 	<gx:CascadingStyle kml:id="__managed_style_01C79EA55942CEE4B4E8_normal">
 		<ex:extension>base64;EgIYAQ</ex:extension>
 		<Style>
@@ -1657,50 +1772,6 @@
 			</BalloonStyle>
 		</Style>
 	</gx:CascadingStyle>
-	<gx:CascadingStyle kml:id="__managed_style_0C5518EEE142CEE4B530_highlight">
-		<ex:extension>base64;EgIYAQ</ex:extension>
-		<Style>
-			<IconStyle>
-				<scale>1.2</scale>
-				<Icon>
-					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
-				</Icon>
-				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
-			</IconStyle>
-			<LabelStyle>
-			</LabelStyle>
-			<LineStyle>
-				<color>ff2dc0fb</color>
-				<width>2.667</width>
-			</LineStyle>
-			<PolyStyle>
-				<color>402dc0fb</color>
-			</PolyStyle>
-			<BalloonStyle>
-				<text><![CDATA[<h2><b>제기4구역</b><br></h2><h3>청량리 힐스테이트 엘클래시<br></h3><div>위치: 동대문구 제기동<br></div><div>세대수: 909세대<br></div><div>규모: 최고 25층, 11개동<br></div><div>시공사: 현대건설<br></div>]]></text>
-			</BalloonStyle>
-		</Style>
-	</gx:CascadingStyle>
-	<StyleMap id="__managed_style_0D960426CA42CEE4B533">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#__managed_style_0D960426CA42CEE4B533_normal</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#__managed_style_0D960426CA42CEE4B533_highlight</styleUrl>
-		</Pair>
-	</StyleMap>
-	<StyleMap id="__managed_style_01516F998D42CEFED0E4">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#__managed_style_01516F998D42CEFED0E4_normal</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#__managed_style_01516F998D42CEFED0E4_highlight</styleUrl>
-		</Pair>
-	</StyleMap>
 	<StyleMap id="__managed_style_0C5518EEE142CEE4B530">
 		<Pair>
 			<key>normal</key>
@@ -1711,30 +1782,6 @@
 			<styleUrl>#__managed_style_0C5518EEE142CEE4B530_highlight</styleUrl>
 		</Pair>
 	</StyleMap>
-	<gx:CascadingStyle kml:id="__managed_style_0C1D61D2DE42CEF90FBC_highlight">
-		<ex:extension>base64;EgIYAQ</ex:extension>
-		<Style>
-			<IconStyle>
-				<scale>1.2</scale>
-				<Icon>
-					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
-				</Icon>
-				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
-			</IconStyle>
-			<LabelStyle>
-			</LabelStyle>
-			<LineStyle>
-				<color>ff2dc0fb</color>
-				<width>2.667</width>
-			</LineStyle>
-			<PolyStyle>
-				<color>402dc0fb</color>
-			</PolyStyle>
-			<BalloonStyle>
-				<text></text>
-			</BalloonStyle>
-		</Style>
-	</gx:CascadingStyle>
 	<gx:CascadingStyle kml:id="__managed_style_17EF7D263342CEE4B4F4_highlight">
 		<ex:extension>base64;EgIYAQ</ex:extension>
 		<Style>
@@ -1973,6 +2020,348 @@
 			</BalloonStyle>
 		</Style>
 	</gx:CascadingStyle>
+	<gx:CascadingStyle kml:id="__managed_style_0E92C5669B42CF5E4849_normal">
+		<ex:extension>base64;EgIYAQ</ex:extension>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>1.778</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>402dc0fb</color>
+			</PolyStyle>
+			<BalloonStyle>
+				<text><![CDATA[<!-- 구글 어스 설명(description)용 빈칸 템플릿 · 모든 스타일 인라인 -->
+<!-- 이미지 칸(zp-img)은 이미지 주소가 비어 있거나 [대괄호] 그대로면 사이트에서 자동으로 숨겨져요. -->
+<!-- [대괄호] 부분만 구역에 맞게 바꿔서 쓰세요. zp- 로 시작하는 class는 지우지 마세요(사이트에서 진행 막대를 자동으로 바꿀 때 사용). -->
+<!-- 현재 단계에 쓸 수 있는 이름(정확히 이 글자여야 막대가 자동으로 바뀜):
+     추진위원회 승인 / 조합설립인가 / 사업시행인가 / 관리처분인가 / 이주·철거 / 착공·분양 / 준공·입주 -->
+<div style="font-size:15px; line-height:1.5; color:#222; word-break:keep-all;">
+
+  <!-- 현재 구역 정보 (조감도 + 표) -->
+  <div style="margin:0 0 10px; padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;">구역 정보</div>
+  <div style="overflow:hidden; border:1px solid #cfd4d9; background:#fff;">
+    <div class="zp-img" style="background:#e9ecef; font-size:0; line-height:0;">
+      <!-- src 안에 설계사 조감도 이미지 주소를 넣으세요 -->
+      <img src="https://cdn.arunews.com/news/photo/202607/64547_65915_1959.jpg" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
+    </div>
+    <table style="width:100%; border-collapse:collapse; border-top:1px solid #cfd4d9;">
+      <tr>
+        <td style="width:28%; padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">사업 명칭</td>
+        <td style="padding:14px 16px; font-weight:bold; border-bottom:1px solid #dfe3e7;">청량리제8구역주택재개발정비사업</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">위치</td>
+        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">서울특별시 동대문구 청량리동 435일대</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">건립 규모</td>
+        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">최고 29층, 730세대(예정)</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-right:1px solid #dfe3e7; vertical-align:top;">현재 단계</td>
+        <td class="zp-stage" style="padding:14px 16px;">
+          <table style="width:100%; border-collapse:collapse; margin-bottom:8px;">
+            <tr>
+              <td class="zp-stage-name" style="padding:0; font-weight:bold; color:#a61c1c;">이주·철거</td>
+              <td class="zp-stage-count" style="padding:0; text-align:right; font-size:13px; color:#000;">7단계 중 [N]단계</td>
+            </tr>
+          </table>
+          <table style="width:100%; border-collapse:separate; border-spacing:3px 0; margin:0 -3px; table-layout:fixed;">
+            <tr>
+              <td class="zp-step" title="추진위원회 승인" style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="조합설립인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="사업시행인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="관리처분인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="이주·철거"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="착공·분양"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="준공·입주"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 재개발/재건축 이후 (시공사 카드 + 조감도) -->
+  <div style="margin:26px 0 10px; padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;">재개발/재건축 이후</div>
+  <div style="overflow:hidden; background:#8a2432;">
+    <table style="width:100%; border-collapse:collapse;">
+      <tr>
+        <td style="width:64%; padding:18px 16px; vertical-align:middle;">
+          <div style="font-size:12px; font-weight:bold; color:rgba(255,255,255,.65); margin-bottom:3px;">롯데건설</div>
+          <div style="font-size:21px; font-weight:bold; letter-spacing:-0.5px; color:#fff;">청량리8구역 롯데캐슬</div>
+        </td>
+        <td style="width:36%; padding:18px 16px 18px 0; text-align:right; vertical-align:middle;">
+
+               <img src="https://i.namu.wiki/i/UUDGAZGR21SfAv5VSyXy5U8VorpqYSymprEz5c3Jf5Yn3HinHNd9tnksTYKJM7BGDN06EQ6kWncBeSxH5etx0ZtT4IsvIqmLpqUG2YLvlQ0fahqoMdrthW0LZrQqZgLu3X92t81rwza65L81KVR25w.svg" alt="로고" style="max-width:100%; max-height:40px; object-fit:contain;"> 
+          
+        </td>
+      </tr>
+    </table>
+    <div class="zp-img" style="background:#e3e7eb; font-size:0; line-height:0;">
+      <!-- src 안에 시공사 조감도 이미지 주소를 넣으세요 -->
+      <img src="https://www.news-report.co.kr/news/photo/202512/3954_5776_3647.jpg" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
+    </div>
+  </div>
+
+</div>]]></text>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<gx:CascadingStyle kml:id="__managed_style_0C5518EEE142CEE4B530_normal">
+		<ex:extension>base64;EgIYAQ</ex:extension>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>1.778</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>402dc0fb</color>
+			</PolyStyle>
+			<BalloonStyle>
+				<text><![CDATA[<h2><b>제기4구역</b><br></h2><h3>청량리 힐스테이트 엘클래시<br></h3><div>위치: 동대문구 제기동<br></div><div>세대수: 909세대<br></div><div>규모: 최고 25층, 11개동<br></div><div>시공사: 현대건설<br></div>]]></text>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<gx:CascadingStyle kml:id="__managed_style_01D59F40E942CEE4B520_normal">
+		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
+		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff3c8e38</color>
+				<width>1.778</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>403c8e38</color>
+			</PolyStyle>
+			<BalloonStyle>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<StyleMap id="__managed_style_0FCE65BDD442CEE4B4F1">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_0FCE65BDD442CEE4B4F1_normal</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_0FCE65BDD442CEE4B4F1_highlight</styleUrl>
+		</Pair>
+	</StyleMap>
+	<gx:CascadingStyle kml:id="__managed_style_0F35DF656542CF4F3B58_highlight">
+		<ex:extension>base64;EgIYAQ</ex:extension>
+		<Style>
+			<IconStyle>
+				<scale>1.2</scale>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>2.667</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>402dc0fb</color>
+			</PolyStyle>
+			<BalloonStyle>
+				<text><![CDATA[<!-- 구글 어스 설명(description)용 빈칸 템플릿 · 모든 스타일 인라인 -->
+<!-- 이미지 칸(zp-img)은 이미지 주소가 비어 있거나 [대괄호] 그대로면 사이트에서 자동으로 숨겨져요. -->
+<!-- [대괄호] 부분만 구역에 맞게 바꿔서 쓰세요. zp- 로 시작하는 class는 지우지 마세요(사이트에서 진행 막대를 자동으로 바꿀 때 사용). -->
+<!-- 현재 단계에 쓸 수 있는 이름(정확히 이 글자여야 막대가 자동으로 바뀜):
+     추진위원회 승인 / 조합설립인가 / 사업시행인가 / 관리처분인가 / 이주·철거 / 착공·분양 / 준공·입주 -->
+<div style="font-size:15px; line-height:1.5; color:#222; word-break:keep-all;">
+
+  <!-- 현재 구역 정보 (조감도 + 표) -->
+  <div style="margin:0 0 10px; padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;">구역 정보</div>
+  <div style="overflow:hidden; border:1px solid #cfd4d9; background:#fff;">
+    <div class="zp-img" style="background:#e9ecef; font-size:0; line-height:0;">
+      <!-- src 안에 설계사 조감도 이미지 주소를 넣으세요 -->
+      <img src="https://cleanup.seoul.go.kr/servlet/image?url=images/assc/2024/08/202408230951401724374300437.jpg" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
+    </div>
+    <table style="width:100%; border-collapse:collapse; border-top:1px solid #cfd4d9;">
+      <tr>
+        <td style="width:28%; padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">사업 명칭</td>
+        <td style="padding:14px 16px; font-weight:bold; border-bottom:1px solid #dfe3e7;">전농8구역주택재개발정비사업</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">위치</td>
+        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">서울특별시 동대문구 전농동 204일대</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">건립 규모</td>
+        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">최고 35층, 1760세대(예정)</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-right:1px solid #dfe3e7; vertical-align:top;">현재 단계</td>
+        <td class="zp-stage" style="padding:14px 16px;">
+          <table style="width:100%; border-collapse:collapse; margin-bottom:8px;">
+            <tr>
+              <td class="zp-stage-name" style="padding:0; font-weight:bold; color:#a61c1c;">사업시행인가</td>
+              <td class="zp-stage-count" style="padding:0; text-align:right; font-size:13px; color:#000;">7단계 중 [N]단계</td>
+            </tr>
+          </table>
+          <table style="width:100%; border-collapse:separate; border-spacing:3px 0; margin:0 -3px; table-layout:fixed;">
+            <tr>
+              <td class="zp-step" title="추진위원회 승인" style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="조합설립인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="사업시행인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="관리처분인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="이주·철거"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="착공·분양"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="준공·입주"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 재개발/재건축 이후 (시공사 카드 + 조감도) -->
+  <div style="margin:26px 0 10px; padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;">재개발/재건축 이후</div>
+  <div style="overflow:hidden; background:#8a2432;">
+    <table style="width:100%; border-collapse:collapse;">
+      <tr>
+        <td style="width:64%; padding:18px 16px; vertical-align:middle;">
+          <div style="font-size:12px; font-weight:bold; color:rgba(255,255,255,.65); margin-bottom:3px;">롯데건설</div>
+          <div style="font-size:21px; font-weight:bold; letter-spacing:-0.5px; color:#fff;">전농8구역 롯데캐슬</div>
+        </td>
+        <td style="width:36%; padding:18px 16px 18px 0; text-align:right; vertical-align:middle;">
+
+               <img src="https://i.namu.wiki/i/UUDGAZGR21SfAv5VSyXy5U8VorpqYSymprEz5c3Jf5Yn3HinHNd9tnksTYKJM7BGDN06EQ6kWncBeSxH5etx0ZtT4IsvIqmLpqUG2YLvlQ0fahqoMdrthW0LZrQqZgLu3X92t81rwza65L81KVR25w.svg" alt="로고" style="max-width:100%; max-height:40px; object-fit:contain;"> 
+          
+        </td>
+      </tr>
+    </table>
+    <div class="zp-img" style="background:#e3e7eb; font-size:0; line-height:0;">
+      <!-- src 안에 시공사 조감도 이미지 주소를 넣으세요 -->
+      <img src="https://cdn.arunews.com/news/photo/202509/50836_47371_1450.jpg" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
+    </div>
+  </div>
+
+</div>]]></text>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<StyleMap id="__managed_style_0D960426CA42CEE4B533">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_0D960426CA42CEE4B533_normal</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_0D960426CA42CEE4B533_highlight</styleUrl>
+		</Pair>
+	</StyleMap>
+	<gx:CascadingStyle kml:id="__managed_style_0C5518EEE142CEE4B530_highlight">
+		<ex:extension>base64;EgIYAQ</ex:extension>
+		<Style>
+			<IconStyle>
+				<scale>1.2</scale>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>2.667</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>402dc0fb</color>
+			</PolyStyle>
+			<BalloonStyle>
+				<text><![CDATA[<h2><b>제기4구역</b><br></h2><h3>청량리 힐스테이트 엘클래시<br></h3><div>위치: 동대문구 제기동<br></div><div>세대수: 909세대<br></div><div>규모: 최고 25층, 11개동<br></div><div>시공사: 현대건설<br></div>]]></text>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<StyleMap id="__managed_style_01EAC4607A42CEE4B4F4">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_01EAC4607A42CEE4B4F4_normal</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_01EAC4607A42CEE4B4F4_highlight</styleUrl>
+		</Pair>
+	</StyleMap>
+	<gx:CascadingStyle kml:id="__managed_style_0C1D61D2DE42CEF90FBC_normal">
+		<ex:extension>base64;EgIYAQ</ex:extension>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>1.778</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>402dc0fb</color>
+			</PolyStyle>
+			<BalloonStyle>
+				<text></text>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<gx:CascadingStyle kml:id="__managed_style_01D59F40E942CEE4B520_highlight">
+		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
+		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
+		<Style>
+			<IconStyle>
+				<scale>1.2</scale>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff3c8e38</color>
+				<width>2.667</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>403c8e38</color>
+			</PolyStyle>
+			<BalloonStyle>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
 	<gx:CascadingStyle kml:id="__managed_style_000B4CF32F42CEF08E10_normal">
 		<ex:extension>base64;EgIYAQ</ex:extension>
 		<Style>
@@ -2167,6 +2556,103 @@
 			</BalloonStyle>
 		</Style>
 	</gx:CascadingStyle>
+	<gx:CascadingStyle kml:id="__managed_style_0F35DF656542CF4F3B58_normal">
+		<ex:extension>base64;EgIYAQ</ex:extension>
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>1.778</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>402dc0fb</color>
+			</PolyStyle>
+			<BalloonStyle>
+				<text><![CDATA[<!-- 구글 어스 설명(description)용 빈칸 템플릿 · 모든 스타일 인라인 -->
+<!-- 이미지 칸(zp-img)은 이미지 주소가 비어 있거나 [대괄호] 그대로면 사이트에서 자동으로 숨겨져요. -->
+<!-- [대괄호] 부분만 구역에 맞게 바꿔서 쓰세요. zp- 로 시작하는 class는 지우지 마세요(사이트에서 진행 막대를 자동으로 바꿀 때 사용). -->
+<!-- 현재 단계에 쓸 수 있는 이름(정확히 이 글자여야 막대가 자동으로 바뀜):
+     추진위원회 승인 / 조합설립인가 / 사업시행인가 / 관리처분인가 / 이주·철거 / 착공·분양 / 준공·입주 -->
+<div style="font-size:15px; line-height:1.5; color:#222; word-break:keep-all;">
+
+  <!-- 현재 구역 정보 (조감도 + 표) -->
+  <div style="margin:0 0 10px; padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;">구역 정보</div>
+  <div style="overflow:hidden; border:1px solid #cfd4d9; background:#fff;">
+    <div class="zp-img" style="background:#e9ecef; font-size:0; line-height:0;">
+      <!-- src 안에 설계사 조감도 이미지 주소를 넣으세요 -->
+      <img src="https://cleanup.seoul.go.kr/servlet/image?url=images/assc/2024/08/202408230951401724374300437.jpg" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
+    </div>
+    <table style="width:100%; border-collapse:collapse; border-top:1px solid #cfd4d9;">
+      <tr>
+        <td style="width:28%; padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">사업 명칭</td>
+        <td style="padding:14px 16px; font-weight:bold; border-bottom:1px solid #dfe3e7;">전농8구역주택재개발정비사업</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">위치</td>
+        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">서울특별시 동대문구 전농동 204일대</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-bottom:1px solid #dfe3e7; border-right:1px solid #dfe3e7;">건립 규모</td>
+        <td style="padding:14px 16px; border-bottom:1px solid #dfe3e7;">최고 35층, 1760세대(예정)</td>
+      </tr>
+      <tr>
+        <td style="padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-right:1px solid #dfe3e7; vertical-align:top;">현재 단계</td>
+        <td class="zp-stage" style="padding:14px 16px;">
+          <table style="width:100%; border-collapse:collapse; margin-bottom:8px;">
+            <tr>
+              <td class="zp-stage-name" style="padding:0; font-weight:bold; color:#a61c1c;">사업시행인가</td>
+              <td class="zp-stage-count" style="padding:0; text-align:right; font-size:13px; color:#000;">7단계 중 [N]단계</td>
+            </tr>
+          </table>
+          <table style="width:100%; border-collapse:separate; border-spacing:3px 0; margin:0 -3px; table-layout:fixed;">
+            <tr>
+              <td class="zp-step" title="추진위원회 승인" style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="조합설립인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="사업시행인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="관리처분인가"    style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="이주·철거"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="착공·분양"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+              <td class="zp-step" title="준공·입주"       style="height:6px; padding:0; font-size:0; line-height:0; background:#e3e7eb;">&nbsp;</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 재개발/재건축 이후 (시공사 카드 + 조감도) -->
+  <div style="margin:26px 0 10px; padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;">재개발/재건축 이후</div>
+  <div style="overflow:hidden; background:#8a2432;">
+    <table style="width:100%; border-collapse:collapse;">
+      <tr>
+        <td style="width:64%; padding:18px 16px; vertical-align:middle;">
+          <div style="font-size:12px; font-weight:bold; color:rgba(255,255,255,.65); margin-bottom:3px;">롯데건설</div>
+          <div style="font-size:21px; font-weight:bold; letter-spacing:-0.5px; color:#fff;">전농8구역 롯데캐슬</div>
+        </td>
+        <td style="width:36%; padding:18px 16px 18px 0; text-align:right; vertical-align:middle;">
+
+               <img src="https://i.namu.wiki/i/UUDGAZGR21SfAv5VSyXy5U8VorpqYSymprEz5c3Jf5Yn3HinHNd9tnksTYKJM7BGDN06EQ6kWncBeSxH5etx0ZtT4IsvIqmLpqUG2YLvlQ0fahqoMdrthW0LZrQqZgLu3X92t81rwza65L81KVR25w.svg" alt="로고" style="max-width:100%; max-height:40px; object-fit:contain;"> 
+          
+        </td>
+      </tr>
+    </table>
+    <div class="zp-img" style="background:#e3e7eb; font-size:0; line-height:0;">
+      <!-- src 안에 시공사 조감도 이미지 주소를 넣으세요 -->
+      <img src="https://cdn.arunews.com/news/photo/202509/50836_47371_1450.jpg" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;">
+    </div>
+  </div>
+
+</div>]]></text>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
 	<gx:CascadingStyle kml:id="__managed_style_094BF4F17242CF054013_normal">
 		<ex:extension>base64;EgIYAQ</ex:extension>
 		<Style>
@@ -2272,62 +2758,6 @@
 		<Pair>
 			<key>highlight</key>
 			<styleUrl>#__managed_style_0577A069DF42CEEED358_highlight</styleUrl>
-		</Pair>
-	</StyleMap>
-	<gx:CascadingStyle kml:id="__managed_style_0C5518EEE142CEE4B530_normal">
-		<ex:extension>base64;EgIYAQ</ex:extension>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
-				</Icon>
-				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
-			</IconStyle>
-			<LabelStyle>
-			</LabelStyle>
-			<LineStyle>
-				<color>ff2dc0fb</color>
-				<width>1.778</width>
-			</LineStyle>
-			<PolyStyle>
-				<color>402dc0fb</color>
-			</PolyStyle>
-			<BalloonStyle>
-				<text><![CDATA[<h2><b>제기4구역</b><br></h2><h3>청량리 힐스테이트 엘클래시<br></h3><div>위치: 동대문구 제기동<br></div><div>세대수: 909세대<br></div><div>규모: 최고 25층, 11개동<br></div><div>시공사: 현대건설<br></div>]]></text>
-			</BalloonStyle>
-		</Style>
-	</gx:CascadingStyle>
-	<gx:CascadingStyle kml:id="__managed_style_01D59F40E942CEE4B520_normal">
-		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
-		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
-		<Style>
-			<IconStyle>
-				<Icon>
-					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
-				</Icon>
-				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
-			</IconStyle>
-			<LabelStyle>
-			</LabelStyle>
-			<LineStyle>
-				<color>ff3c8e38</color>
-				<width>1.778</width>
-			</LineStyle>
-			<PolyStyle>
-				<color>403c8e38</color>
-			</PolyStyle>
-			<BalloonStyle>
-			</BalloonStyle>
-		</Style>
-	</gx:CascadingStyle>
-	<StyleMap id="__managed_style_01EAC4607A42CEE4B4F4">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#__managed_style_01EAC4607A42CEE4B4F4_normal</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#__managed_style_01EAC4607A42CEE4B4F4_highlight</styleUrl>
 		</Pair>
 	</StyleMap>
 	<gx:CascadingStyle kml:id="__managed_style_0FCE65BDD442CEE4B4F1_normal">
@@ -2449,16 +2879,6 @@
 			</BalloonStyle>
 		</Style>
 	</gx:CascadingStyle>
-	<StyleMap id="__managed_style_0C1D61D2DE42CEF90FBC">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#__managed_style_0C1D61D2DE42CEF90FBC_normal</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#__managed_style_0C1D61D2DE42CEF90FBC_highlight</styleUrl>
-		</Pair>
-	</StyleMap>
 	<gx:CascadingStyle kml:id="__managed_style_0C5691A76642CEE4B4D4_normal">
 		<ex:extension>base64;Eq4BGAEiqQEKpgEKT2h0dHBzOi8vZWFydGguZ29vZ2xlLmNvbS9iYWxsb29uX2NvbXBvbmVudHMvYmFzZS8xLjEuMC4wL2NhcmRfdGVtcGxhdGUua21sI21haW4SUwpPaHR0cHM6Ly9lYXJ0aC5nb29nbGUuY29tL2JhbGxvb25fY29tcG9uZW50cy9iYXNlL2N1cnJlbnQvY2FyZF90ZW1wbGF0ZS5rbWwjbWFpbhgA</ex:extension>
 		<styleUrl>https://earth.google.com/balloon_components/base/1.1.0.0/card_template.kml#main</styleUrl>
@@ -2774,16 +3194,6 @@
 			</BalloonStyle>
 		</Style>
 	</gx:CascadingStyle>
-	<StyleMap id="__managed_style_0FCE65BDD442CEE4B4F1">
-		<Pair>
-			<key>normal</key>
-			<styleUrl>#__managed_style_0FCE65BDD442CEE4B4F1_normal</styleUrl>
-		</Pair>
-		<Pair>
-			<key>highlight</key>
-			<styleUrl>#__managed_style_0FCE65BDD442CEE4B4F1_highlight</styleUrl>
-		</Pair>
-	</StyleMap>
 	<Folder id="5F9E2FBD31000001">
 		<ex:extension>base64;GgA</ex:extension>
 		<name>노원구</name>
@@ -3230,7 +3640,7 @@
 				<range>3840.281233415008</range>
 				<altitudeMode>absolute</altitudeMode>
 			</LookAt>
-			<styleUrl>#__managed_style_0C5691A76642CEE4B4D4</styleUrl>
+			<styleUrl>#__managed_style_0F35DF656542CF4F3B58</styleUrl>
 			<Polygon>
 				<outerBoundaryIs>
 					<LinearRing>
@@ -3488,7 +3898,7 @@
 				<range>1547.350532528217</range>
 				<altitudeMode>absolute</altitudeMode>
 			</LookAt>
-			<styleUrl>#__managed_style_0C5691A76642CEE4B4D4</styleUrl>
+			<styleUrl>#__managed_style_0E92C5669B42CF5E4849</styleUrl>
 			<Polygon>
 				<outerBoundaryIs>
 					<LinearRing>
@@ -3616,6 +4026,7 @@
 		</Placemark>
 		<Placemark id="5F9E2FBD32000027">
 			<name>신답극동리모델링</name>
+			<description><![CDATA[<div>사업명칭: 신답극동리모델링<br></div><div>위치: 서울특별시 동대문구 답십리동 464-1<br></div><div>건립규모: 최고 17층, 254세대<br></div><div>현재단계: 이주·철거<br></div><div>조감도:<br></div><div>시공사: 쌍용건설<br></div><div>단지명: 청계 더 플래티넘<br></div><div>로고:&nbsp;<a href="https://i.namu.wiki/i/04J14CjTNnb1YOCdfbK9PUeIeob2Qgw1Ex5e0VvYhO8az-1u-0uzIWaJMVsPw2O8tBz6gwWhuE20HUFDo_zP9iIslv0aIE7tG64t7rVxH4FnhBpkUWAIClU0KbEaTuuL_xMseHMySxjDZCVjd3HQ9g.svg">https://i.namu.wiki/i/04J14CjTNnb1YOCdfbK9PUeIeob2Qgw1Ex5e0VvYhO8az-1u-0uzIWaJMVsPw2O8tBz6gwWhuE20HUFDo_zP9iIslv0aIE7tG64t7rVxH4FnhBpkUWAIClU0KbEaTuuL_xMseHMySxjDZCVjd3HQ9g.svg</a><br></div><div>시공사조감도:&nbsp;<a href="https://www.ssyapt.com/upload/remodeling/faa660f72a2f498184e869aa0799b982.jpg">https://www.ssyapt.com/upload/remodeling/faa660f72a2f498184e869aa0799b982.jpg</a><br></div><div>브랜드색상:&nbsp;#172C56<br></div><div>브랜드글자색: #fff<br></div>]]></description>
 			<LookAt>
 				<longitude>127.0448181463866</longitude>
 				<latitude>37.57274379621148</latitude>
@@ -4474,7 +4885,7 @@
 				<range>2921.715701207577</range>
 				<altitudeMode>absolute</altitudeMode>
 			</LookAt>
-			<styleUrl>#__managed_style_0D991C237C42CF1840D8</styleUrl>
+			<styleUrl>#__managed_style_0659AF4DD442CF3BEAA4</styleUrl>
 			<Polygon>
 				<outerBoundaryIs>
 					<LinearRing>
