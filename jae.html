@@ -1087,6 +1087,134 @@
             zpHideEmptyImages(root);
         }
 
+        /* ---------- 글자만 적어도 구역 카드 자동 생성 ----------
+           KML 설명에 아래처럼 '항목: 값' 줄만 적어도(ExtendedData로 넣어도) 카드가 만들어집니다.
+             사업명칭: ...        위치: ...        건립규모: ...
+             현재단계: 관리처분인가
+             조감도: 이미지 주소
+             시공사: ...          단지명: ...      로고: 이미지 주소
+             시공사조감도: 이미지 주소
+             브랜드색상: #eceff1   (시공사 카드 배경색, 16진수 색 코드)
+             브랜드글자색: #000000 (시공사 카드 글씨색. 시공사·단지명 두 줄에 같은 색, 시공사 줄만 조금 투명)
+           적지 않은 항목은 그 줄(또는 이미지 칸)이 자동으로 빠집니다.
+           이미 HTML 카드(zp- 클래스)로 적힌 구역은 건드리지 않습니다. */
+        const ZP_KEYS = { '사업명칭': 'name', '위치': 'loc', '건립규모': 'scale', '현재단계': 'stage',
+                          '조감도': 'img1', '설계사조감도': 'img1', '시공사': 'maker', '단지명': 'brand',
+                          '로고': 'logo', '시공사조감도': 'img2',
+                          '브랜드색상': 'bg', '브랜드색': 'bg', '로고배경': 'bg', '로고배경색': 'bg',
+                          '브랜드글자색': 'fg', '글자색': 'fg', '시공사글자색': 'fg', '브랜드글씨색': 'fg', '글씨색': 'fg' };
+
+        function zpPlain(html) {
+            const ta = document.createElement('textarea');
+            ta.innerHTML = String(html || '').replace(/<[^>]*>/g, '');
+            return ta.value.trim();
+        }
+
+        function zpParseFields(desc) {
+            const f = {};
+            const put = function(k, v) {
+                const key = ZP_KEYS[String(k).replace(/\s+/g, '')];
+                v = String(v == null ? '' : v).trim();
+                if (key && v && !(key in f)) f[key] = v;
+            };
+            // ExtendedData 표(kml-data): <th>항목</th><td>값</td>
+            String(desc).replace(/<th[^>]*>([\s\S]*?)<\/th>\s*<td[^>]*>([\s\S]*?)<\/td>/gi, function(m, k, v) {
+                put(zpPlain(k), zpPlain(v));
+                return m;
+            });
+            // 글자 줄: 항목: 값
+            const text = String(desc)
+                .replace(/<br\s*\/?>/gi, '\n')
+                .replace(/<\/(p|div|li|tr|h\d)>/gi, '\n')
+                .replace(/<[^>]*>/g, '');
+            const ta = document.createElement('textarea');
+            ta.innerHTML = text;
+            ta.value.split(/\r?\n/).forEach(function(line) {
+                const m = line.match(/^\s*([가-힣A-Za-z ]+?)\s*[:：]\s*(.+?)\s*$/);
+                if (m) put(m[1], m[2]);
+            });
+            return f;
+        }
+
+        function zpSafeUrl(u) {
+            u = String(u || '').trim();
+            if (/^https?:\/\//i.test(u)) return u;
+            if (u.indexOf(':') === -1) return u;   // 같은 저장소의 상대 경로(assets/…)
+            return '';                              // javascript: 같은 주소는 막음
+        }
+
+        function zpBuildCard(desc) {
+            if (/class=["']zp-/.test(desc)) return null;
+            const f = zpParseFields(desc);
+            if (!(f.name || f.stage)) return null;
+
+            const HEAD = 'padding-left:10px; border-left:4px solid #a61c1c; font-size:18px; font-weight:bold; color:#000;';
+            const imgBox = function(url, bg) {
+                const u = zpSafeUrl(url);
+                if (!u) return '';
+                return '<div class="zp-img" style="background:' + bg + '; font-size:0; line-height:0;">' +
+                       '<img src="' + esc(u) + '" alt="조감도" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover;"></div>';
+            };
+
+            /* ① 구역 정보 */
+            const rows = [];
+            if (f.name)  rows.push({ label: '사업 명칭', html: esc(f.name), bold: true });
+            if (f.loc)   rows.push({ label: '위치', html: esc(f.loc) });
+            if (f.scale) rows.push({ label: '건립 규모', html: esc(f.scale) });
+            if (f.stage) {
+                const idx = ZP_STAGES.indexOf(f.stage.trim());
+                const bar = ZP_STAGES.map(function(n, i) {
+                    const c = i < idx ? '#000000' : i === idx ? '#a61c1c' : '#e3e7eb';
+                    return '<td class="zp-step" title="' + esc(n) + '" style="height:6px; padding:0; font-size:0; line-height:0; background:' + c + ';">&nbsp;</td>';
+                }).join('');
+                rows.push({
+                    label: '현재 단계', cls: 'zp-stage', top: true,
+                    html: '<table style="width:100%; border-collapse:collapse; margin-bottom:8px;"><tr>' +
+                          '<td class="zp-stage-name" style="padding:0; font-weight:bold; color:#a61c1c;">' + esc(f.stage) + '</td>' +
+                          '<td class="zp-stage-count" style="padding:0; text-align:right; font-size:13px; color:#000;">' + (idx >= 0 ? '7단계 중 ' + (idx + 1) + '단계' : '') + '</td></tr></table>' +
+                          '<table style="width:100%; border-collapse:separate; border-spacing:3px 0; margin:0 -3px; table-layout:fixed;"><tr>' + bar + '</tr></table>'
+                });
+            }
+            const img1 = imgBox(f.img1, '#e9ecef');
+            let infoHtml = '';
+            if (rows.length || img1) {
+                const rowsHtml = rows.map(function(r, i) {
+                    const bb = i < rows.length - 1 ? ' border-bottom:1px solid #dfe3e7;' : '';
+                    return '<tr><td style="width:28%; padding:14px 12px; background:#f8f9fa; font-weight:bold; color:#000; text-align:center; border-right:1px solid #dfe3e7;' + bb + (r.top ? ' vertical-align:top;' : '') + '">' + r.label + '</td>' +
+                           '<td' + (r.cls ? ' class="' + r.cls + '"' : '') + ' style="padding:14px 16px;' + (r.bold ? ' font-weight:bold;' : '') + bb + '">' + r.html + '</td></tr>';
+                }).join('');
+                infoHtml =
+                    '<div style="margin:0 0 10px; ' + HEAD + '">구역 정보</div>' +
+                    '<div style="overflow:hidden; border:1px solid #cfd4d9; background:#fff;">' + img1 +
+                    (rows.length ? '<table style="width:100%; border-collapse:collapse;' + (img1 ? ' border-top:1px solid #cfd4d9;' : '') + '">' + rowsHtml + '</table>' : '') +
+                    '</div>';
+            }
+
+            /* ② 재개발/재건축 이후 */
+            const logoUrl = zpSafeUrl(f.logo);
+            const fgm = /^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.exec((f.fg || '').trim());
+            const brandFg = fgm ? '#' + fgm[1] : '#000000';   // 잘못된 색 코드면 기본 검정
+            const left = (f.maker ? '<div style="font-size:12px; font-weight:bold; color:' + brandFg + '; opacity:.65; margin-bottom:3px;">' + esc(f.maker) + '</div>' : '') +
+                         (f.brand ? '<div style="font-size:21px; font-weight:bold; letter-spacing:-0.5px; color:' + brandFg + ';">' + esc(f.brand) + '</div>' : '');
+            const img2 = imgBox(f.img2, '#e3e7eb');
+            const bgm = /^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.exec((f.bg || '').trim());
+            const brandBg = bgm ? '#' + bgm[1] : '#eceff1';   // 잘못된 색 코드면 기본 회색
+            let afterHtml = '';
+            if (left || logoUrl || img2) {
+                const brandRow = (left || logoUrl)
+                    ? '<table style="width:100%; border-collapse:collapse;"><tr>' +
+                      '<td style="' + (logoUrl ? 'width:64%; ' : '') + 'padding:18px 16px; vertical-align:middle;">' + left + '</td>' +
+                      (logoUrl ? '<td style="width:36%; padding:18px 16px 18px 0; text-align:right; vertical-align:middle;"><img src="' + esc(logoUrl) + '" alt="로고" style="max-width:100%; max-height:40px; object-fit:contain;"></td>' : '') +
+                      '</tr></table>'
+                    : '';
+                afterHtml =
+                    '<div style="margin:' + (infoHtml ? '26px' : '0') + ' 0 10px; ' + HEAD + '">재개발/재건축 이후</div>' +
+                    '<div style="overflow:hidden; background:' + brandBg + ';">' + brandRow + img2 + '</div>';
+            }
+
+            return '<div style="font-size:15px; line-height:1.5; color:#222; word-break:keep-all;">' + infoHtml + afterHtml + '</div>';
+        }
+
         function getImageUrl(imageField) {
             if (!imageField) return null;
             if (typeof imageField === 'string') return imageField;
@@ -2225,6 +2353,8 @@
 
             // 설명 안의 이미지는 상단에 따로 배치
             let description = zone.description;
+            const zpCardHtml = zpBuildCard(description);   // '항목: 값' 글자만 적은 구역 → 카드로 자동 변환
+            if (zpCardHtml) description = zpCardHtml;
             let imageUrl = null;
             const imgTagMatch = description.match(/<img[^>]+src="([^">]+)"/i) || description.match(/<img[^>]+src='([^'>]+)'/i);
             const urlMatch = description.match(/(https?:\/\/[^\s"'<>]+\.(png|jpg|jpeg|gif|webp))/i);
