@@ -6,6 +6,8 @@
     <title id="pageTitle">서오일보</title>
     <!-- 브라우저 탭 아이콘 (파비콘) 설정 -->
     <link rel="icon" href="assets/favi.png" type="image/png">
+    <!-- 공통 헤더 스타일 -->
+    <link rel="stylesheet" href="components/header.css" data-seoilbo-header>
 
     <!-- 다크/라이트 모드: 저장된 선택이 있으면 먼저 적용 (없으면 라이트) -->
     <script>
@@ -43,169 +45,6 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-        }
-
-        /* 1. 페이지와 함께 스크롤되어 올라가는 큰 헤더 (날짜 정보 바 포함) */
-        .large-header {
-            width: 100%;
-            background-color: #ffffff;
-            border-bottom: 1px solid #d1d8dd;
-            position: relative;
-            z-index: 10;
-        }
-
-        .header-main-bar {
-            height: 95px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #ffffff;
-        }
-
-        .header-container {
-            max-width: 1160px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 0 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center; /* 로고 정가운데 배치 */
-            height: 100%;
-            position: relative;
-        }
-
-        .logo-link {
-            display: block;
-            text-decoration: none;
-        }
-
-        .logo-img-large {
-            height: 60px;
-            width: auto;
-            display: block;
-        }
-
-        /* 날짜 정보 바 스타일 추가 */
-        .sub-info-bar {
-            background-color: #ffffff;
-            border-top: 1px solid #d1d8dd;
-            border-bottom: 1px solid #000000;
-            font-size: 12px;
-            color: #555555;
-            height: 36px;
-            display: flex;
-            align-items: center;
-        }
-
-        .sub-info-inner {
-            max-width: 1160px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 0 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-        }
-
-        .current-date {
-            flex-shrink: 0;
-        }
-
-        /* 카테고리 칸 (가운데 정렬) */
-        .sub-nav-categories {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 24px;
-            align-items: center;
-        }
-
-        .sub-nav-categories a {
-            text-decoration: none;
-            color: #333333;
-            font-size: 13px;
-            font-weight: 500;
-            transition: none;
-        }
-
-        .sub-nav-categories a:hover {
-            color: #a61c1c;
-            font-weight: 700;
-        }
-
-        /* 2. 일정 수준 이상 스크롤했을 때 위에서 스르륵 나타나는 고정 소형 헤더 */
-        .fixed-small-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 56px;
-            background-color: #ffffff;
-            border-bottom: 1px solid #d1d8dd;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            transform: translateY(-100%);
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .fixed-small-header.active {
-            transform: translateY(0);
-        }
-
-        .logo-img-small {
-            height: 32px;
-            width: auto;
-            display: block;
-        }
-
-        /* 모바일 헤더용 유틸리티 바 (기본 숨김) */
-        .mobile-utility-bar {
-            display: none;
-            width: 100%;
-            height: 100%;
-            justify-content: space-around;
-            align-items: center;
-        }
-
-        .mobile-utility-bar .util-btn {
-            flex: 1;
-            height: 100%;
-            background: none;
-            border: none;
-            border-right: 1px solid #e1e4e8;
-            font-size: 13px;
-            font-weight: 700;
-            color: #555555;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-        .mobile-utility-bar .util-btn:last-child {
-            border-right: none;
-        }
-        
-        .util-icon {
-            width: 18px;
-            height: 18px;
-            object-fit: contain;
-            display: block;
-        }
-
-        /* 스크롤 프로세스바 */
-        .scroll-progress-bar {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0%;
-            height: 3px;
-            background-color: #C91C1C;
-            transition: width 0.1s ease-out;
         }
 
         .page-wrapper {
@@ -950,9 +789,6 @@
         }
 
         @media (max-width: 768px) {
-            .sub-info-bar { display: none; }
-            .header-main-bar { height: 70px; }
-            .logo-img-large { height: 40px; }
             .article-toolbar { display: none !important; }
             .article-col { padding-top: 30px; }
             .article-layout { grid-template-columns: minmax(0, 1fr); }
@@ -961,10 +797,6 @@
             .cat-news-name { font-size: 16px; }
             .article-title { font-size: 32px; }
             .page-wrapper { padding: 0 15px; }
-            .fixed-small-header .header-container { display: flex; }
-            .fixed-small-header .mobile-utility-bar { display: none; }
-            .fixed-small-header.mobile-scrolled-down .header-container { display: none; }
-            .fixed-small-header.mobile-scrolled-down .mobile-utility-bar { display: flex; }
             .footer-top { flex-direction: column; gap: 20px; }
             .footer-bar { margin: 0 6px; }
             footer { padding: 20px 15px; }
@@ -1038,64 +870,9 @@
         }
 
         /* ===== 다크 모드 ===== */
-        @media (max-width: 768px) {
-            .mobile-utility-bar {
-                justify-content: flex-start;
-                overflow-x: auto;
-                overflow-y: hidden;
-                scroll-snap-type: x mandatory;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-            }
-            .mobile-utility-bar::-webkit-scrollbar { display: none; }
-            .mobile-utility-bar .util-btn {
-                flex: 0 0 25%;
-                width: 25%;
-                scroll-snap-align: start;
-            }
-        }
-
-        /* 모바일 유틸 바 '옆으로 넘기기' 화살표 (한 번 만지면 사라짐) */
-        .util-scroll-hint { display: none; }
-
-        @media (max-width: 768px) {
-            .fixed-small-header.mobile-scrolled-down .util-scroll-hint {
-                display: flex;
-                position: absolute;
-                right: 5px;
-                top: 9px;
-                width: 18px;
-                height: 18px;
-                align-items: center;
-                justify-content: center;
-                border-radius: 50%;
-                background-color: rgba(255, 255, 255, 0.9);
-                border: 1px solid #d1d8dd;
-                color: #666666;
-                font-size: 14px;
-                line-height: 1;
-                pointer-events: none;
-                z-index: 5;
-            }
-        }
-
-        html.util-hint-done .util-scroll-hint { display: none !important; }
-        html[data-theme="dark"] .util-scroll-hint { background-color: rgba(18, 18, 18, 0.9); border-color: #444444; color: #cccccc; }
-
         html[data-theme="dark"] { color-scheme: dark; }
         html[data-theme="dark"] body { color: #e4e4e4; background-color: #121212; }
-        html[data-theme="dark"] .large-header,
-        html[data-theme="dark"] .header-main-bar,
-        html[data-theme="dark"] .sub-info-bar,
-        html[data-theme="dark"] .fixed-small-header { background-color: #121212; border-color: #333333; }
-        html[data-theme="dark"] .sub-info-bar { color: #aaaaaa; border-bottom-color: #444444; }
-        html[data-theme="dark"] .sub-nav-categories a { color: #dddddd; }
-        html[data-theme="dark"] .sub-nav-categories a:hover { color: #ff6b6b; }
-        html[data-theme="dark"] .fixed-small-header { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
-        html[data-theme="dark"] .logo-img-large,
-        html[data-theme="dark"] .logo-img-small,
         html[data-theme="dark"] .footer-logo-img { filter: invert(1) hue-rotate(180deg); }
-        html[data-theme="dark"] .mobile-utility-bar .util-btn { border-right-color: #333333; color: #bbbbbb; }
         html[data-theme="dark"] .util-btn,
         html[data-theme="dark"] .toolbar-btn { color: #cccccc; }
         html[data-theme="dark"] .util-btn:hover,
@@ -1161,49 +938,8 @@
 </head>
 <body>
 
-    <!-- 1. 페이지와 함께 스크롤되어 올라가는 큰 헤더 (날짜 바 포함) -->
-    <div class="large-header" id="largeHeader">
-        <div class="header-main-bar">
-            <div class="header-container">
-                <a href="index.html" class="logo-link">
-                    <img src="assets/seologo.png" alt="서오일보 로고" class="logo-img-large">
-                </a>
-            </div>
-        </div>
-        <div class="sub-info-bar">
-            <div class="sub-info-inner">
-                <span class="current-date" id="headerDate">2026.09.14 (월)</span>
-                <nav class="sub-nav-categories">
-                    <a href="category.html?type=social">사회</a>
-                    <a href="category.html?type=economy">경제</a>
-                    <a href="category.html?type=politics">정치</a>
-                    <a href="category.html?type=realestate">부동산</a>
-                    <a href="category.html?type=culture">문화</a>
-                    <a href="category.html?type=opinion">오피니언</a>
-                    <a href="jae.html">동네개발맵</a>
-                    <a href="https://seoilbo.github.io/monthly/">월간서오</a>
-                </nav>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2. 일정 수준 이상 스크롤했을 때 위에서 스르륵 나타나는 고정 소형 헤더 -->
-    <header class="fixed-small-header" id="fixedSmallHeader">
-        <div class="header-container">
-            <a href="index.html" class="logo-link">
-                <img src="assets/seologo.png" alt="서오일보 로고" class="logo-img-small">
-            </a>
-        </div>
-        <div class="mobile-utility-bar">
-            <button class="util-btn" onclick="changeFontSize(1)">A+</button>
-            <button class="util-btn" onclick="changeFontSize(-1)">A-</button>
-            <button class="util-btn tts-btn" onclick="startTTS()" aria-label="기사 듣기"><img src="assets/speak.png" alt="기사 듣기" class="util-icon"></button>
-            <button class="util-btn theme-btn" onclick="toggleTheme()" aria-label="다크 모드"><img src="assets/dark.png" alt="다크 모드" class="util-icon"></button>
-            <button class="util-btn" onclick="toggleSharePopup(this, event)"><img src="assets/share.png" alt="공유" class="util-icon"></button>
-        </div>
-        <span class="util-scroll-hint" id="utilScrollHint" aria-hidden="true">&#8250;</span>
-        <div class="scroll-progress-bar" id="scrollProgressBar"></div>
-    </header>
+    <!-- 공통 헤더 (components/header.js) · 뷰어용: 진행 바 + 모바일 유틸 바 포함 -->
+    <script src="components/header.js" data-variant="viewer"></script>
 
     <!-- 메인 래퍼 -->
     <div class="page-wrapper">
@@ -1357,16 +1093,6 @@
 
     <script>
         window.addEventListener('DOMContentLoaded', function() {
-            const dateEl = document.getElementById('headerDate');
-            if(dateEl) {
-                const now = new Date();
-                const year = now.getFullYear();
-                const month = String(now.getMonth() + 1).padStart(2, '0');
-                const day = String(now.getDate()).padStart(2, '0');
-                const week = ['일', '월', '화', '수', '목', '금', '토'][now.getDay()];
-                dateEl.innerText = `${year}.${month}.${day} (${week})`;
-            }
-
             const urlParams = new URLSearchParams(window.location.search);
             const articleId = urlParams.get('id');
 
@@ -1811,40 +1537,6 @@
             section.style.display = 'block';
         }
 
-        let lastScrollTop = 0;
-        window.addEventListener('scroll', function() {
-            const fixedHeader = document.getElementById('fixedSmallHeader');
-            const largeHeader = document.getElementById('largeHeader');
-            const progressBar = document.getElementById('scrollProgressBar');
-            
-            const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            
-            if(progressBar) {
-                progressBar.style.width = scrolled + '%';
-            }
-
-            const threshold = largeHeader ? largeHeader.offsetHeight : 111;
-
-            if (winScroll > threshold) {
-                fixedHeader.classList.add('active');
-                
-                if (window.innerWidth <= 768) {
-                    if (winScroll < lastScrollTop) {
-                        fixedHeader.classList.remove('mobile-scrolled-down');
-                    } else {
-                        fixedHeader.classList.add('mobile-scrolled-down');
-                    }
-                }
-            } else {
-                fixedHeader.classList.remove('active');
-                fixedHeader.classList.remove('mobile-scrolled-down');
-            }
-            
-            lastScrollTop = winScroll <= 0 ? 0 : winScroll;
-        });
-
         // ===== 기사 듣기 (TTS) =====
         // 한 번 누르면 제목 → 요약 → 본문 순서로 끝까지 읽습니다.
         // 요약을 읽지 않으려면 아래 TTS_READ_SUMMARY 를 false 로 바꾸세요.
@@ -1959,23 +1651,6 @@
         }
 
         applyThemeButtons();
-
-        // 모바일 유틸 바 화살표: 한 번 만지거나 옆으로 넘기면 사라지고, 이후에는 다시 나타나지 않음
-        (function() {
-            const root = document.documentElement;
-            try {
-                if (localStorage.getItem('seoUtilHintDone') === '1') { root.classList.add('util-hint-done'); return; }
-            } catch (e) {}
-            const bar = document.querySelector('.mobile-utility-bar');
-            if (!bar) return;
-            const hide = function() {
-                root.classList.add('util-hint-done');
-                try { localStorage.setItem('seoUtilHintDone', '1'); } catch (e) {}
-            };
-            bar.addEventListener('touchstart', hide, { once: true, passive: true });
-            bar.addEventListener('pointerdown', hide, { once: true, passive: true });
-            bar.addEventListener('scroll', hide, { once: true, passive: true });
-        })();
 
         let currentFontSize = 18;
         function changeFontSize(step) {
