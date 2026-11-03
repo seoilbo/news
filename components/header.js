@@ -207,7 +207,6 @@
           '<input type="search" id="hdrSearchInput" placeholder="검색어를 입력하세요." enterkeyhint="search" aria-label="검색어">' +
           '<button type="submit" aria-label="검색">' + ICON.search(24) + '</button>' +
         '</form>' +
-        '<div class="hdr-search-results" id="hdrSearchResults"></div>' +
       '</div>';
     while (wrap.firstChild) document.body.appendChild(wrap.firstChild);
 
@@ -215,7 +214,6 @@
     var menu = document.getElementById('hdrMenu');
     var panel = document.getElementById('hdrSearch');
     var input = document.getElementById('hdrSearchInput');
-    var results = document.getElementById('hdrSearchResults');
     var openedAt = 0;
 
     function setBtns(sel, on) {
@@ -274,7 +272,6 @@
       if (mq.matches) root.classList.add('hdr-lock');
       openedAt = window.pageYOffset || 0;
       setTimeout(function () { input.focus(); }, 60);
-      loadIndex(); // 미리 불러두기
     }
 
     document.addEventListener('click', function (e) {
@@ -297,84 +294,17 @@
     if (mq.addEventListener) mq.addEventListener('change', onBreak); else if (mq.addListener) mq.addListener(onBreak);
     menu.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('a')) closeAll(); });
 
-    // ---- 검색 ----
-    var API = 'https://api.github.com/repos/seoilbo/news/contents/articles';
-    var CACHE_KEY = 'seoSearchIndex', CACHE_MS = 10 * 60 * 1000;
-    var indexPromise = null, token = 0, timer = null;
-
-    function textOf(content) {
-      if (!Array.isArray(content)) return '';
-      var out = [];
-      content.forEach(function (item) {
-        var t = typeof item === 'string' ? item : (item && item.type === 'text' ? item.value : '');
-        if (t) out.push(String(t));
-      });
-      return out.join(' ');
-    }
-    function loadIndex() {
-      if (indexPromise) return indexPromise;
-      try {
-        var c = JSON.parse(sessionStorage.getItem(CACHE_KEY) || 'null');
-        if (c && Array.isArray(c.d) && Date.now() - c.t < CACHE_MS) return (indexPromise = Promise.resolve(c.d));
-      } catch (e) {}
-      indexPromise = fetch(API)
-        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-        .then(function (files) {
-          var jf = files.filter(function (f) { return f.type === 'file' && /\.json$/i.test(f.name); });
-          return Promise.all(jf.map(function (f) {
-            return fetch(f.download_url)
-              .then(function (r) { return r.ok ? r.json() : null; })
-              .then(function (d) {
-                if (!d) return null;
-                return {
-                  id: f.name.replace(/\.json$/i, ''),
-                  title: String(d.title || ''),
-                  cat: Array.isArray(d.category) ? d.category.join(' ') : String(d.category || ''),
-                  text: textOf(d.content).slice(0, 4000)
-                };
-              })
-              .catch(function () { return null; });
-          }));
-        })
-        .then(function (list) {
-          list = list.filter(Boolean).sort(function (a, b) { return b.id.localeCompare(a.id); });
-          try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), d: list })); } catch (e) {}
-          return list;
-        })
-        .catch(function () { indexPromise = null; return null; });
-      return indexPromise;
-    }
-
-    function run() {
-      var q = input.value.trim();
-      var my = ++token;
-      if (!q) { results.innerHTML = ''; return; }
-      results.innerHTML = '<div class="hdr-sr-msg">검색 중…</div>';
-      loadIndex().then(function (list) {
-        if (my !== token) return;
-        if (!list) { results.innerHTML = '<div class="hdr-sr-msg">기사를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</div>'; return; }
-        var terms = q.toLowerCase().split(/\s+/);
-        var hits = [];
-        list.forEach(function (a) {
-          var t = a.title.toLowerCase();
-          var all = t + ' ' + a.cat.toLowerCase() + ' ' + a.text.toLowerCase();
-          if (terms.every(function (w) { return all.indexOf(w) > -1; })) {
-            hits.push({ a: a, s: terms.every(function (w) { return t.indexOf(w) > -1; }) ? 0 : 1 });
-          }
-        });
-        hits.sort(function (x, y) { return x.s - y.s; });
-        if (!hits.length) { results.innerHTML = '<div class="hdr-sr-msg">검색 결과가 없습니다.</div>'; return; }
-        results.innerHTML = '<div class="hdr-sr-count">검색 결과 ' + hits.length + '건</div>' +
-          hits.slice(0, 30).map(function (h) {
-            return '<a class="hdr-sr-item" href="viewer.html?id=' + encodeURIComponent(h.a.id) + '">' +
-                   (h.a.cat ? '<span class="hdr-sr-cat">' + esc(h.a.cat) + '</span>' : '') +
-                   '<span class="hdr-sr-title">' + esc(h.a.title) + '</span></a>';
-          }).join('');
-      });
-    }
-    input.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(run, 200); });
+    // ---- 검색: 결과는 search.html 에서 보여줌 ----
+    var SEARCH_PAGE = 'search.html';
     document.getElementById('hdrSearchForm').addEventListener('submit', function (e) {
-      e.preventDefault(); clearTimeout(timer); run();
+      e.preventDefault();
+      var q = input.value.trim();
+      if (!q) {
+        alert('검색어를 입력하세요!');
+        input.focus();
+        return;
+      }
+      location.href = SEARCH_PAGE + '?q=' + encodeURIComponent(q);
     });
   })();
 })();
