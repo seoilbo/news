@@ -128,3 +128,116 @@
     .header-main-bar { height: 70px; }
     .logo-img-large { height: 40px; }
 }
+
+/* ===== 뷰어 전용 요소: 모바일 유틸 바 / 스크롤 진행 바 (뷰어_최종본_.txt에서 그대로 추출) ===== */
+/* 모바일 헤더용 유틸리티 바 (기본 숨김) */
+.mobile-utility-bar {
+    display: none;
+    width: 100%;
+    height: 100%;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.mobile-utility-bar .util-btn {
+    flex: 1;
+    height: 100%;
+    background: none;
+    border: none;
+    border-right: 1px solid #e1e4e8;
+    font-size: 13px;
+    font-weight: 700;
+    color: #555555;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.mobile-utility-bar .util-btn:last-child {
+    border-right: none;
+}
+
+.util-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    display: block;
+}
+
+/* 스크롤 프로세스바 */
+.scroll-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background-color: #C91C1C;
+    transition: width 0.1s ease-out;
+}
+
+/* 모바일 유틸 바 가로 스크롤 */
+@media (max-width: 768px) {
+    .mobile-utility-bar {
+        justify-content: flex-start;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .mobile-utility-bar::-webkit-scrollbar { display: none; }
+    .mobile-utility-bar .util-btn {
+        flex: 0 0 25%;
+        width: 25%;
+        scroll-snap-align: start;
+    }
+}
+
+/* 모바일 유틸 바 '옆으로 넘기기' 화살표 */
+.util-scroll-hint { display: none; }
+
+@media (max-width: 768px) {
+    .fixed-small-header.mobile-scrolled-down .util-scroll-hint {
+        display: flex;
+        position: absolute;
+        right: 5px;
+        top: 9px;
+        width: 18px;
+        height: 18px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.9);
+        border: 1px solid #d1d8dd;
+        color: #666666;
+        font-size: 14px;
+        line-height: 1;
+        pointer-events: none;
+        z-index: 5;
+    }
+}
+
+html.util-hint-done .util-scroll-hint { display: none !important; }
+html[data-theme="dark"] .util-scroll-hint { background-color: rgba(18, 18, 18, 0.9); border-color: #444444; color: #cccccc; }
+
+/* 모바일에서 스크롤 내릴 때 소형 헤더가 유틸 바로 바뀜 */
+@media (max-width: 768px) {
+    .fixed-small-header .header-container { display: flex; }
+    .fixed-small-header .mobile-utility-bar { display: none; }
+    .fixed-small-header.mobile-scrolled-down .header-container { display: none; }
+    .fixed-small-header.mobile-scrolled-down .mobile-utility-bar { display: flex; }
+}
+
+/* ===== 다크 모드 (헤더 부분만) ===== */
+html[data-theme="dark"] .large-header,
+html[data-theme="dark"] .header-main-bar,
+html[data-theme="dark"] .sub-info-bar,
+html[data-theme="dark"] .fixed-small-header { background-color: #121212; border-color: #333333; }
+html[data-theme="dark"] .sub-info-bar { color: #aaaaaa; border-bottom-color: #444444; }
+html[data-theme="dark"] .sub-nav-categories a { color: #dddddd; }
+html[data-theme="dark"] .sub-nav-categories a:hover { color: #ff6b6b; }
+html[data-theme="dark"] .fixed-small-header { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
+html[data-theme="dark"] .logo-img-large,
+html[data-theme="dark"] .logo-img-small { filter: invert(1) hue-rotate(180deg); }
+html[data-theme="dark"] .mobile-utility-bar .util-btn { border-right-color: #333333; color: #bbbbbb; }
+html[data-theme="dark"] .sub-nav-categories a.active { color: #ff6b6b; }
