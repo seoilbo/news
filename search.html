@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>검색 - 서오일보</title>
+    <link rel="icon" href="assets/favi.png" type="image/png">
+    <!-- 공통 헤더 스타일 -->
+    <link rel="stylesheet" href="components/header.css" data-seoilbo-header>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: #222222;
+            line-height: 1.6;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* 메인 컨테이너 레이아웃 */
+        .main-container {
+            max-width: 1160px;
+            width: 100%;
+            margin: 40px auto 60px auto;
+            padding: 0 10px;
+            flex: 1;
+        }
+
+        .search-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 280px;
+            gap: 48px;
+            align-items: start;
+        }
+
+        /* ===== 검색창 ===== */
+        .big-search {
+            display: flex;
+            align-items: center;
+            height: 72px;
+            border: 1px solid #cfd5da;
+            background: #ffffff;
+            padding: 0 8px 0 20px;
+        }
+        .big-search input {
+            flex: 1;
+            min-width: 0;
+            height: 100%;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            font-family: inherit;
+            font-size: 28px;
+            font-weight: 700;
+            color: #111111;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .big-search input::placeholder { color: #aaaaaa; font-weight: 400; }
+        .big-search input::-webkit-search-cancel-button { display: none; }
+        .big-search button {
+            border: 0;
+            background: none;
+            padding: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #111111;
+        }
+        .clear-btn {
+            width: 36px;
+            height: 36px;
+            visibility: hidden;
+        }
+        .clear-btn.show { visibility: visible; }
+        .clear-btn span {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #cccccc;
+            color: #ffffff;
+            font-size: 15px;
+            line-height: 22px;
+            text-align: center;
+        }
+        .go-btn { width: 52px; height: 52px; }
+
+        /* ===== 결과 머리글 ===== */
+        .result-head {
+            margin-top: 40px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #111111;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .result-title { font-size: 20px; font-weight: 700; color: #111111; }
+        .result-title .cnt { font-size: 17px; font-weight: 400; color: #777777; margin-left: 6px; }
+        .sort-list { display: flex; align-items: center; font-size: 16px; }
+        .sort-list button {
+            border: 0;
+            background: none;
+            padding: 0 12px;
+            font-family: inherit;
+            font-size: 16px;
+            color: #444444;
+            cursor: pointer;
+            border-left: 1px solid #d5d9dd;
+            line-height: 1.1;
+        }
+        .sort-list button:first-child { border-left: 0; }
+        .sort-list button:last-child { padding-right: 0; }
+        .sort-list button.on { font-weight: 800; color: #111111; }
+
+        /* ===== 결과 목록 ===== */
+        .result-item {
+            display: grid;
+            grid-template-columns: 280px minmax(0, 1fr);
+            gap: 24px;
+            padding: 24px 0;
+            border-bottom: 1px solid #e5e8eb;
+        }
+        .result-thumb {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #eceff1;
+            overflow: hidden;
+        }
+        .result-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .result-body { min-width: 0; }
+        .result-item-title {
+            font-size: 22px;
+            line-height: 1.4;
+            font-weight: 500;
+            color: #111111;
+            margin-bottom: 8px;
+            word-break: keep-all;
+        }
+        .result-item-title b { font-weight: 800; }
+        .result-snippet {
+            font-size: 15px;
+            line-height: 1.65;
+            color: #777777;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .result-snippet b { font-weight: 800; color: #5a4a3a; }
+        .result-meta { font-size: 13px; color: #8a8f94; display: flex; flex-wrap: wrap; align-items: center; }
+        .result-meta span + span::before {
+            content: "";
+            display: inline-block;
+            width: 1px;
+            height: 11px;
+            background: #d5d9dd;
+            margin: 0 8px;
+            vertical-align: -1px;
+        }
+        .result-meta .m-cat { color: #a61c1c; font-weight: 600; }
+
+        .state-msg {
+            padding: 70px 0;
+            text-align: center;
+            color: #888888;
+            font-size: 16px;
+            border-bottom: 1px solid #e5e8eb;
+        }
+
+        /* ===== 오른쪽: 최신 기사 ===== */
+        .side-block { border-top: 1px solid #111111; padding-top: 16px; }
+        .side-title { font-size: 18px; font-weight: 800; color: #111111; margin-bottom: 8px; }
+        .side-item {
+            display: grid;
+            grid-template-columns: 96px minmax(0, 1fr);
+            gap: 12px;
+            padding: 14px 0;
+            border-top: 1px solid #e5e8eb;
+        }
+        .side-item:first-of-type { border-top: 0; }
+        .side-thumb { width: 100%; aspect-ratio: 16 / 9; background: #eceff1; overflow: hidden; }
+        .side-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .side-cat { font-size: 12px; font-weight: 600; color: #a61c1c; line-height: 1.3; margin-bottom: 2px; }
+        .side-item-title {
+            font-size: 14px;
+            line-height: 1.45;
+            font-weight: 600;
+            color: #222222;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-break: keep-all;
+        }
+
+        /* ===== 푸터 (인덱스와 동일) ===== */
+        footer {
+            background-color: #f2f4f6;
+            padding: 30px 10px;
+            font-size: 12px;
+            color: #666666;
+            margin-top: auto;
+            line-height: 1.6;
+        }
+
+        .footer-inner {
+            max-width: 1160px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 40px;
+        }
+
+        .footer-logo-area {
+            flex-shrink: 0;
+            padding-top: 2px;
+        }
+
+        .footer-logo-img {
+            height: 32px;
+            width: auto;
+            display: block;
+        }
+
+        .footer-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .footer-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0;
+            color: #555555;
+        }
+
+        .footer-bar {
+            margin: 0 8px;
+            color: #d1d5db;
+            font-size: 11px;
+        }
+
+        .footer-desc {
+            margin-top: 4px;
+            color: #666666;
+        }
+
+        .footer-copyright {
+            margin-top: 4px;
+            color: #888888;
+            font-weight: 500;
+        }
+
+        /* ===== 모바일 ===== */
+        @media (max-width: 900px) {
+            .search-layout { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+        }
+        @media (max-width: 768px) {
+            .main-container { margin: 15px auto 30px auto; padding: 0 8px; }
+            .big-search { height: 54px; padding: 0 4px 0 14px; }
+            .big-search input { font-size: 18px; }
+            .clear-btn { width: 30px; height: 30px; }
+            .go-btn { width: 42px; height: 42px; }
+            .result-head { margin-top: 24px; }
+            .result-title { font-size: 17px; }
+            .result-title .cnt { font-size: 14px; }
+            .sort-list button, .sort-list { font-size: 14px; }
+            .result-item { grid-template-columns: 120px minmax(0, 1fr); gap: 12px; padding: 16px 0; }
+            .result-item-title { font-size: 16px; margin-bottom: 4px; }
+            .result-snippet { font-size: 13px; -webkit-line-clamp: 2; margin-bottom: 6px; }
+            .result-meta { font-size: 12px; }
+            .footer-top { flex-direction: column; gap: 20px; }
+            .footer-bar { margin: 0 6px; }
+            footer { padding: 20px 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 공통 헤더 (components/header.js) -->
+    <script src="components/header.js"></script>
+
+    <main class="main-container">
+        <div class="search-layout">
+
+            <!-- 왼쪽: 검색창 + 결과 -->
+            <section>
+                <form class="big-search" id="bigSearchForm" autocomplete="off">
+                    <input type="search" id="bigSearchInput" placeholder="검색어를 입력하세요." aria-label="검색어" enterkeyhint="search">
+                    <button type="button" class="clear-btn" id="clearBtn" aria-label="검색어 지우기"><span>×</span></button>
+                    <button type="submit" class="go-btn" aria-label="검색">
+                        <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>
+                    </button>
+                </form>
+
+                <div id="resultArea"></div>
+            </section>
+
+            <!-- 오른쪽: 최신 기사 5개 -->
+            <aside class="side-block" id="latestBlock" hidden>
+                <div class="side-title">최신 기사</div>
+                <div id="latestList"></div>
+            </aside>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-logo-area">
+                    <img src="assets/seologo.png" alt="서오일보 로고" class="footer-logo-img">
+                </div>
+                <div class="footer-info">
+                    <div class="footer-row">
+                        <span>주소 : 서울특별시 용산구 한일로 301 (우) 01201</span>
+                        <span class="footer-bar">|</span>
+                        <span>전화 : 02-123-4567</span>
+                        <span class="footer-bar">|</span>
+                        <span>등록번호 : 서울 아 00000</span>
+                        <span class="footer-bar">|</span>
+                        <span>등록일자 : 2026.09.11</span>
+                        <span class="footer-bar">|</span>
+                        <span>발행인·편집인 : 김서오</span>
+                    </div>
+                    <div class="footer-row">
+                        <span>사업자명 : 서오일보(주)</span>
+                        <span class="footer-bar">|</span>
+                        <span>사업자등록번호 : 123-45-6789</span>
+                        <span class="footer-bar">|</span>
+                        <span>대표자명 : 김서오</span>
+                        <span class="footer-bar">|</span>
+                        <span>통신판매업신고번호 : 2026-서울용산-0123</span>
+                    </div>
+                    <div class="footer-row footer-desc">
+                        서오일보의 모든 콘텐츠(기사)는 저작권법의 보호를 받는바, 무단 전재, 복사, 배포 등을 금합니다.
+                    </div>
+                    <div class="footer-row footer-copyright">
+                        Copyright by SeoIlbo Co., Ltd. All Rights Reserved
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ===== 기본 설정 =====
+        const API_URL = 'https://api.github.com/repos/seoilbo/news/contents/articles';
+        const DEFAULT_THUMB = 'assets/thum_OG.jpg';
+        const THUMB_ONERROR = "this.onerror=null;this.src='" + DEFAULT_THUMB + "'";
+        const CACHE_KEY = 'seoSearchPageCache';
+        const CACHE_MS = 5 * 60 * 1000;
+
+        const params = new URLSearchParams(location.search);
+        const query = (params.get('q') || '').trim();
+        let sortMode = ['relevance', 'latest', 'oldest'].includes(params.get('sort')) ? params.get('sort') : 'latest';
+
+        const input = document.getElementById('bigSearchInput');
+        const clearBtn = document.getElementById('clearBtn');
+        const resultArea = document.getElementById('resultArea');
+
+        // ===== 유틸 =====
+        function esc(t) {
+            return String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+        function escRegExp(t) { return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+        function cleanText(t) { return String(t).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(); }
+
+        function highlight(text, re) {
+            if (!re) return esc(text);
+            let out = '', last = 0, m;
+            re.lastIndex = 0;
+            while ((m = re.exec(text))) {
+                if (m[0] === '') { re.lastIndex++; continue; }
+                out += esc(text.slice(last, m.index)) + '<b>' + esc(m[0]) + '</b>';
+                last = m.index + m[0].length;
+            }
+            return out + esc(text.slice(last));
+        }
+
+        function pickField(obj, keys) {
+            if (!obj) return '';
+            for (const k of keys) {
+                if (typeof obj[k] === 'string' && obj[k].trim() !== '') return obj[k].trim();
+            }
+            return '';
+        }
+
+        function extractImage(d) {
+            if (typeof d.image === 'string' && d.image.trim() !== '') return d.image.trim();
+            if (d.image && typeof d.image === 'object' && d.image.url) return d.image.url;
+            if (Array.isArray(d.content)) {
+                const found = d.content.find(item => item && typeof item === 'object' && item.type === 'image' && item.url);
+                if (found) return found.url;
+            }
+            return '';
+        }
+
+        function extractText(content) {
+            if (!Array.isArray(content)) return '';
+            const out = [];
+            content.forEach(item => {
+                const t = typeof item === 'string' ? item : (item && item.type === 'text' ? item.value : '');
+                if (t && String(t).trim()) out.push(cleanText(t));
+            });
+            return out.join(' ');
+        }
+
+        function categoryText(c) {
+            if (Array.isArray(c)) return c.map(x => String(x).trim()).filter(Boolean).join('·');
+            return c ? String(c).trim() : '';
+        }
+
+        function postedDate(d) {
+            if (Array.isArray(d)) d = d.map(x => String(x).trim()).filter(Boolean)[0] || '';
+            return d ? String(d).trim() : '';
+        }
+
+        // ===== 기사 불러오기 =====
+        async function loadArticles() {
+            try {
+                const c = JSON.parse(sessionStorage.getItem(CACHE_KEY) || 'null');
+                if (c && Array.isArray(c.d) && Date.now() - c.t < CACHE_MS) return c.d;
+            } catch (e) {}
+
+            const list = [];
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error('GitHub API 오류: ' + response.status);
+                const files = await response.json();
+                const jsonFiles = files.filter(f => f.type === 'file' && f.name.toLowerCase().endsWith('.json'));
+                const results = await Promise.all(jsonFiles.map(async file => {
+                    try {
+                        const res = await fetch(file.download_url);
+                        if (!res.ok) return null;
+                        const d = await res.json();
+                        let rid = pickField(d, ['reporterId', 'reporter']);
+                        rid = rid.replace(/^\/?reporter\//i, '').replace(/\.json$/i, '').trim();
+                        return {
+                            id: file.name.replace(/\.json$/i, ''),
+                            title: cleanText(d.title || ''),
+                            cat: categoryText(d.category),
+                            date: postedDate(d.date),
+                            image: extractImage(d),
+                            reporter: rid,
+                            summary: (typeof d.summary === 'string' ? cleanText(d.summary) : '').slice(0, 200),
+                            text: extractText(d.content).slice(0, 8000)
+                        };
+                    } catch (e) { return null; }
+                }));
+                results.forEach(r => { if (r && r.title) list.push(r); });
+            } catch (e) {
+                console.error(e);
+                return null;
+            }
+
+            list.sort((a, b) => b.id.localeCompare(a.id));
+            try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), d: list })); } catch (e) {}
+            return list;
+        }
+
+        // ===== 검색 =====
+        function search(list, terms) {
+            const hits = [];
+            list.forEach(a => {
+                const t = a.title.toLowerCase();
+                const c = a.cat.toLowerCase();
+                const b = (a.summary + ' ' + a.text).toLowerCase();
+                const all = t + ' ' + c + ' ' + b;
+                if (!terms.every(w => all.includes(w))) return;
+                let score = 0;
+                terms.forEach(w => {
+                    if (t.includes(w)) score += 10;
+                    if (c.includes(w)) score += 3;
+                    let n = 0, i = -1;
+                    while ((i = b.indexOf(w, i + 1)) > -1 && n < 20) n++;
+                    score += n;
+                });
+                hits.push({ a, score });
+            });
+            return hits;
+        }
+
+        function makeSnippet(a, terms) {
+            const text = a.text || a.summary || '';
+            const low = text.toLowerCase();
+            let pos = -1;
+            terms.forEach(w => {
+                const p = low.indexOf(w);
+                if (p > -1 && (pos === -1 || p < pos)) pos = p;
+            });
+            if (pos === -1) return (a.summary || text).slice(0, 180);
+            const start = Math.max(0, pos - 50);
+            const end = Math.min(text.length, start + 220);
+            return (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
+        }
+
+        function sortHits(hits) {
+            const arr = hits.slice();
+            if (sortMode === 'relevance') {
+                arr.sort((x, y) => (y.score - x.score) || y.a.id.localeCompare(x.a.id));
+            } else if (sortMode === 'oldest') {
+                arr.sort((x, y) => x.a.id.localeCompare(y.a.id));
+            } else {
+                arr.sort((x, y) => y.a.id.localeCompare(x.a.id));
+            }
+            return arr;
+        }
+
+        // ===== 렌더링 =====
+        let allHits = [];
+        let termList = [];
+        let highlightRe = null;
+        const reporterNames = {};
+
+        function renderResults() {
+            const hits = sortHits(allHits);
+            const sorts = [['relevance', '관련도순'], ['latest', '최신순'], ['oldest', '오래된순']];
+            let html = `
+                <div class="result-head">
+                    <div class="result-title">${esc(query)} 검색결과<span class="cnt">${hits.length}건</span></div>
+                    <div class="sort-list">
+                        ${sorts.map(s => `<button type="button" data-sort="${s[0]}" class="${sortMode === s[0] ? 'on' : ''}">${s[1]}</button>`).join('')}
+                    </div>
+                </div>`;
+
+            if (!hits.length) {
+                html += `<div class="state-msg">‘${esc(query)}’에 대한 검색 결과가 없습니다.</div>`;
+                resultArea.innerHTML = html;
+                bindSort();
+                return;
+            }
+
+            html += hits.map(h => {
+                const a = h.a;
+                const meta = [];
+                if (a.cat) meta.push(`<span class="m-cat">${esc(a.cat)}</span>`);
+                if (a.reporter) meta.push(`<span class="m-reporter" data-rid="${esc(a.reporter)}">${esc(reporterNames[a.reporter] || '')}</span>`);
+                if (a.date) meta.push(`<span>${esc(a.date)}</span>`);
+                return `
+                    <a class="result-item" href="viewer.html?id=${encodeURIComponent(a.id)}">
+                        <div class="result-thumb"><img src="${esc(a.image || DEFAULT_THUMB)}" alt="" loading="lazy" onerror="${THUMB_ONERROR}"></div>
+                        <div class="result-body">
+                            <div class="result-item-title">${highlight(a.title, highlightRe)}</div>
+                            <p class="result-snippet">${highlight(makeSnippet(a, termList), highlightRe)}</p>
+                            <div class="result-meta">${meta.join('')}</div>
+                        </div>
+                    </a>`;
+            }).join('');
+
+            resultArea.innerHTML = html;
+            bindSort();
+            fillReporters();
+        }
+
+        function bindSort() {
+            resultArea.querySelectorAll('.sort-list button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    sortMode = btn.dataset.sort;
+                    const p = new URLSearchParams(location.search);
+                    p.set('sort', sortMode);
+                    history.replaceState(null, '', location.pathname + '?' + p.toString());
+                    renderResults();
+                });
+            });
+        }
+
+        // 기사 JSON의 reporter 칸에 적힌 id로 reporter/<id>.json 에서 기자 이름을 불러옴 (뷰어와 같은 방식)
+        async function resolveReporter(rid) {
+            if (rid in reporterNames) return reporterNames[rid];
+            let name = '';
+            try {
+                const res = await fetch('reporter/' + encodeURIComponent(rid) + '.json');
+                if (res.ok) {
+                    const r = await res.json();
+                    name = pickField(r, ['name', 'reporterName', '기자명']);
+                }
+            } catch (e) {}
+            // 파일이 없을 때: 기사 JSON에 이름이 직접 적혀 있으면(한글 등) 그대로 사용
+            if (!name && /[^\x00-\x7F]/.test(rid)) name = rid;
+            reporterNames[rid] = name;
+            return name;
+        }
+
+        function fillReporters() {
+            const spans = resultArea.querySelectorAll('.m-reporter');
+            const ids = [...new Set([...spans].map(s => s.dataset.rid))];
+            Promise.all(ids.map(resolveReporter)).then(() => {
+                spans.forEach(s => {
+                    const name = reporterNames[s.dataset.rid];
+                    if (name) s.textContent = name; else s.remove();
+                });
+            });
+        }
+
+        function renderLatest(list) {
+            const block = document.getElementById('latestBlock');
+            const top = list.slice(0, 5);
+            if (!top.length) return;
+            document.getElementById('latestList').innerHTML = top.map(a => `
+                <a class="side-item" href="viewer.html?id=${encodeURIComponent(a.id)}">
+                    <div class="side-thumb"><img src="${esc(a.image || DEFAULT_THUMB)}" alt="" loading="lazy" onerror="${THUMB_ONERROR}"></div>
+                    <div>
+                        ${a.cat ? `<div class="side-cat">${esc(a.cat)}</div>` : ''}
+                        <div class="side-item-title">${esc(a.title)}</div>
+                    </div>
+                </a>`).join('');
+            block.hidden = false;
+        }
+
+        // ===== 검색창 동작 =====
+        function syncClear() { clearBtn.classList.toggle('show', input.value.length > 0); }
+        input.addEventListener('input', syncClear);
+        clearBtn.addEventListener('click', () => { input.value = ''; syncClear(); input.focus(); });
+        document.getElementById('bigSearchForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const q = input.value.trim();
+            if (!q) {
+                alert('검색어를 입력하세요!');
+                input.focus();
+                return;
+            }
+            location.href = 'search.html?q=' + encodeURIComponent(q);
+        });
+
+        // ===== 시작 =====
+        (async function init() {
+            input.value = query;
+            syncClear();
+            document.title = (query ? query + ' 검색결과' : '검색') + ' - 서오일보';
+
+            if (!query) {
+                resultArea.innerHTML = '<div class="result-head"><div class="result-title">검색</div></div>' +
+                    '<div class="state-msg">검색어를 입력해 주세요.</div>';
+                input.focus();
+            } else {
+                resultArea.innerHTML = '<div class="state-msg" style="border-bottom:0">검색 중…</div>';
+            }
+
+            const list = await loadArticles();
+            if (!list) {
+                resultArea.innerHTML = '<div class="state-msg">기사를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</div>';
+                return;
+            }
+
+            renderLatest(list);
+
+            if (!query) return;
+            termList = query.toLowerCase().split(/\s+/).filter(Boolean);
+            highlightRe = new RegExp(query.split(/\s+/).filter(Boolean).map(escRegExp).join('|'), 'gi');
+            allHits = search(list, termList);
+            renderResults();
+        })();
+    </script>
+</body>
+</html>
