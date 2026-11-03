@@ -56,6 +56,9 @@ if (fs.existsSync(path.join(__dirname, 'ad'))) {
 if (fs.existsSync(path.join(__dirname, 'jae.html'))) {
     fs.copyFileSync(path.join(__dirname, 'jae.html'), path.join(distDir, 'jae.html'));
 }
+if (fs.existsSync(path.join(__dirname, 'search.html'))) {
+    fs.copyFileSync(path.join(__dirname, 'search.html'), path.join(distDir, 'search.html'));
+}
 if (fs.existsSync(path.join(__dirname, 'editor.html'))) {
     fs.copyFileSync(path.join(__dirname, 'editor.html'), path.join(distDir, 'editor.html'));
 }
