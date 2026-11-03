@@ -10,6 +10,8 @@
     <meta property="og:description" content="서오 최초의 온라인 뉴스서비스인 서오일보는 서오 최고의 언론사인 서오일보의 온라인 뉴스 제공 서비스입니다. ">
     <title>서오일보</title>
     <link rel="icon" href="assets/favi.png" type="image/png">
+<!-- 공통 헤더 스타일 -->
+<link rel="stylesheet" href="components/header.css" data-seoilbo-header>
     
     <style>
         * {
@@ -26,124 +28,6 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-        }
-
-        /* 1. 기본 큰 헤더 */
-        .large-header {
-            width: 100%;
-            background-color: #ffffff;
-            border-bottom: 1px solid #d1d8dd;
-            position: relative;
-            z-index: 10;
-        }
-
-        .header-main-bar {
-            height: 95px; /* 로고 크기 확대에 맞추어 메인 바 높이 조정 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #ffffff;
-        }
-
-        .header-container {
-            max-width: 1160px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 0 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            position: relative;
-        }
-
-        .logo-link {
-            display: block;
-            text-decoration: none;
-        }
-
-        .logo-img-large {
-            height: 60px; /* 큰 헤더 로고 크기를 눈에 띄게 대폭 확대 */
-            width: auto;
-            display: block;
-        }
-
-        /* 날짜 정보 및 카테고리 바 */
-        .sub-info-bar {
-            background-color: #ffffff;
-            border-top: 1px solid #d1d8dd;
-            border-bottom: 1px solid #000000;
-            font-size: 12px;
-            color: #555555;
-            height: 36px;
-            display: flex;
-            align-items: center;
-        }
-
-        .sub-info-inner {
-            max-width: 1160px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 0 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-        }
-
-        .current-date {
-            flex-shrink: 0;
-        }
-
-        /* 카테고리 칸 (가운데 정렬) */
-        .sub-nav-categories {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 24px;
-            align-items: center;
-        }
-
-        .sub-nav-categories a {
-            text-decoration: none;
-            color: #333333;
-            font-size: 13px;
-            font-weight: 500;
-            transition: none; 
-        }
-
-        .sub-nav-categories a:hover {
-            color: #a61c1c;
-            font-weight: 700;
-        }
-
-        /* 2. 스크롤 시 위에서 나타나는 고정 소형 헤더 */
-        .fixed-small-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 56px; /* 소형 헤더 높이도 살짝 키움 */
-            background-color: #ffffff;
-            border-bottom: 1px solid #d1d8dd;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            transform: translateY(-100%);
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .fixed-small-header.active {
-            transform: translateY(0);
-        }
-
-        .logo-img-small {
-            height: 32px; /* 소형 헤더 로고도 기존보다 키움 */
-            width: auto;
-            display: block;
         }
 
         /* 메인 컨테이너 레이아웃 */
@@ -853,9 +737,6 @@
         }
 
         @media (max-width: 768px) {
-            .sub-info-bar { display: none; }
-            .header-main-bar { height: 70px; }
-            .logo-img-large { height: 40px; }
             
             .top-news-layout {
                 grid-template-columns: 1fr;
@@ -974,40 +855,8 @@
 </head>
 <body>
 
-    <!-- 1. 기본 큰 헤더 -->
-    <div class="large-header" id="largeHeader">
-        <div class="header-main-bar">
-            <div class="header-container">
-                <a href="index.html" class="logo-link">
-                    <img src="assets/seologo.png" alt="서오일보 로고" class="logo-img-large">
-                </a>
-            </div>
-        </div>
-        <div class="sub-info-bar">
-            <div class="sub-info-inner">
-                <span class="current-date" id="headerDate">2026.09.29 (화)</span>
-                <nav class="sub-nav-categories">
-                    <a href="category.html?type=social">사회</a>
-                    <a href="category.html?type=economy">경제</a>
-                    <a href="category.html?type=politics">정치</a>
-                    <a href="category.html?type=realestate">부동산</a>
-                    <a href="category.html?type=culture">문화</a>
-                    <a href="category.html?type=opinion">오피니언</a>
-                    <a href="jae.html">동네개발맵</a>
-                    <a href="https://seoilbo.github.io/monthly/">월간서오</a>
-                </nav>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2. 스크롤 시 위에서 스르륵 나타나는 고정 소형 헤더 -->
-    <header class="fixed-small-header" id="fixedSmallHeader">
-        <div class="header-container">
-            <a href="index.html" class="logo-link">
-                <img src="assets/seologo.png" alt="서오일보 로고" class="logo-img-small">
-            </a>
-        </div>
-    </header>
+    <!-- 공통 헤더 (components/header.js) -->
+    <script src="components/header.js"></script>
 
     <!-- 메인 콘텐츠 영역 -->
     <main class="main-container">
@@ -1160,16 +1009,6 @@
 
     <script>
         window.addEventListener('DOMContentLoaded', function() {
-            const dateEl = document.getElementById('headerDate');
-            if(dateEl) {
-                const now = new Date();
-                const year = now.getFullYear();
-                const month = String(now.getMonth() + 1).padStart(2, '0');
-                const day = String(now.getDate()).padStart(2, '0');
-                const week = ['일', '월', '화', '수', '목', '금', '토'][now.getDay()];
-                dateEl.innerText = `${year}.${month}.${day} (${week})`;
-            }
-
             renderRandomAd();
             fetchArticles();
         });
@@ -1412,19 +1251,6 @@
             }
         }
 
-        window.addEventListener('scroll', function() {
-            const fixedHeader = document.getElementById('fixedSmallHeader');
-            const largeHeader = document.getElementById('largeHeader');
-            
-            const winScroll = window.pageYOffset || document.documentElement.scrollTop;
-            const threshold = largeHeader ? largeHeader.offsetHeight : 131;
-
-            if (winScroll > threshold) {
-                fixedHeader.classList.add('active');
-            } else {
-                fixedHeader.classList.remove('active');
-            }
-        });
     </script>
 
 </body>
