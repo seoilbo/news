@@ -130,11 +130,8 @@
         }
 
         /* 오른쪽: 최신 뉴스 */
-        .latest-head {
-            font-size: 17px;
-            font-weight: 700;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #111111;
+        .latest-item:first-child {
+            padding-top: 0;
         }
 
         .latest-item {
@@ -280,7 +277,7 @@
         }
 
         .category-col-title a:hover {
-            color: #a61c1c;
+            color: #777777;
         }
 
         .category-title-inner {
@@ -947,7 +944,6 @@
             `).join('');
             return `
                 <div class="top-col is-latest">
-                    <div class="latest-head">최신 뉴스</div>
                     ${items}
                 </div>
             `;
