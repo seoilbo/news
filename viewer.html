@@ -213,12 +213,10 @@
         }
 
         .article-category {
-            font-size: 13px;
-            color: #C91C1C;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
+            font-size: 17px;
+            color: #111111;
+            font-weight: 500;
+            margin-bottom: 18px;
             display: inline-block;
             text-decoration: none;
         }
@@ -227,22 +225,27 @@
         }
 
         .article-title {
-            font-size: 36px;
-            font-weight: 800;
+            font-size: 42px;
+            font-weight: 700;
             color: #111111;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             line-height: 1.3;
-            letter-spacing: -0.5px;
+            letter-spacing: -1px;
         }
 
         .article-info {
-            font-size: 13px;
+            font-size: 14px;
             color: #777777;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            padding-bottom: 25px;
-            border-bottom: 1px solid #111111;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        #articleReporter {
+            font-size: 15px;
+            color: #333333;
         }
 
         /* 날짜: 수정 기록이 있으면 '업데이트: 날짜 ▾' 로 표시하고, 누르면 아래로 펼쳐 입력/업데이트 날짜를 확인 */
@@ -288,7 +291,6 @@
             /* max-height: 500px; */
             /* object-fit: cover; */
             display: block;
-            border: 1px solid #e1e4e8;
         }
 
         /* 추가 이미지 및 설명 스타일 */
@@ -302,19 +304,19 @@
             /* max-height: 500px; */
             /* object-fit: cover; */
             display: block;
-            border: 1px solid #e1e4e8;
         }
         .article-img-caption {
             font-size: 14px;
-            color: #666666;
-            margin-top: 8px;
-            text-align: center;
-            line-height: 1.4;
+            color: #888888;
+            margin-top: 12px;
+            text-align: left;
+            line-height: 1.55;
         }
 
         .article-content {
             font-size: 18px;
-            color: #000000;
+            color: #222222;
+            letter-spacing: -0.02em;
             line-height: 1.85;
             margin-bottom: 16px;
         }
@@ -330,7 +332,7 @@
 
         .article-content p {
             margin-bottom: 28px;
-            color: #000000;
+            color: #222222;
         }
 
         /* 광고 컨테이너: 크기 제한 적용 (너무 크지 않도록 조정) */
@@ -367,16 +369,16 @@
 
         /* 기자 카드: 좁은 화면에서는 본문 아래 가로형, 넓은 화면(1280px~)에서는 본문 왼쪽 카드형 */
         .reporter-section {
-            border-top: 1px solid #d1d8dd;
-            padding: 24px 0 0 0;
-            margin: 30px 0 50px 0;
+            border-top: 1px solid #111111;
+            padding: 28px 0 0 0;
+            margin: 40px 0 50px 0;
             display: flex;
             align-items: center;
         }
 
         .reporter-avatar {
-            width: 65px;
-            height: 65px;
+            width: 72px;
+            height: 72px;
             border-radius: 50%;
             object-fit: cover;
             margin-right: 20px;
@@ -389,14 +391,14 @@
         }
 
         .reporter-info h3 {
-            font-size: 16px;
+            font-size: 20px;
             font-weight: 700;
             color: #111111;
             margin-bottom: 6px;
         }
 
         .reporter-dept {
-            font-size: 13px;
+            font-size: 14px;
             color: #888888;
             line-height: 1.4;
             margin-bottom: 6px;
@@ -407,9 +409,9 @@
         }
 
         .reporter-info p {
-            font-size: 14px;
-            color: #555555;
-            line-height: 1.5;
+            font-size: 15px;
+            color: #777777;
+            line-height: 1.8;
         }
 
         .reporter-info p:empty {
@@ -420,7 +422,7 @@
             display: inline-block;
             margin-top: 8px;
             font-size: 13px;
-            color: #a61c1c;
+            color: #777777;
             text-decoration: none;
         }
 
@@ -455,6 +457,21 @@
             grid-row: 3;
             min-width: 0;
             padding-top: 0;
+            position: relative;
+        }
+
+        .article-col::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: -20px;
+            width: 1px;
+            background-color: #eeeeee;
+        }
+
+        @media (max-width: 1100px) {
+            .article-col::after { display: none; }
         }
 
         .popular-aside {
@@ -465,11 +482,11 @@
         }
 
         .popular-head {
-            padding: 12px 0;
-            font-size: 16px;
-            font-weight: 800;
+            padding: 20px 0 8px 0;
+            font-size: 20px;
+            font-weight: 700;
             color: #111111;
-            border-bottom: 1px solid #a61c1c;
+            border-top: 1px solid #111111;
         }
 
         .popular-list {
@@ -479,8 +496,9 @@
         .popular-item a {
             display: flex;
             gap: 12px;
-            padding: 12px 0;
-            border-bottom: 1px solid #e9ecef;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #eeeeee;
             text-decoration: none;
             color: #222222;
         }
@@ -492,23 +510,26 @@
         .popular-rank {
             flex-shrink: 0;
             width: 22px;
-            font-size: 18px;
-            font-weight: 800;
-            color: #adb5bd;
+            font-size: 17px;
+            font-weight: 500;
+            color: #111111;
             line-height: 1.4;
         }
 
         .popular-item:nth-child(-n+3) .popular-rank {
             color: #a61c1c;
+            font-weight: 700;
         }
 
         .popular-title {
+            flex: 1;
+            min-width: 0;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             line-height: 1.45;
             color: #111111;
             display: -webkit-box;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 1;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -532,10 +553,10 @@
         }
 
         .category-news-title {
-            font-size: 18px;
-            font-weight: 800;
+            font-size: 20px;
+            font-weight: 700;
             color: #111111;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
         }
 
         .category-news-list {
@@ -548,7 +569,7 @@
             align-items: flex-start;
             gap: 20px;
             padding: 18px 0;
-            border-bottom: 1px solid #e9ecef;
+            border-bottom: 1px solid #eeeeee;
             text-decoration: none;
             color: #222222;
         }
@@ -563,11 +584,11 @@
         }
 
         .cat-news-name {
-            font-size: 17px;
-            font-weight: 700;
+            font-size: 19px;
+            font-weight: 600;
             line-height: 1.4;
             color: #111111;
-            margin-bottom: 6px;
+            margin-bottom: 10px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -575,10 +596,10 @@
         }
 
         .cat-news-summary {
-            font-size: 14px;
+            font-size: 15px;
             line-height: 1.55;
-            color: #555555;
-            margin-bottom: 8px;
+            color: #999999;
+            margin-bottom: 0;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -588,14 +609,15 @@
         .cat-news-date {
             font-size: 12px;
             color: #888888;
+            display: none; /* 조선일보 스타일: 목록에는 날짜를 표시하지 않음 (다시 보이려면 이 줄 삭제) */
         }
 
         .cat-news-thumb {
             flex-shrink: 0;
-            width: 150px;
-            height: 100px;
+            order: -1;
+            width: 200px;
+            aspect-ratio: 16 / 9;
             background-color: #f1f3f5;
-            border: 1px solid #e1e4e8;
             overflow: hidden;
         }
 
@@ -723,7 +745,6 @@
                 grid-row: 4;
                 position: static;
                 margin-top: 50px;
-                border-top: 1px solid #111111;
             }
         }
 
@@ -750,14 +771,14 @@
                 padding: 12px 10px;
                 gap: 8px;
                 background-color: #ffffff;
-                border: 1px solid #d1d8dd;
-                border-radius: 34px;
+                border: 1px solid #e5e5e5;
+                border-radius: 16px;
             }
 
             .toolbar-btn {
                 width: 48px;
                 height: 48px;
-                border-radius: 50%;
+                border-radius: 10px;
             }
 
             .toolbar-btn img,
@@ -793,9 +814,10 @@
             .article-col { padding-top: 30px; }
             .article-layout { grid-template-columns: minmax(0, 1fr); }
             .article-layout .article-header, .article-layout .article-info, .article-col, .popular-aside { grid-column: 1; }
-            .cat-news-thumb { width: 110px; height: 76px; }
+            .cat-news-thumb { width: 120px; }
             .cat-news-name { font-size: 16px; }
-            .article-title { font-size: 32px; }
+            .article-title { font-size: 28px; }
+            .article-summary { font-size: 17px; }
             .page-wrapper { padding: 0 15px; }
             .footer-top { flex-direction: column; gap: 20px; }
             .footer-bar { margin: 0 6px; }
@@ -814,12 +836,11 @@
 
         /* 제목 바로 아래 짧은 요약 */
         .article-summary {
-            font-size: 17px;
-            line-height: 1.7;
-            color: #444444;
-            border-left: 2px solid #C91C1C;
-            padding: 2px 0 2px 16px;
-            margin: 0 0 26px 0;
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 1.6;
+            color: #111111;
+            margin: 0 0 32px 0;
         }
 
         /* 오른쪽 칸: 오피니언 */
@@ -830,12 +851,12 @@
         }
 
         .opinion-head {
-            margin-top: 28px;
-            padding: 12px 0;
-            font-size: 16px;
-            font-weight: 800;
+            margin-top: 40px;
+            padding: 20px 0 8px 0;
+            font-size: 20px;
+            font-weight: 700;
             color: #111111;
-            border-bottom: 1px solid #a61c1c;
+            border-top: 1px solid #111111;
         }
 
         .opinion-list {
@@ -844,8 +865,8 @@
 
         .opinion-item a {
             display: block;
-            padding: 12px 0;
-            border-bottom: 1px solid #e9ecef;
+            padding: 14px 0;
+            border-bottom: 1px solid #eeeeee;
             font-size: 15px;
             font-weight: 600;
             line-height: 1.5;
@@ -880,10 +901,12 @@
         html[data-theme="dark"] .toolbar-inner { background-color: #121212; border-color: #333333; }
         html[data-theme="dark"] .share-popup { background-color: #1e1e1e; border-color: #333333; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); }
         html[data-theme="dark"] .share-popup-head { border-bottom-color: #333333; color: #eeeeee; }
-        html[data-theme="dark"] .article-category { color: #ff6b6b; }
+        html[data-theme="dark"] .article-category { color: #eeeeee; }
         html[data-theme="dark"] .article-title { color: #f5f5f5; }
-        html[data-theme="dark"] .article-summary { color: #cccccc; border-left-color: #ff6b6b; }
-        html[data-theme="dark"] .article-info { color: #9aa0a6; border-bottom-color: #bbbbbb; }
+        html[data-theme="dark"] .article-summary { color: #dddddd; }
+        html[data-theme="dark"] .article-info { color: #9aa0a6; border-bottom-color: #333333; }
+        html[data-theme="dark"] #articleReporter { color: #dddddd; }
+        html[data-theme="dark"] .article-col::after { background-color: #2a2a2a; }
         html[data-theme="dark"] .article-image-container img,
         html[data-theme="dark"] .article-image-wrap img { border-color: #333333; }
         html[data-theme="dark"] .article-img-caption { color: #aaaaaa; }
@@ -892,7 +915,7 @@
         html[data-theme="dark"] .article-copyright { color: #8a9097; }
         html[data-theme="dark"] .ad-box,
         html[data-theme="dark"] .ad-label { color: #999999; }
-        html[data-theme="dark"] .reporter-section { border-top-color: #333333; }
+        html[data-theme="dark"] .reporter-section { border-top-color: #bbbbbb; }
         html[data-theme="dark"] .reporter-avatar { border-color: #444444; }
         html[data-theme="dark"] .reporter-info h3 { color: #f5f5f5; }
         html[data-theme="dark"] .reporter-dept { color: #9aa0a6; }
@@ -901,14 +924,14 @@
         html[data-theme="dark"] .popular-aside,
         html[data-theme="dark"] .category-news { border-top-color: #bbbbbb; }
         html[data-theme="dark"] .popular-head,
-        html[data-theme="dark"] .opinion-head { color: #f5f5f5; border-bottom-color: #ff6b6b; }
+        html[data-theme="dark"] .opinion-head { color: #f5f5f5; border-top-color: #bbbbbb; }
         html[data-theme="dark"] .popular-item a,
         html[data-theme="dark"] .opinion-item a,
         html[data-theme="dark"] .cat-news-link { color: #dddddd; border-bottom-color: #2a2a2a; }
         html[data-theme="dark"] .popular-item:last-child a,
         html[data-theme="dark"] .opinion-item:last-child a,
         html[data-theme="dark"] .cat-news-item:last-child .cat-news-link { border-bottom: none; }
-        html[data-theme="dark"] .popular-rank { color: #666666; }
+        html[data-theme="dark"] .popular-rank { color: #bbbbbb; }
         html[data-theme="dark"] .popular-item:nth-child(-n+3) .popular-rank { color: #ff6b6b; }
         html[data-theme="dark"] .popular-title,
         html[data-theme="dark"] .category-news-title,
@@ -917,7 +940,7 @@
         html[data-theme="dark"] .cat-news-link:hover .cat-news-name,
         html[data-theme="dark"] .opinion-item a:hover { color: #9aa0a6; }
         html[data-theme="dark"] .popular-empty { color: #9aa0a6; }
-        html[data-theme="dark"] .cat-news-summary { color: #aaaaaa; }
+        html[data-theme="dark"] .cat-news-summary { color: #888888; }
         html[data-theme="dark"] .cat-news-date { color: #9aa0a6; }
         html[data-theme="dark"] .cat-news-thumb { background-color: #262626; border-color: #333333; }
         html[data-theme="dark"] .error-message { color: #dddddd; }
@@ -944,6 +967,7 @@
                     <div class="article-header">
                         <a href="#" class="article-category" id="articleCategory">카테고리</a>
                         <h1 class="article-title" id="articleTitle"></h1>
+                        <p class="article-summary" id="articleSummary" style="display:none;"></p>
                     </div>
 
                     <div class="article-info">
@@ -968,8 +992,6 @@
                             <button type="button" class="toolbar-btn" title="인쇄하기" aria-label="인쇄하기" onclick="openPrintWindow()"><img src="assets/print.png" alt="인쇄"></button>
                           </div>
                         </div>
-
-                        <p class="article-summary" id="articleSummary" style="display:none;"></p>
 
                         <div id="articleImageArea"></div>
 
@@ -1481,7 +1503,7 @@
                 return;
             }
 
-            document.getElementById('categoryNewsTitle').innerText = categoryName + ' 뉴스';
+            document.getElementById('categoryNewsTitle').innerText = categoryName + ' 더보기';
 
             items.forEach(art => {
                 const li = document.createElement('li');
@@ -1588,7 +1610,7 @@
 
             // 수정 기록이 없으면 기존처럼 표시
             if (!updated || updated === posted) {
-                el.innerText = "입력 : " + posted;
+                el.innerText = "입력 " + posted;
                 return;
             }
 
@@ -1597,7 +1619,7 @@
             postedRow.className = 'date-posted';
             postedRow.id = 'datePosted';
             postedRow.hidden = true;
-            postedRow.innerText = "입력 : " + posted;
+            postedRow.innerText = "입력 " + posted;
 
             // '업데이트: 날짜 (화살표)' 줄 (눌러서 펼치기/접기)
             const toggle = document.createElement('span');
@@ -1606,7 +1628,7 @@
             toggle.setAttribute('tabindex', '0');
             toggle.setAttribute('aria-expanded', 'false');
             toggle.setAttribute('aria-controls', 'datePosted');
-            toggle.appendChild(document.createTextNode('업데이트: ' + updated));
+            toggle.appendChild(document.createTextNode('업데이트 ' + updated));
 
             const arrow = document.createElement('img');
             arrow.src = 'assets/rarrow.png';
@@ -1693,6 +1715,8 @@
                         }
                         h1 { font-size: 24pt; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
                         p { font-size: 12pt; margin-bottom: 15px; }
+                        .article-summary { font-size: 13pt; }
+                        .article-info { display: flex; justify-content: space-between; font-size: 10pt; color: #666; padding-bottom: 8px; margin-bottom: 20px; border-bottom: 1px solid #ccc; }
                         .article-image-container img, .article-image-wrap img { width: 100%; height: auto; max-height: 500px; object-fit: cover; }
                         .article-img-caption { font-size: 10pt; color: #666; margin-top: 6px; text-align: center; }
                         .article-copyright { font-size: 10pt; color: #666; margin-top: 10px; }
