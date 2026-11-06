@@ -213,12 +213,10 @@
         }
 
         .article-category {
-            font-size: 13px;
-            color: #C91C1C;
+            font-size: 15px;
+            color: #a61c1c;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: inline-block;
             text-decoration: none;
         }
@@ -227,29 +225,42 @@
         }
 
         .article-title {
-            font-size: 36px;
-            font-weight: 800;
+            font-size: 38px;
+            font-weight: 700;
             color: #111111;
-            margin-bottom: 20px;
-            line-height: 1.3;
-            letter-spacing: -0.5px;
+            margin-bottom: 18px;
+            line-height: 1.32;
+            letter-spacing: -0.8px;
         }
 
+        /* 조선일보 스타일: 기자명(굵게) 아래에 날짜, 위아래 얇은 선 */
         .article-info {
             font-size: 13px;
             color: #777777;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: flex-start;
-            padding-bottom: 25px;
-            border-bottom: 2px solid #111111;
+            gap: 4px;
+            padding: 14px 0;
+            border-top: 1px solid #d1d8dd;
+            border-bottom: 1px solid #d1d8dd;
+        }
+
+        #articleReporter {
+            font-size: 15px;
+            font-weight: 700;
+            color: #111111;
+        }
+
+        #articleReporter:empty {
+            display: none;
         }
 
         /* 날짜: 수정 기록이 있으면 '업데이트: 날짜 ▾' 로 표시하고, 누르면 아래로 펼쳐 입력/업데이트 날짜를 확인 */
         #articleDate {
             display: inline-flex;
             flex-direction: column;
-            align-items: flex-end;
+            align-items: flex-start;
             gap: 4px;
         }
 
@@ -279,7 +290,7 @@
 
         .article-image-container {
             width: 100%;
-            margin-bottom: 40px;
+            margin-bottom: 32px;
         }
 
         .article-image-container img {
@@ -288,7 +299,6 @@
             /* max-height: 500px; */
             /* object-fit: cover; */
             display: block;
-            border: 1px solid #e1e4e8;
         }
 
         /* 추가 이미지 및 설명 스타일 */
@@ -302,20 +312,20 @@
             /* max-height: 500px; */
             /* object-fit: cover; */
             display: block;
-            border: 1px solid #e1e4e8;
         }
+        /* 사진 설명: 왼쪽 정렬, 작고 연한 글씨 */
         .article-img-caption {
-            font-size: 14px;
-            color: #666666;
-            margin-top: 8px;
-            text-align: center;
-            line-height: 1.4;
+            font-size: 13px;
+            color: #777777;
+            margin-top: 10px;
+            text-align: left;
+            line-height: 1.5;
         }
 
         .article-content {
             font-size: 18px;
-            color: #000000;
-            line-height: 1.85;
+            color: #111111;
+            line-height: 1.9;
             margin-bottom: 16px;
         }
 
@@ -324,12 +334,15 @@
             font-size: 13px;
             color: #868e96;
             line-height: 1.5;
-            margin-bottom: 40px;
+            margin-top: 40px;
+            padding-top: 16px;
+            border-top: 1px solid #e1e4e8;
+            margin-bottom: 0;
         }
 
         .article-content p {
             margin-bottom: 28px;
-            color: #000000;
+            color: #111111;
         }
 
         /* 광고 컨테이너: 크기 제한 적용 (너무 크지 않도록 조정) */
@@ -366,10 +379,10 @@
 
         /* 기자 카드: 좁은 화면에서는 본문 아래 가로형, 넓은 화면(1280px~)에서는 본문 왼쪽 카드형 */
         .reporter-section {
-            border-top: 1px solid #d1d8dd;
-            border-bottom: 1px solid #d1d8dd;
-            padding: 24px 0;
-            margin: 40px 0 50px 0;
+            border: 1px solid #d1d8dd;
+            background-color: #fafafa;
+            padding: 22px 24px;
+            margin: 24px 0 50px 0;
             display: flex;
             align-items: center;
         }
@@ -466,10 +479,11 @@
 
         .popular-head {
             padding: 12px 0;
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 800;
             color: #111111;
-            border-bottom: 2px solid #a61c1c;
+            border-top: 2px solid #111111;
+            border-bottom: 1px solid #d1d8dd;
         }
 
         .popular-list {
@@ -592,8 +606,8 @@
 
         .cat-news-thumb {
             flex-shrink: 0;
-            width: 150px;
-            height: 100px;
+            width: 160px;
+            height: 90px;
             background-color: #f1f3f5;
             border: 1px solid #e1e4e8;
             overflow: hidden;
@@ -723,7 +737,6 @@
                 grid-row: 4;
                 position: static;
                 margin-top: 50px;
-                border-top: 2px solid #111111;
             }
         }
 
@@ -751,13 +764,13 @@
                 gap: 8px;
                 background-color: #ffffff;
                 border: 1px solid #d1d8dd;
-                border-radius: 34px;
+                border-radius: 0;
             }
 
             .toolbar-btn {
                 width: 48px;
                 height: 48px;
-                border-radius: 50%;
+                border-radius: 0;
             }
 
             .toolbar-btn img,
@@ -793,9 +806,9 @@
             .article-col { padding-top: 30px; }
             .article-layout { grid-template-columns: minmax(0, 1fr); }
             .article-layout .article-header, .article-layout .article-info, .article-col, .popular-aside { grid-column: 1; }
-            .cat-news-thumb { width: 110px; height: 76px; }
+            .cat-news-thumb { width: 112px; height: 63px; }
             .cat-news-name { font-size: 16px; }
-            .article-title { font-size: 32px; }
+            .article-title { font-size: 28px; }
             .page-wrapper { padding: 0 15px; }
             .footer-top { flex-direction: column; gap: 20px; }
             .footer-bar { margin: 0 6px; }
@@ -809,21 +822,16 @@
             gap: 2px;
         }
 
-        /* 기사 듣기(TTS) 재생 중 표시 */
-        .toolbar-btn.active,
-        .util-btn.active {
-            box-shadow: inset 0 0 0 2px #C91C1C;
-            color: #C91C1C;
-        }
+        /* 기사 듣기 기능은 제거됨: components/header.js 모바일 바에 버튼이 남아 있어도 보이지 않게 함 */
+        .tts-btn { display: none !important; }
 
-        /* 제목 바로 아래 짧은 요약 */
+        /* 제목 바로 아래 짧은 요약 (조선일보 스타일: 제목 아래 회색 부제) */
         .article-summary {
-            font-size: 17px;
-            line-height: 1.7;
-            color: #444444;
-            border-left: 4px solid #C91C1C;
-            padding: 2px 0 2px 16px;
-            margin: 0 0 26px 0;
+            font-size: 19px;
+            font-weight: 400;
+            line-height: 1.6;
+            color: #666666;
+            margin: 0 0 22px 0;
         }
 
         /* 오른쪽 칸: 오피니언 */
@@ -836,10 +844,11 @@
         .opinion-head {
             margin-top: 28px;
             padding: 12px 0;
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 800;
             color: #111111;
-            border-bottom: 2px solid #a61c1c;
+            border-top: 2px solid #111111;
+            border-bottom: 1px solid #d1d8dd;
         }
 
         .opinion-list {
@@ -880,34 +889,30 @@
         html[data-theme="dark"] .toolbar-btn img,
         html[data-theme="dark"] .util-btn img,
         html[data-theme="dark"] .share-popup-close img { filter: invert(1); }
-        html[data-theme="dark"] .toolbar-btn.active,
-        html[data-theme="dark"] .util-btn.active { color: #ff6b6b; box-shadow: inset 0 0 0 2px #ff6b6b; }
         html[data-theme="dark"] .toolbar-divider { background-color: #444444; }
         html[data-theme="dark"] .toolbar-inner { background-color: #121212; border-color: #333333; }
         html[data-theme="dark"] .share-popup { background-color: #1e1e1e; border-color: #333333; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); }
         html[data-theme="dark"] .share-popup-head { border-bottom-color: #333333; color: #eeeeee; }
         html[data-theme="dark"] .article-category { color: #ff6b6b; }
         html[data-theme="dark"] .article-title { color: #f5f5f5; }
-        html[data-theme="dark"] .article-summary { color: #cccccc; border-left-color: #ff6b6b; }
-        html[data-theme="dark"] .article-info { color: #9aa0a6; border-bottom-color: #bbbbbb; }
-        html[data-theme="dark"] .article-image-container img,
-        html[data-theme="dark"] .article-image-wrap img { border-color: #333333; }
+        html[data-theme="dark"] .article-summary { color: #aaaaaa; }
+        html[data-theme="dark"] .article-info { color: #9aa0a6; border-top-color: #333333; border-bottom-color: #333333; }
+        html[data-theme="dark"] #articleReporter { color: #f0f0f0; }
         html[data-theme="dark"] .article-img-caption { color: #aaaaaa; }
         html[data-theme="dark"] .article-content,
         html[data-theme="dark"] .article-content p { color: #e6e6e6; }
-        html[data-theme="dark"] .article-copyright { color: #8a9097; }
+        html[data-theme="dark"] .article-copyright { color: #8a9097; border-top-color: #333333; }
         html[data-theme="dark"] .ad-box,
         html[data-theme="dark"] .ad-label { color: #999999; }
-        html[data-theme="dark"] .reporter-section { border-color: #333333; }
+        html[data-theme="dark"] .reporter-section { border-color: #333333; background-color: #1a1a1a; }
         html[data-theme="dark"] .reporter-avatar { border-color: #444444; }
         html[data-theme="dark"] .reporter-info h3 { color: #f5f5f5; }
         html[data-theme="dark"] .reporter-dept { color: #9aa0a6; }
         html[data-theme="dark"] .reporter-info p { color: #bbbbbb; }
         html[data-theme="dark"] .reporter-email { color: #ff6b6b; }
-        html[data-theme="dark"] .popular-aside,
         html[data-theme="dark"] .category-news { border-top-color: #bbbbbb; }
         html[data-theme="dark"] .popular-head,
-        html[data-theme="dark"] .opinion-head { color: #f5f5f5; border-bottom-color: #ff6b6b; }
+        html[data-theme="dark"] .opinion-head { color: #f5f5f5; border-top-color: #bbbbbb; border-bottom-color: #333333; }
         html[data-theme="dark"] .popular-item a,
         html[data-theme="dark"] .opinion-item a,
         html[data-theme="dark"] .cat-news-link { color: #dddddd; border-bottom-color: #2a2a2a; }
@@ -950,6 +955,7 @@
                     <div class="article-header">
                         <a href="#" class="article-category" id="articleCategory">카테고리</a>
                         <h1 class="article-title" id="articleTitle"></h1>
+                        <p class="article-summary" id="articleSummary" style="display:none;"></p>
                     </div>
 
                     <div class="article-info">
@@ -968,15 +974,12 @@
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 19L8.5 5l6 14M4.8 14h7.4"/><path d="M17 7h5M19.5 4.5v5"/></svg>
                             </button>
                             <span class="toolbar-divider"></span>
-                            <button type="button" class="toolbar-btn tts-btn" title="기사 듣기" aria-label="기사 듣기" onclick="startTTS()"><img src="assets/speak.png" alt="기사 듣기"></button>
                             <button type="button" class="toolbar-btn theme-btn" title="다크 모드" aria-label="다크 모드" onclick="toggleTheme()"><img src="assets/dark.png" alt="다크 모드"></button>
                             <span class="toolbar-divider"></span>
                             <button type="button" class="toolbar-btn" title="공유하기" aria-label="공유하기" onclick="toggleSharePopup(this, event)"><img src="assets/share.png" alt="공유"></button>
                             <button type="button" class="toolbar-btn" title="인쇄하기" aria-label="인쇄하기" onclick="openPrintWindow()"><img src="assets/print.png" alt="인쇄"></button>
                           </div>
                         </div>
-
-                        <p class="article-summary" id="articleSummary" style="display:none;"></p>
 
                         <div id="articleImageArea"></div>
 
@@ -1537,97 +1540,6 @@
             section.style.display = 'block';
         }
 
-        // ===== 기사 듣기 (TTS) =====
-        // 한 번 누르면 제목 → 요약 → 본문 순서로 끝까지 읽습니다.
-        // 요약을 읽지 않으려면 아래 TTS_READ_SUMMARY 를 false 로 바꾸세요.
-        const TTS_READ_SUMMARY = true;
-        let ttsActive = false;
-
-        function splitForTTS(text) {
-            // 긴 문장은 브라우저가 중간에 끊을 수 있어 짧게 나눠 순서대로 읽습니다.
-            const MAX = 160;
-            const sentences = text.match(/[^.!?。]+[.!?。]*\s*/g) || [text];
-            const chunks = [];
-            let cur = '';
-            sentences.forEach(s => {
-                while (s.length > MAX * 1.5) {
-                    let cut = s.lastIndexOf(' ', MAX);
-                    if (cut < 40) cut = MAX;
-                    if (cur) { chunks.push(cur.trim()); cur = ''; }
-                    chunks.push(s.slice(0, cut).trim());
-                    s = s.slice(cut);
-                }
-                if (cur && (cur + s).length > MAX) { chunks.push(cur.trim()); cur = s; }
-                else cur += s;
-            });
-            if (cur.trim()) chunks.push(cur.trim());
-            return chunks.filter(c => c);
-        }
-
-        function buildTTSChunks() {
-            const parts = [];
-            const title = document.getElementById('articleTitle');
-            if (title && title.innerText.trim()) parts.push(title.innerText.trim());
-            const sum = document.getElementById('articleSummary');
-            if (TTS_READ_SUMMARY && sum && sum.style.display !== 'none' && sum.innerText.trim()) {
-                parts.push(sum.innerText.trim());
-            }
-            document.querySelectorAll('#articleBody > p').forEach(p => {
-                const txt = p.innerText.trim();
-                if (txt) parts.push(txt);
-            });
-            let chunks = [];
-            parts.forEach(p => { chunks = chunks.concat(splitForTTS(p)); });
-            return chunks;
-        }
-
-        function setTTSButtons(active) {
-            document.querySelectorAll('.tts-btn').forEach(btn => {
-                btn.classList.toggle('active', active);
-                btn.setAttribute('aria-pressed', active ? 'true' : 'false');
-                btn.title = active ? '기사를 읽는 중입니다' : '기사 듣기';
-            });
-        }
-
-        function finishTTS() {
-            ttsActive = false;
-            setTTSButtons(false);
-        }
-
-        function startTTS() {
-            if (!('speechSynthesis' in window)) {
-                showShareToast('이 브라우저는 기사 듣기를 지원하지 않습니다.');
-                return;
-            }
-            if (ttsActive) return; // 한 번 누르면 끝까지 읽음
-
-            const chunks = buildTTSChunks();
-            if (chunks.length === 0) return;
-
-            ttsActive = true;
-            setTTSButtons(true);
-
-            const voices = window.speechSynthesis.getVoices();
-            const koVoice = voices.find(v => /^ko/i.test(v.lang));
-            let i = 0;
-
-            const next = function() {
-                if (i >= chunks.length) { finishTTS(); return; }
-                const u = new SpeechSynthesisUtterance(chunks[i++]);
-                u.lang = 'ko-KR';
-                if (koVoice) u.voice = koVoice;
-                u.rate = 1;
-                u.onend = next;
-                u.onerror = finishTTS;
-                window.speechSynthesis.speak(u);
-            };
-            next();
-        }
-
-        window.addEventListener('beforeunload', function() {
-            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-        });
-
         // ===== 다크 / 라이트 모드 =====
         function applyThemeButtons() {
             const dark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -1791,6 +1703,8 @@
                         }
                         h1 { font-size: 24pt; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
                         p { font-size: 12pt; margin-bottom: 15px; }
+                        .article-summary { font-size: 13pt; color: #555; }
+                        .article-info { margin: 12px 0 20px; padding: 8px 0; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; font-size: 10pt; color: #666; }
                         .article-image-container img, .article-image-wrap img { width: 100%; height: auto; max-height: 500px; object-fit: cover; }
                         .article-img-caption { font-size: 10pt; color: #666; margin-top: 6px; text-align: center; }
                         .article-copyright { font-size: 10pt; color: #666; margin-top: 10px; }
