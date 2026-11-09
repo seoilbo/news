@@ -42,7 +42,6 @@
         .category-head {
             display: flex;
             align-items: baseline;
-            justify-content: space-between;
             border-top: 1px solid #000000;
             padding: 18px 0 16px 0;
         }
@@ -55,16 +54,10 @@
             line-height: 1.2;
         }
 
-        .category-count {
-            font-size: 13px;
-            font-weight: 400;
-            color: #888888;
-        }
-
         .article-list-wrap {
             display: flex;
             flex-direction: column;
-            border-top: 1px solid #000000;
+            border-top: 1px solid #e3e3e3;
         }
 
         .article-card-item {
@@ -73,11 +66,11 @@
             text-decoration: none;
             color: inherit;
             padding: 24px 0;
-            border-bottom: 1px solid #dddddd;
+            border-bottom: 1px solid #e3e3e3;
         }
 
         .article-card-item:last-child {
-            border-bottom: 1px solid #000000;
+            border-bottom: 1px solid #e3e3e3;
         }
 
         .article-card-text {
@@ -144,7 +137,7 @@
         .article-card-featured {
             gap: 28px;
             padding: 26px 0;
-            border-bottom: 1px solid #000000;
+            border-bottom: 1px solid #e3e3e3;
         }
 
         .article-card-featured .article-card-title {
@@ -172,7 +165,44 @@
             padding: 80px 0;
             color: #888888;
             font-size: 15px;
-            border-bottom: 1px solid #000000;
+            border-bottom: 1px solid #e3e3e3;
+        }
+
+        /* 페이지 넘김 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            margin-top: 36px;
+        }
+
+        .pagination a,
+        .pagination span {
+            min-width: 34px;
+            height: 34px;
+            padding: 0 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #777777;
+            text-decoration: none;
+            border: 1px solid transparent;
+        }
+
+        .pagination a:hover {
+            color: #000000;
+        }
+
+        .pagination .page-current {
+            color: #000000;
+            font-weight: 600;
+            border-color: #000000;
+        }
+
+        .pagination .page-disabled {
+            color: #cccccc;
         }
 
         /* 푸터 영역 */
@@ -274,6 +304,8 @@
                 font-size: 14px;
                 -webkit-line-clamp: 3;
             }
+            .pagination { margin-top: 28px; gap: 2px; }
+            .pagination a, .pagination span { min-width: 30px; height: 30px; padding: 0 5px; font-size: 13px; }
             .footer-top {
                 flex-direction: column;
                 gap: 20px;
@@ -293,11 +325,11 @@
     <main class="main-container">
         <div class="category-head">
             <h1 class="category-page-title" id="categoryPageTitle">카테고리</h1>
-            <span class="category-count" id="categoryCount"></span>
         </div>
         <div class="article-list-wrap" id="categoryArticleList">
             <div class="no-article-box">기사를 불러오는 중입니다...</div>
         </div>
+        <nav class="pagination" id="pagination"></nav>
     </main>
 
     <!-- 푸터 영역 -->
@@ -471,11 +503,75 @@
             // 해당 카테고리 기사만 필터링
             const filteredArticles = articles.filter(art => art.category && art.category.includes(currentCat.keyword));
 
-            const countEl = document.getElementById('categoryCount');
-            if (countEl) countEl.innerText = `기사 ${filteredArticles.length}건`;
-
-            renderCategoryArticles(filteredArticles);
+            currentList = filteredArticles;
+            showPage(getPageFromUrl(), false);
         }
+
+        // ===== 페이지 넘김 (대표 기사 포함 한 페이지 11개) =====
+        const PAGE_SIZE = 11;
+        const PAGE_GROUP = 10; // 페이지 번호는 10개씩 묶어서 표시
+        let currentList = [];
+
+        function getPageFromUrl() {
+            const p = parseInt(new URLSearchParams(window.location.search).get('page'), 10);
+            return p > 0 ? p : 1;
+        }
+
+        function pageHref(page) {
+            const u = new URL(window.location.href);
+            if (page <= 1) u.searchParams.delete('page');
+            else u.searchParams.set('page', page);
+            return u.pathname + u.search;
+        }
+
+        function showPage(page, push) {
+            const total = Math.max(1, Math.ceil(currentList.length / PAGE_SIZE));
+            page = Math.min(Math.max(1, page), total);
+
+            renderCategoryArticles(currentList.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE));
+            renderPagination(page, total);
+
+            if (push) {
+                history.pushState({ page: page }, '', pageHref(page));
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function renderPagination(page, total) {
+            const nav = document.getElementById('pagination');
+            if (!nav) return;
+            if (total <= 1) { nav.innerHTML = ''; return; }
+
+            const start = Math.floor((page - 1) / PAGE_GROUP) * PAGE_GROUP + 1;
+            const end = Math.min(start + PAGE_GROUP - 1, total);
+
+            let html = page > 1
+                ? `<a href="${pageHref(page - 1)}" data-page="${page - 1}" aria-label="이전">‹</a>`
+                : `<span class="page-disabled">‹</span>`;
+
+            for (let i = start; i <= end; i++) {
+                html += i === page
+                    ? `<span class="page-current">${i}</span>`
+                    : `<a href="${pageHref(i)}" data-page="${i}">${i}</a>`;
+            }
+
+            html += page < total
+                ? `<a href="${pageHref(page + 1)}" data-page="${page + 1}" aria-label="다음">›</a>`
+                : `<span class="page-disabled">›</span>`;
+
+            nav.innerHTML = html;
+        }
+
+        document.addEventListener('click', function(e) {
+            const a = e.target.closest && e.target.closest('#pagination a[data-page]');
+            if (!a) return;
+            e.preventDefault();
+            showPage(parseInt(a.dataset.page, 10), true);
+        });
+
+        window.addEventListener('popstate', function() {
+            showPage(getPageFromUrl(), false);
+        });
 
         function renderCategoryArticles(articles) {
             const container = document.getElementById('categoryArticleList');
